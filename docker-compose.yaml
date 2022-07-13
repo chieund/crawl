@@ -1,0 +1,20 @@
+version: '3.7'
+services:
+  crawl:
+    build:
+      context: ./docker/golang/
+    volumes:
+      - ./:/app/
+    ports:
+      - "8082:8080"
+    working_dir: "/app"
+    privileged: true
+    tty: true
+
+  db:
+    build: ./docker/db
+    ports:
+      - "63311:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: db_crawl
