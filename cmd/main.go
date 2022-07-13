@@ -9,14 +9,6 @@ import (
 	"fmt"
 	"github.com/gocolly/colly/v2"
 	"github.com/gosimple/slug"
-	//"io"
-	//"net/http"
-	//"os"
-	//"strings"
-	//"udemy_crawl/business"
-	//"udemy_crawl/database"
-	//"udemy_crawl/models"
-	//articleStorage "udemy_crawl/storage"
 )
 
 const PAGE_LASTER = "latest"
@@ -26,9 +18,13 @@ func main() {
 	config, err := util.LoadConfig(".")
 	if err != nil {
 		fmt.Println("not load config", err)
+		panic(err)
 	}
 
-	db := database.DBConn(config)
+	db, err := database.DBConn(config)
+	if err != nil {
+		panic(err)
+	}
 	storage := articleStorage.NewMySQLStorage(db)
 
 	c := colly.NewCollector()
