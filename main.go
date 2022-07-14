@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"os"
+	"path"
 )
 
 func main() {
@@ -27,10 +29,8 @@ func main() {
 	r := gin.Default()
 	gin.SetMode(gin.ReleaseMode)
 
-	files := []string{
-		"./templates/index.tmpl",
-	}
-	r.LoadHTMLFiles(files...)
+	cwd, _ := os.Getwd()
+	r.LoadHTMLGlob(path.Join(cwd, "templates/*"))
 	r.GET("/", func(c *gin.Context) {
 		articles, err := biz.GetAllArticles()
 		if err != nil {
