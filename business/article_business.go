@@ -40,5 +40,10 @@ func (articleBusiness *ArticleBusiness) CreateArticle(article models.Article) {
 }
 
 func (articleBusiness *ArticleBusiness) GetAllArticles() ([]models.Article, error) {
-	return articleBusiness.GetAllArticles()
+	articles, err := articleBusiness.articleStore.GetAllArticles()
+	if err != nil {
+		return nil, err
+	}
+
+	return articles, nil
 }

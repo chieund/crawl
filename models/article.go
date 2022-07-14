@@ -5,13 +5,13 @@ import (
 )
 
 type Article struct {
-	Id          int
-	Title       string
-	Slug        string
-	Image       string
-	Description string
-	Content     string
-	Link        string
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
+	Id          int       `json:"id" gorm:"primary_key"`
+	Title       string    `json:"title"`
+	Slug        string    `json:"slug"`
+	Image       string    `json:"image"`
+	Description string    `json:"description"`
+	Content     string    `json:"content"`
+	Link        string    `json:"link"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
 }

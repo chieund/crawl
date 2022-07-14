@@ -14,24 +14,27 @@ func main() {
 	config, err := util.LoadConfig(".")
 	if err != nil {
 		fmt.Println("not load config", err)
+		panic(err)
 	}
 
-	db := database.DBConn(config)
+	db, err := database.DBConn(config)
+	if err != nil {
+		panic(err)
+	}
 	storage := articleStorage.NewMySQLStorage(db)
 	biz := business.NewArticleBusiness(storage)
 
 	r := gin.Default()
 	r.LoadHTMLGlob("templates/*")
 	r.GET("/", func(c *gin.Context) {
-
 		articles, err := biz.GetAllArticles()
 		if err != nil {
 			fmt.Println("article list empty")
 		}
-		fmt.Println(articles)
 
 		c.HTML(http.StatusOK, "index.tmpl", gin.H{
-			"title": "Main website",
+			"title":    "Crawl Web",
+			"articles": articles,
 		})
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
