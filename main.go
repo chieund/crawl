@@ -28,7 +28,7 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 
 	files := []string{
-		"templates/index.tmpl",
+		"./templates/index.tmpl",
 	}
 	r.LoadHTMLFiles(files...)
 	r.GET("/", func(c *gin.Context) {
