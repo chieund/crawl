@@ -25,6 +25,7 @@ func main() {
 	biz := business.NewArticleBusiness(storage)
 
 	r := gin.Default()
+	gin.SetMode(gin.ReleaseMode)
 	r.LoadHTMLGlob("templates/*")
 	r.GET("/", func(c *gin.Context) {
 		articles, err := biz.GetAllArticles()
