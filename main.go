@@ -26,7 +26,11 @@ func main() {
 
 	r := gin.Default()
 	gin.SetMode(gin.ReleaseMode)
-	r.LoadHTMLGlob("templates/*")
+
+	files := []string{
+		"templates/index.tmpl",
+	}
+	r.LoadHTMLFiles(files...)
 	r.GET("/", func(c *gin.Context) {
 		articles, err := biz.GetAllArticles()
 		if err != nil {
