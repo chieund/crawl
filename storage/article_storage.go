@@ -29,7 +29,7 @@ func (s *mysqlStorage) CreateArticle(article models.Article) {
 
 func (s *mysqlStorage) GetAllArticles() ([]models.Article, error) {
 	var articles []models.Article
-	s.db.Find(&articles)
+	s.db.Order("id").Find(&articles)
 	fmt.Println(articles)
 	return articles, nil
 }
