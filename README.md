@@ -1,3 +1,4 @@
+# Build Run Local
 ## Build Docker
 ```
 docker-compose up --build
@@ -16,4 +17,63 @@ docker-compose exec crawl go mod vendor
 ## Run Crawl
 ```
 docker-compose exec crawl go run cmd/main.go
+```
+
+# Deploy
+## Run file build.sh build project into folder bin
+```
+chmod +x build.sh
+./build.sh
+```
+
+# Create Services in run in background (https://www.atpeaz.com/running-go-app-as-a-service-on-ubuntu/amp/)
+## Create Service and Run App Web
+```
+sudo nano /lib/systemd/system/app_web.service
+```
+## Copy Content
+```
+[Unit]
+Description=App Web
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5s
+WorkingDirectory=/root/actions-runner/crawl/crawl/crawl/bin
+ExecStart=/root/actions-runner/crawl/crawl/crawl/bin/app_web
+
+[Install]
+WantedBy=multi-user.target
+```
+```
+sudo systemctl enable app_web
+sudo systemctl start app_web
+sudo systemctl status app_web
+```
+
+
+## Create Service Run App Crawl
+```
+sudo nano /lib/systemd/system/app_crawl.service
+```
+## Copy Content
+```
+[Unit]
+Description=App Crawl
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5s
+WorkingDirectory=/root/actions-runner/crawl/crawl/crawl/bin
+ExecStart=/root/actions-runner/crawl/crawl/crawl/bin/app_crawl
+
+[Install]
+WantedBy=multi-user.target
+```
+```
+sudo systemctl enable app_crawl
+sudo systemctl start app_crawl
+sudo systemctl status app_crawl
 ```
