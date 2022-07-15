@@ -52,28 +52,7 @@ sudo systemctl start app_web
 sudo systemctl status app_web
 ```
 
-
-## Create Service Run App Crawl
+## Run App Crawl
 ```
-sudo nano /lib/systemd/system/app_crawl.service
-```
-## Copy Content
-```
-[Unit]
-Description=App Crawl
-
-[Service]
-Type=simple
-Restart=always
-RestartSec=5s
-WorkingDirectory=/root/actions-runner/crawl/crawl/crawl/bin
-ExecStart=/root/actions-runner/crawl/crawl/crawl/bin/app_crawl
-
-[Install]
-WantedBy=multi-user.target
-```
-```
-sudo systemctl enable app_crawl
-sudo systemctl start app_crawl
-sudo systemctl status app_crawl
+./app_crawl
 ```
