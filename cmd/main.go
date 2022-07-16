@@ -6,13 +6,12 @@ import (
 	"crawl/models"
 	articleStorage "crawl/storage"
 	"crawl/util"
+	"crawl/web_crawl"
 	"fmt"
-	"github.com/gocolly/colly/v2"
-	"github.com/gosimple/slug"
 )
 
 //const PAGE_LASTER = "latest"
-const DOMAIN_CRAWL = "https://dev.to"
+const DOMAIN_CRAWL string = "https://dev.to"
 
 func main() {
 	config, err := util.LoadConfig(".")
@@ -26,42 +25,24 @@ func main() {
 		panic(err)
 	}
 	storage := articleStorage.NewMySQLStorage(db)
+	biz := business.NewArticleBusiness(storage)
+	fmt.Println(storage)
 
-	c := colly.NewCollector()
-	c.OnHTML(".crayons-story", func(e *colly.HTMLElement) {
-		title := e.ChildText("h2.crayons-story__title a")
-		link := e.ChildAttr("h2.crayons-story__title a", "href")
-		image := e.ChildAttr("h2.crayons-story__title a", "data-preload-image")
-
-		if image == "" {
-			image = "https://thepracticaldev.s3.amazonaws.com/i/6hqmcjaxbgbon8ydw93z.png"
-		}
-
-		// get tags
-		slug := slug.Make(title)
-		fmt.Println(title, slug, DOMAIN_CRAWL+link)
-
-		biz := business.NewArticleBusiness(storage)
-		article, err := biz.FindArticle(map[string]interface{}{"slug": slug})
+	dataResult := web_crawl.CrawlWeb(DOMAIN_CRAWL)
+	for _, data := range dataResult {
+		article, err := biz.FindArticle(map[string]interface{}{"slug": data.Slug})
 		if err != nil {
-			fmt.Println("insert article: ", title)
+			fmt.Println("insert article: ", data.Title)
 			article := models.Article{
-				Title: title,
-				Slug:  slug,
-				Image: image,
-				Link:  DOMAIN_CRAWL + link,
+				Title: data.Title,
+				Slug:  data.Slug,
+				Image: data.Image,
+				Link:  data.Link,
 			}
 			biz.CreateArticle(article)
 		} else {
 			fmt.Println("update article: ", article.Title)
-			biz.UpdateArticle(map[string]interface{}{"slug": slug}, *article)
+			biz.UpdateArticle(map[string]interface{}{"slug": data.Slug}, *article)
 		}
-		//c.Visit(DOMAIN_CRAWL + link)
-	})
-
-	c.OnRequest(func(r *colly.Request) {
-		fmt.Print("Visiting\n", r.URL)
-	})
-
-	c.Visit(DOMAIN_CRAWL)
+	}
 }
