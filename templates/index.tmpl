@@ -15,17 +15,32 @@
           <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
           <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
         <![endif]-->
+        <style>
+            .box-list h2 {
+                font-size: 16px;
+            }
+        </style>
 	</head>
     <body>
         <div class="container">
             <div class="header clearfix">
                 <h3 class="text-muted">Dev.to Crawl</h3>
               </div>
-            <div class="box-item">
-                {{range .articles }}
-                    <h4><a href="{{.Link}}" target="_blank">{{.Title}}</a></h4>
-                {{end}}
-            </div>
+
+              <div class="row row-offcanvas row-offcanvas-right">
+                  <div class="col-xs-12 col-sm-9">
+                    <div class="row box-list">
+                    {{range .articles }}
+                      <div class="col-xs-6 col-lg-4">
+                        <h2><a href="{{.Link}}" target="_blank">{{.Title}}</a></h2>
+                        <a href="{{.Link}}" target="_blank"><img class="img-rounded" style="width: 100%;" src="{{.Image}}" data-holder-rendered="true"></a>
+                      </div><!--/.col-xs-6.col-lg-4-->
+                      {{end}}
+                    </div><!--/row-->
+                  </div><!--/.col-xs-12.col-sm-9-->
+                  <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+                  </div>
+                </div>
         </div>
     </body>
 </html>

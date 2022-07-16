@@ -11,7 +11,7 @@ import (
 	"github.com/gosimple/slug"
 )
 
-const PAGE_LASTER = "latest"
+//const PAGE_LASTER = "latest"
 const DOMAIN_CRAWL = "https://dev.to"
 
 func main() {
@@ -29,8 +29,13 @@ func main() {
 
 	c := colly.NewCollector()
 	c.OnHTML(".crayons-story", func(e *colly.HTMLElement) {
-		title := e.ChildText("a.crayons-story__hidden-navigation-link")
-		link := e.ChildAttr("a.crayons-story__hidden-navigation-link", "href")
+		title := e.ChildText("h2.crayons-story__title a")
+		link := e.ChildAttr("h2.crayons-story__title a", "href")
+		image := e.ChildAttr("h2.crayons-story__title a", "data-preload-image")
+
+		if image == "" {
+			image = "https://thepracticaldev.s3.amazonaws.com/i/6hqmcjaxbgbon8ydw93z.png"
+		}
 
 		// get tags
 		slug := slug.Make(title)
@@ -44,6 +49,7 @@ func main() {
 			article := models.Article{
 				Title: title,
 				Slug:  slug,
+				Image: image,
 				Link:  DOMAIN_CRAWL + link,
 			}
 			biz.CreateArticle(article)
@@ -58,5 +64,5 @@ func main() {
 		fmt.Print("Visiting\n", r.URL)
 	})
 
-	c.Visit(DOMAIN_CRAWL + "/" + PAGE_LASTER)
+	c.Visit(DOMAIN_CRAWL)
 }

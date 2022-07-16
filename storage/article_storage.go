@@ -2,7 +2,6 @@ package storage
 
 import (
 	"crawl/models"
-	"fmt"
 )
 
 func (s *mysqlStorage) FindArticle(condition map[string]interface{}) (*models.Article, error) {
@@ -29,7 +28,6 @@ func (s *mysqlStorage) CreateArticle(article models.Article) {
 
 func (s *mysqlStorage) GetAllArticles() ([]models.Article, error) {
 	var articles []models.Article
-	s.db.Order("id").Find(&articles)
-	fmt.Println(articles)
+	s.db.Order("id DESC").Find(&articles)
 	return articles, nil
 }
