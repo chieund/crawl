@@ -1,4 +1,4 @@
-package pkg
+package crawl
 
 import (
 	"fmt"
@@ -33,9 +33,14 @@ func CrawlWeb(url string) []DataArticle {
 			dataArticle.Image = "https://thepracticaldev.s3.amazonaws.com/i/6hqmcjaxbgbon8ydw93z.png"
 		}
 
-		e.ForEach("a.crayons-tag__prefix", func(_ int, e *colly.HTMLElement) {
-
+		var tags []DataTag
+		e.ForEach("a.crayons-tag", func(_ int, e *colly.HTMLElement) {
+			fmt.Println(e.Text, "vao day")
+			tag := DataTag{}
+			tag.Name = e.Text
+			tags = append(tags, tag)
 		})
+		dataArticle.Tags = tags
 
 		// get tags
 		dataArticle.Slug = slug.Make(dataArticle.Title)
