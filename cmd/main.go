@@ -45,7 +45,6 @@ func main() {
 		article, err := biz.FindArticle(map[string]interface{}{"slug": slug})
 		if err != nil {
 			fmt.Println("insert article: ", title)
-
 			article := models.Article{
 				Title: title,
 				Slug:  slug,
