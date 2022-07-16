@@ -4,6 +4,7 @@ import (
 	"crawl/business"
 	"crawl/database"
 	"crawl/models"
+	"crawl/pkg"
 	articleStorage "crawl/storage"
 	"crawl/util"
 	"crawl/web_crawl"
@@ -28,7 +29,7 @@ func main() {
 	biz := business.NewArticleBusiness(storage)
 	fmt.Println(storage)
 
-	dataResult := web_crawl.CrawlWeb(DOMAIN_CRAWL)
+	dataResult := pkg.CrawlWeb(DOMAIN_CRAWL)
 	for _, data := range dataResult {
 		article, err := biz.FindArticle(map[string]interface{}{"slug": data.Slug})
 		if err != nil {

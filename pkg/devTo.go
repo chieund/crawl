@@ -1,4 +1,4 @@
-package web_crawl
+package pkg
 
 import (
 	"fmt"
