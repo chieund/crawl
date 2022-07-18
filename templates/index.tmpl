@@ -22,16 +22,16 @@
         </style>
 	</head>
     <body>
-        <div class="container">
+        <div class="container-fluid">
             <div class="header clearfix">
-                <h3 class="text-muted">Dev.to Crawl</h3>
+                <h3 class="text-muted">Web Crawl</h3>
               </div>
 
               <div class="row row-offcanvas row-offcanvas-right">
-                  <div class="col-xs-12 col-sm-9">
+                  <div class="col-xs-12 col-sm-12">
                     <div class="row box-list">
                     {{range .articles }}
-                      <div class="col-xs-6 col-lg-4">
+                      <div class="col-xs-12 col-ms-6 col-lg-3">
                         <h2><a href="{{.Link}}" target="_blank">{{.Title}}</a></h2>
                         <a href="{{.Link}}" target="_blank"><img class="img-rounded" style="width: 100%;" src="{{.Image}}" data-holder-rendered="true"></a>
                       </div><!--/.col-xs-6.col-lg-4-->

@@ -8,18 +8,6 @@ import (
 
 const DOMAIN_CRAWL string = "https://dev.to"
 
-type DataTag struct {
-	Name string
-}
-
-type DataArticle struct {
-	Title string
-	Slug  string
-	Link  string
-	Image string
-	Tags  []DataTag
-}
-
 func CrawlWeb(url string) []DataArticle {
 	c := colly.NewCollector()
 

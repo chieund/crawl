@@ -29,6 +29,16 @@ func main() {
 	fmt.Println(storage)
 
 	dataResult := crawl.CrawlWeb(DOMAIN_CRAWL)
+	insertData(biz, dataResult)
+
+	// crawl freecodecamp
+	dataResultFreeCodeCamp := crawl.CrawlWebFreeCodeCamp()
+	fmt.Println(dataResultFreeCodeCamp)
+
+	insertData(biz, dataResultFreeCodeCamp)
+}
+
+func insertData(biz *business.ArticleBusiness, dataResult []crawl.DataArticle) {
 	for _, data := range dataResult {
 		article, err := biz.FindArticle(map[string]interface{}{"slug": data.Slug})
 		if err != nil {
