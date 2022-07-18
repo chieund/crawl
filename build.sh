@@ -13,4 +13,4 @@ go build -o bin/app_web
 go build -o ./bin/app_crawl ./cmd/
 
 ## build migrate
-go build -o ./bin/app_crawl ./migrations/
+go build -o ./bin/app_migrate ./migrations/
