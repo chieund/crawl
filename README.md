@@ -57,5 +57,18 @@ sudo systemctl status app_web
 ./app_crawl
 ```
 
+## Add CronTab
+```
+crontab -e
+```
+### add cron time
+```
+*/60 * * * * /root/actions-runner/crawl/crawl/crawl/bin/app_crawl
+```
+### Reload cron run
+```
+sudo service cron reload
+```
+
 ## Website 
 http://techdaily.info/
