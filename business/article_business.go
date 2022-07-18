@@ -7,8 +7,9 @@ import (
 type ArticleStorageInterface interface {
 	FindArticle(map[string]interface{}) (*models.Article, error)
 	UpdateArticle(map[string]interface{}, models.Article) bool
-	CreateArticle(models.Article)
+	CreateArticle(*models.Article)
 	GetAllArticles() ([]models.Article, error)
+	GetAllArticlesByIds([]int) ([]models.Article, error)
 }
 
 type ArticleBusiness struct {
@@ -35,7 +36,7 @@ func (articleBusiness *ArticleBusiness) UpdateArticle(condition map[string]inter
 	return articleBusiness.articleStore.UpdateArticle(condition, article)
 }
 
-func (articleBusiness *ArticleBusiness) CreateArticle(article models.Article) {
+func (articleBusiness *ArticleBusiness) CreateArticle(article *models.Article) {
 	articleBusiness.articleStore.CreateArticle(article)
 }
 
@@ -46,4 +47,8 @@ func (articleBusiness *ArticleBusiness) GetAllArticles() ([]models.Article, erro
 	}
 
 	return articles, nil
+}
+
+func (articleBusiness *ArticleBusiness) GetAllArticlesByIds(ids []int) ([]models.Article, error) {
+	return articleBusiness.articleStore.GetAllArticlesByIds(ids)
 }

@@ -4,15 +4,14 @@ import (
 	"crawl/business"
 	"crawl/database"
 	"crawl/models"
+	"crawl/pkg/crawl"
 	articleStorage "crawl/storage"
 	"crawl/util"
 	"fmt"
-	"github.com/gocolly/colly/v2"
-	"github.com/gosimple/slug"
 )
 
 //const PAGE_LASTER = "latest"
-const DOMAIN_CRAWL = "https://dev.to"
+const DOMAIN_CRAWL string = "https://dev.to"
 
 func main() {
 	config, err := util.LoadConfig(".")
@@ -26,42 +25,66 @@ func main() {
 		panic(err)
 	}
 	storage := articleStorage.NewMySQLStorage(db)
+	biz := business.NewArticleBusiness(storage)
 
-	c := colly.NewCollector()
-	c.OnHTML(".crayons-story", func(e *colly.HTMLElement) {
-		title := e.ChildText("h2.crayons-story__title a")
-		link := e.ChildAttr("h2.crayons-story__title a", "href")
-		image := e.ChildAttr("h2.crayons-story__title a", "data-preload-image")
+	bizTag := business.NewTagBusiness(storage)
 
-		if image == "" {
-			image = "https://thepracticaldev.s3.amazonaws.com/i/6hqmcjaxbgbon8ydw93z.png"
-		}
+	articleTagBiz := business.NewArticleTagBusiness(storage)
 
-		// get tags
-		slug := slug.Make(title)
-		fmt.Println(title, slug, DOMAIN_CRAWL+link)
+	dataResult := crawl.CrawlWeb(DOMAIN_CRAWL)
+	insertData(dataResult, biz, bizTag, articleTagBiz)
 
-		biz := business.NewArticleBusiness(storage)
-		article, err := biz.FindArticle(map[string]interface{}{"slug": slug})
-		if err != nil {
-			fmt.Println("insert article: ", title)
-			article := models.Article{
-				Title: title,
-				Slug:  slug,
-				Image: image,
-				Link:  DOMAIN_CRAWL + link,
+	// crawl freecodecamp
+	//dataResultFreeCodeCamp := crawl.CrawlWebFreeCodeCamp()
+	//fmt.Println(dataResultFreeCodeCamp)
+
+	//insertData(biz, dataResultFreeCodeCamp)
+}
+
+func insertData(dataResult []crawl.DataArticle, biz *business.ArticleBusiness, bizTag *business.TagBusiness, articleTagBiz *business.ArticleTagBusiness) {
+	for _, data := range dataResult {
+		if len(data.Tags) > 0 {
+			for _, dataTag := range data.Tags {
+				tag, err := bizTag.FindTag(map[string]interface{}{"slug": dataTag.Slug})
+				if err != nil {
+					tag := models.Tag{
+						Title: dataTag.Title,
+						Slug:  dataTag.Slug,
+					}
+					bizTag.CreateTag(tag)
+				} else {
+					bizTag.UpdateTag(map[string]interface{}{"slug": dataTag.Slug}, *tag)
+				}
 			}
-			biz.CreateArticle(article)
-		} else {
-			fmt.Println("update article: ", article.Title)
-			biz.UpdateArticle(map[string]interface{}{"slug": slug}, *article)
 		}
-		//c.Visit(DOMAIN_CRAWL + link)
-	})
 
-	c.OnRequest(func(r *colly.Request) {
-		fmt.Print("Visiting\n", r.URL)
-	})
-
-	c.Visit(DOMAIN_CRAWL)
+		article, err := biz.FindArticle(map[string]interface{}{"slug": data.Slug})
+		if err != nil {
+			//fmt.Println("insert article: ", data.Title)
+			article := models.Article{
+				Title: data.Title,
+				Slug:  data.Slug,
+				Image: data.Image,
+				Link:  data.Link,
+			}
+			biz.CreateArticle(&article)
+			// insert article_tag
+			if len(data.Tags) > 0 {
+				for _, dataTag := range data.Tags {
+					tag, err := bizTag.FindTag(map[string]interface{}{"slug": dataTag.Slug})
+					if err == nil {
+						// insert article with tag
+						articleTag := models.ArticleTag{
+							ArticleId: article.Id,
+							TagId:     tag.Id,
+						}
+						articleTagBiz.CreateArticleTag(&articleTag)
+					}
+				}
+			}
+		} else {
+			//fmt.Println("update article: ", article.Title)
+			biz.UpdateArticle(map[string]interface{}{"slug": data.Slug}, *article)
+		}
+	}
 }

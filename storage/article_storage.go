@@ -22,12 +22,18 @@ func (s *mysqlStorage) UpdateArticle(condition map[string]interface{}, article m
 	return true
 }
 
-func (s *mysqlStorage) CreateArticle(article models.Article) {
+func (s *mysqlStorage) CreateArticle(article *models.Article) {
 	s.db.Create(&article)
 }
 
 func (s *mysqlStorage) GetAllArticles() ([]models.Article, error) {
 	var articles []models.Article
 	s.db.Order("id DESC").Find(&articles)
+	return articles, nil
+}
+
+func (s *mysqlStorage) GetAllArticlesByIds(ids []int) ([]models.Article, error) {
+	var articles []models.Article
+	s.db.Order("id DESC").Find(&articles, ids)
 	return articles, nil
 }
