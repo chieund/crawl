@@ -1,7 +1,8 @@
 package crawl
 
 type DataTag struct {
-	Name string
+	Title string
+	Slug  string
 }
 
 type DataArticle struct {

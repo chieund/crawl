@@ -22,7 +22,7 @@ func (s *mysqlStorage) UpdateArticle(condition map[string]interface{}, article m
 	return true
 }
 
-func (s *mysqlStorage) CreateArticle(article models.Article) {
+func (s *mysqlStorage) CreateArticle(article *models.Article) {
 	s.db.Create(&article)
 }
 

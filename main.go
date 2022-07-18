@@ -3,7 +3,7 @@ package main
 import (
 	"crawl/business"
 	"crawl/database"
-	articleStorage "crawl/storage"
+	mysqlStorage "crawl/storage"
 	"crawl/util"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -23,8 +23,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	storage := articleStorage.NewMySQLStorage(db)
+	storage := mysqlStorage.NewMySQLStorage(db)
 	biz := business.NewArticleBusiness(storage)
+	tagBiz := business.NewTagBusiness(storage)
 
 	r := gin.Default()
 	gin.SetMode(gin.ReleaseMode)
@@ -37,10 +38,32 @@ func main() {
 			fmt.Println("article list empty")
 		}
 
+		tags, err := tagBiz.GetAllTags()
+
 		c.HTML(http.StatusOK, "index.tmpl", gin.H{
 			"title":    "Crawl Web",
 			"articles": articles,
+			"tags":     tags,
 		})
 	})
-	r.Run(":80") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+
+	r.GET("/t/:tag", func(c *gin.Context) {
+		tagName := c.Param("tag")
+
+		tags, err := tagBiz.GetAllTags()
+		if err != nil {
+			fmt.Println("tags list empty")
+		}
+
+		articleTagBiz := business.NewArticleTagBusiness(storage)
+		tags, err := tagBiz.GetArticleByTag(tagName, articleTagBiz)
+
+		c.HTML(http.StatusOK, "tag.tmpl", gin.H{
+			"title":    "Crawl Web",
+			"articles": tags,
+			"tags":     tags,
+		})
+	})
+
+	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }

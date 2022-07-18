@@ -26,20 +26,38 @@ func main() {
 	}
 	storage := articleStorage.NewMySQLStorage(db)
 	biz := business.NewArticleBusiness(storage)
-	fmt.Println(storage)
+
+	bizTag := business.NewTagBusiness(storage)
+
+	articleTagBiz := business.NewArticleTagBusiness(storage)
 
 	dataResult := crawl.CrawlWeb(DOMAIN_CRAWL)
-	insertData(biz, dataResult)
+	insertData(dataResult, biz, bizTag, articleTagBiz)
 
 	// crawl freecodecamp
-	dataResultFreeCodeCamp := crawl.CrawlWebFreeCodeCamp()
-	fmt.Println(dataResultFreeCodeCamp)
+	//dataResultFreeCodeCamp := crawl.CrawlWebFreeCodeCamp()
+	//fmt.Println(dataResultFreeCodeCamp)
 
-	insertData(biz, dataResultFreeCodeCamp)
+	//insertData(biz, dataResultFreeCodeCamp)
 }
 
-func insertData(biz *business.ArticleBusiness, dataResult []crawl.DataArticle) {
+func insertData(dataResult []crawl.DataArticle, biz *business.ArticleBusiness, bizTag *business.TagBusiness, articleTagBiz *business.ArticleTagBusiness) {
 	for _, data := range dataResult {
+		if len(data.Tags) > 0 {
+			for _, dataTag := range data.Tags {
+				tag, err := bizTag.FindTag(map[string]interface{}{"slug": dataTag.Slug})
+				if err != nil {
+					tag := models.Tag{
+						Title: dataTag.Title,
+						Slug:  dataTag.Slug,
+					}
+					bizTag.CreateTag(tag)
+				} else {
+					bizTag.UpdateTag(map[string]interface{}{"slug": dataTag.Slug}, *tag)
+				}
+			}
+		}
+
 		article, err := biz.FindArticle(map[string]interface{}{"slug": data.Slug})
 		if err != nil {
 			//fmt.Println("insert article: ", data.Title)
@@ -49,7 +67,21 @@ func insertData(biz *business.ArticleBusiness, dataResult []crawl.DataArticle) {
 				Image: data.Image,
 				Link:  data.Link,
 			}
-			biz.CreateArticle(article)
+			biz.CreateArticle(&article)
+			// insert article_tag
+			if len(data.Tags) > 0 {
+				for _, dataTag := range data.Tags {
+					tag, err := bizTag.FindTag(map[string]interface{}{"slug": dataTag.Slug})
+					if err == nil {
+						// insert article with tag
+						articleTag := models.ArticleTag{
+							ArticleId: article.Id,
+							TagId:     tag.Id,
+						}
+						articleTagBiz.CreateArticleTag(&articleTag)
+					}
+				}
+			}
 		} else {
 			//fmt.Println("update article: ", article.Title)
 			biz.UpdateArticle(map[string]interface{}{"slug": data.Slug}, *article)

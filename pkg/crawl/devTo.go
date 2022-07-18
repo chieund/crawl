@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gocolly/colly/v2"
 	"github.com/gosimple/slug"
+	"strings"
 )
 
 const DOMAIN_CRAWL string = "https://dev.to"
@@ -23,9 +24,11 @@ func CrawlWeb(url string) []DataArticle {
 
 		var tags []DataTag
 		e.ForEach("a.crayons-tag", func(_ int, e *colly.HTMLElement) {
-			fmt.Println(e.Text, "vao day")
+			tagText := e.Text
+			title := strings.Replace(tagText, "#", "", 1)
 			tag := DataTag{}
-			tag.Name = e.Text
+			tag.Title = title
+			tag.Slug = slug.Make(title)
 			tags = append(tags, tag)
 		})
 		dataArticle.Tags = tags

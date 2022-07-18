@@ -1,14 +1,14 @@
 package models
 
-import (
-	"gorm.io/gorm"
-	"time"
-)
+import "gorm.io/gorm"
 
 type Tag struct {
+	Id    int `gorm: "primary_key"`
+	Title string
+	Slug  string
 	gorm.Model
-	Id        int       `json:"id" gorm: "primary_key"`
-	Name      string    `json:"name"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+}
+
+func (tag *Tag) TableName() string {
+	return "tags"
 }

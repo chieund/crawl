@@ -7,7 +7,7 @@ import (
 type ArticleStorageInterface interface {
 	FindArticle(map[string]interface{}) (*models.Article, error)
 	UpdateArticle(map[string]interface{}, models.Article) bool
-	CreateArticle(models.Article)
+	CreateArticle(*models.Article)
 	GetAllArticles() ([]models.Article, error)
 }
 
@@ -35,7 +35,7 @@ func (articleBusiness *ArticleBusiness) UpdateArticle(condition map[string]inter
 	return articleBusiness.articleStore.UpdateArticle(condition, article)
 }
 
-func (articleBusiness *ArticleBusiness) CreateArticle(article models.Article) {
+func (articleBusiness *ArticleBusiness) CreateArticle(article *models.Article) {
 	articleBusiness.articleStore.CreateArticle(article)
 }
 

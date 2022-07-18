@@ -11,3 +11,6 @@ go build -o bin/app_web
 
 ## build crawl app
 go build -o ./bin/app_crawl ./cmd/
+
+## build migrate
+go build -o ./bin/app_crawl ./migrations/

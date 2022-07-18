@@ -1,6 +1,8 @@
 package storage
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type mysqlStorage struct {
 	db *gorm.DB
