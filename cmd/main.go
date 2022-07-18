@@ -35,10 +35,8 @@ func main() {
 	insertData(dataResult, biz, bizTag, articleTagBiz)
 
 	// crawl freecodecamp
-	//dataResultFreeCodeCamp := crawl.CrawlWebFreeCodeCamp()
-	//fmt.Println(dataResultFreeCodeCamp)
-
-	//insertData(biz, dataResultFreeCodeCamp)
+	dataResultFreeCodeCamp := crawl.CrawlWebFreeCodeCamp()
+	insertData(dataResultFreeCodeCamp, biz, bizTag, articleTagBiz)
 }
 
 func insertData(dataResult []crawl.DataArticle, biz *business.ArticleBusiness, bizTag *business.TagBusiness, articleTagBiz *business.ArticleTagBusiness) {
