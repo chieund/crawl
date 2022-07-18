@@ -31,3 +31,9 @@ func (s *mysqlStorage) GetAllArticles() ([]models.Article, error) {
 	s.db.Order("id DESC").Find(&articles)
 	return articles, nil
 }
+
+func (s *mysqlStorage) GetAllArticlesByIds(ids []int) ([]models.Article, error) {
+	var articles []models.Article
+	s.db.Order("id DESC").Find(&articles, ids)
+	return articles, nil
+}

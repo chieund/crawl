@@ -24,12 +24,12 @@
 <body>
     <div class="container-fluid">
         <div class="header clearfix">
-            <h3 class="text-muted">Web Crawl</h3>
+            <h3 class="text-muted"><a href="/">Web Crawl</a></h3>
         </div>
         <div class="row row-offcanvas row-offcanvas-right">
             <div class="col-xs-2 col-sm-2 sidebar-offcanvas" id="sidebar">
                 {{range .tags}}
-                <a href="t/{{.Title}}" class="badge badge-primary">#{{.Title}}</a>
+                    <a href="/t/{{.Title}}" class="badge badge-primary">#{{.Title}}</a>
                 {{end}}
             </div>
             <div class="col-xs-10 col-sm-10">

@@ -9,6 +9,7 @@ type ArticleStorageInterface interface {
 	UpdateArticle(map[string]interface{}, models.Article) bool
 	CreateArticle(*models.Article)
 	GetAllArticles() ([]models.Article, error)
+	GetAllArticlesByIds([]int) ([]models.Article, error)
 }
 
 type ArticleBusiness struct {
@@ -46,4 +47,8 @@ func (articleBusiness *ArticleBusiness) GetAllArticles() ([]models.Article, erro
 	}
 
 	return articles, nil
+}
+
+func (articleBusiness *ArticleBusiness) GetAllArticlesByIds(ids []int) ([]models.Article, error) {
+	return articleBusiness.articleStore.GetAllArticlesByIds(ids)
 }

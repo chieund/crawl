@@ -6,7 +6,7 @@ import (
 
 type ArticleTagStorageInterface interface {
 	CreateArticleTag(*models.ArticleTag)
-	findArticleIdByTagId(tagId int) []models.ArticleTag
+	FindArticleIdByTagId(tagId int) []int
 }
 
 type ArticleTagBusiness struct {
@@ -23,6 +23,6 @@ func (articleTagBusiness *ArticleTagBusiness) CreateArticleTag(articleTag *model
 	articleTagBusiness.articleTagStore.CreateArticleTag(articleTag)
 }
 
-func (articleTagBusiness ArticleTagBusiness) findArticleIdByTagId(tagId int) []models.ArticleTag {
-	return articleTagBusiness.articleTagStore.findArticleIdByTagId(tagId)
+func (articleTagBusiness *ArticleTagBusiness) FindArticleIdByTagId(tagId int) []int {
+	return articleTagBusiness.articleTagStore.FindArticleIdByTagId(tagId)
 }
