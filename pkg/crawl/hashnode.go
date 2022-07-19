@@ -19,7 +19,6 @@ func CrawlWebHashNode() []DataArticle {
 
 		dataArticle.Title = e.ChildText("h1.css-1ja44m4 a.css-4zleql")
 		link := e.ChildAttr("h1.css-1ja44m4 a.css-4zleql", "href")
-
 		image := e.ChildAttr("div.css-qnvenm img", "style")
 		if image != "" {
 			imageNew := strings.Split(image, "background-image:url(")
@@ -28,7 +27,7 @@ func CrawlWebHashNode() []DataArticle {
 			imageNewPlace := strings.ReplaceAll(imageNewReplace, `"`, "")
 			dataArticle.Image = imageNewPlace
 		}
-		dataArticle.Link = URL_HASHNODE + link
+		dataArticle.Link = link
 		dataArticle.Slug = slug.Make(dataArticle.Title)
 
 		// get tags
