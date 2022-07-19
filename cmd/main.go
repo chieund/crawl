@@ -40,6 +40,9 @@ func main() {
 
 	medium := crawl.CrawlWebMedium()
 	insertData(medium, biz, bizTag, articleTagBiz)
+
+	hashNode := crawl.CrawlWebHashNode()
+	insertData(hashNode, biz, bizTag, articleTagBiz)
 }
 
 func insertData(dataResult []crawl.DataArticle, biz *business.ArticleBusiness, bizTag *business.TagBusiness, articleTagBiz *business.ArticleTagBusiness) {
