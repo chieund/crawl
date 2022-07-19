@@ -9,7 +9,6 @@ import (
 
 const (
 	URL_MEDIUM = "https://medium.com"
-
 )
 
 var listTags = []string{

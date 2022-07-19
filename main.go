@@ -41,7 +41,7 @@ func main() {
 		tags, err := tagBu.GetAllTags()
 
 		c.HTML(http.StatusOK, "index.tmpl", gin.H{
-			"title":    "Crawl Web",
+			"title":    "The Best Developer News - Tech Daily",
 			"articles": articles,
 			"tags":     tags,
 		})
@@ -69,9 +69,9 @@ func main() {
 		}
 
 		c.HTML(http.StatusOK, "tags.tmpl", gin.H{
-			"title":    "Crawl Web",
 			"articles": articles,
 			"tags":     tags,
+			"tag":      tag,
 		})
 	})
 
