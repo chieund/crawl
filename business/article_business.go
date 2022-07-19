@@ -2,14 +2,15 @@ package business
 
 import (
 	"crawl/models"
+	"crawl/pkg"
 )
 
 type ArticleStorageInterface interface {
 	FindArticle(map[string]interface{}) (*models.Article, error)
 	UpdateArticle(map[string]interface{}, models.Article) bool
 	CreateArticle(*models.Article)
-	GetAllArticles() ([]models.Article, error)
-	GetAllArticlesByIds([]int) ([]models.Article, error)
+	GetAllArticles(*pkg.Pagination) (*pkg.Pagination, error)
+	GetAllArticlesByIds([]int, *pkg.Pagination) (*pkg.Pagination, error)
 }
 
 type ArticleBusiness struct {
@@ -40,8 +41,8 @@ func (articleBusiness *ArticleBusiness) CreateArticle(article *models.Article) {
 	articleBusiness.articleStore.CreateArticle(article)
 }
 
-func (articleBusiness *ArticleBusiness) GetAllArticles() ([]models.Article, error) {
-	articles, err := articleBusiness.articleStore.GetAllArticles()
+func (articleBusiness *ArticleBusiness) GetAllArticles(pagination *pkg.Pagination) (*pkg.Pagination, error) {
+	articles, err := articleBusiness.articleStore.GetAllArticles(pagination)
 	if err != nil {
 		return nil, err
 	}
@@ -49,6 +50,6 @@ func (articleBusiness *ArticleBusiness) GetAllArticles() ([]models.Article, erro
 	return articles, nil
 }
 
-func (articleBusiness *ArticleBusiness) GetAllArticlesByIds(ids []int) ([]models.Article, error) {
-	return articleBusiness.articleStore.GetAllArticlesByIds(ids)
+func (articleBusiness *ArticleBusiness) GetAllArticlesByIds(ids []int, pagination *pkg.Pagination) (*pkg.Pagination, error) {
+	return articleBusiness.articleStore.GetAllArticlesByIds(ids, pagination)
 }

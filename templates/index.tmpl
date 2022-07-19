@@ -43,7 +43,7 @@
             </div>
             <div class="col-xs-10 col-sm-10">
                 <div class="row box-list">
-                    {{range .articles}}
+                    {{range .pagination.Rows}}
                     <div class="col-xs-12 col-ms-6 col-lg-3">
                         <h2><a href="{{.Link}}" target="_blank">{{.Title}}</a></h2>
                         <a href="{{.Link}}" target="_blank">
@@ -51,6 +51,29 @@
                     </div><!--/.col-xs-6.col-lg-4-->
                     {{end}}
                 </div><!--/row-->
+                <div class="d-flex justify-content-center align-items-center" style="height:100px;">
+                    <nav aria-label="...">
+                      <ul class="pagination">
+                        <li class="page-item disabled">
+                          <span class="page-link">Previous</span>
+                        </li>
+                        {{range index .pagination.TotalPages}}
+                        <li class="page-item"><a class="page-link" href="#">{{.index}}</a></li>
+                        {{end}}
+                        <li class="page-item active">
+                          <span class="page-link">
+                            2
+                            <span class="sr-only">(current)</span>
+                          </span>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><span class="page-link">...</span></li>
+                        <li class="page-item">
+                          <a class="page-link" href="#">Next</a>
+                        </li>
+                      </ul>
+                    </nav>
+                </div>
             </div><!--/.col-xs-12.col-sm-9-->
         </div>
     </div>

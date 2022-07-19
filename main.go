@@ -3,6 +3,7 @@ package main
 import (
 	"crawl/business"
 	"crawl/database"
+	"crawl/pkg"
 	mysqlStorage "crawl/storage"
 	"crawl/util"
 	"fmt"
@@ -33,7 +34,9 @@ func main() {
 	cwd, _ := os.Getwd()
 	r.LoadHTMLGlob(path.Join(cwd, "templates/*"))
 	r.GET("/", func(c *gin.Context) {
-		articles, err := articleBU.GetAllArticles()
+
+		var pagination pkg.Pagination
+		articles, err := articleBU.GetAllArticles(&pagination)
 		if err != nil {
 			fmt.Println("article list empty")
 		}
@@ -41,9 +44,9 @@ func main() {
 		tags, err := tagBu.GetAllTags()
 
 		c.HTML(http.StatusOK, "index.tmpl", gin.H{
-			"title":    "Crawl Web",
-			"articles": articles,
-			"tags":     tags,
+			"title":      "Crawl Web",
+			"pagination": articles,
+			"tags":       tags,
 		})
 	})
 
@@ -63,7 +66,9 @@ func main() {
 		// get all article_tag by tag_id
 		articleTagBU := business.NewArticleTagBusiness(storage)
 		articleTags := articleTagBU.FindArticleIdByTagId(tag.Id)
-		articles, err := articleBU.GetAllArticlesByIds(articleTags)
+
+		var pagination pkg.Pagination
+		articles, err := articleBU.GetAllArticlesByIds(articleTags, &pagination)
 		if err != nil {
 			fmt.Println("not load article by tag")
 		}
@@ -75,5 +80,5 @@ func main() {
 		})
 	})
 
-	r.Run(":80") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
