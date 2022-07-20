@@ -34,6 +34,7 @@ func (s *mysqlStorage) GetAllArticles(pagination *pkg.Pagination) (*pkg.Paginati
 	s.db.Model(&articles).Count(&totalRows)
 	pagination.TotalRows = totalRows
 	pagination.TotalPages = int(math.Ceil(float64(totalRows) / float64(pagination.GetLimit())))
+	pagination.SetListPages()
 
 	s.db.Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
 	pagination.Rows = articles
@@ -43,9 +44,12 @@ func (s *mysqlStorage) GetAllArticles(pagination *pkg.Pagination) (*pkg.Paginati
 func (s *mysqlStorage) GetAllArticlesByIds(ids []int, pagination *pkg.Pagination) (*pkg.Pagination, error) {
 	var articles []models.Article
 	var totalRows int64
-	s.db.Model(&articles).Count(&totalRows)
+	s.db.Model(&articles).Where("id=?", ids).Count(&totalRows)
 	pagination.TotalRows = totalRows
-	s.db.Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles, ids)
+	pagination.TotalPages = int(math.Ceil(float64(totalRows) / float64(pagination.GetLimit())))
+	pagination.SetListPages()
+
+	s.db.Where("id=?", ids).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
 	pagination.Rows = articles
 	return pagination, nil
 }

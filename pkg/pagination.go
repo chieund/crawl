@@ -1,12 +1,13 @@
 package pkg
 
 type Pagination struct {
-	Limit      int         `json:"limit,omitempty:query:limit"`
-	Page       int         `json:"page,omitempty;query:page"`
-	Sort       string      `json:"sort,omitempty;query:sort"`
-	TotalRows  int64       `json:"total_rows"`
-	TotalPages int         `json:"total_pages"`
-	Rows       interface{} `json:"rows"`
+	Limit      int
+	Page       int
+	Sort       string
+	TotalRows  int64
+	TotalPages int
+	ListPages  []int
+	Rows       interface{}
 }
 
 func (p *Pagination) GetOffset() int {
@@ -32,4 +33,39 @@ func (p *Pagination) GetSort() string {
 		p.Sort = "Id desc"
 	}
 	return p.Sort
+}
+
+func (p *Pagination) SetListPages() {
+	var pages []int
+	for i := 1; i <= p.TotalPages; i++ {
+		pages = append(pages, i)
+
+	}
+	p.ListPages = pages
+}
+
+func (p *Pagination) ShowPage() bool {
+	if p.TotalPages-3 <= p.Page {
+		return true
+	}
+	return false
+}
+
+func (p *Pagination) ShowPage1() bool {
+	for i := 1; i <= p.TotalPages; i++ {
+		if i >= p.TotalPages-4 {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (p *Pagination) ShowPage2() bool {
+	for i := 1; i <= p.TotalPages; i++ {
+		if p.Page+1 == i || p.Page == i || p.Page-1 == i {
+			return true
+		}
+	}
+	return false
 }
