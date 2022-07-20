@@ -32,6 +32,8 @@ func (s *mysqlStorage) GetAllTags() ([]models.Tag, error) {
 	return tags, nil
 }
 
-func (s *mysqlStorage) Test() (models.Tag, error) {
-	return models.Tag{}, nil
+func (s *mysqlStorage) GetAllHotTags() ([]models.Tag, error) {
+	var tags []models.Tag
+	s.db.Order("Title asc").Where("hot=?", 1).Find(&tags)
+	return tags, nil
 }

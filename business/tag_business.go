@@ -9,7 +9,7 @@ type TagStorageInterface interface {
 	UpdateTag(map[string]interface{}, models.Tag) bool
 	CreateTag(models.Tag)
 	GetAllTags() ([]models.Tag, error)
-	Test() (models.Tag, error)
+	GetAllHotTags() ([]models.Tag, error)
 }
 
 type TagBusiness struct {
@@ -49,7 +49,11 @@ func (tagBusiness *TagBusiness) GetAllTags() ([]models.Tag, error) {
 	return tags, nil
 }
 
-func (tagBusiness *TagBusiness) Test() (models.Tag, error) {
-	// get by tag
-	return models.Tag{}, nil
+func (tagBusiness *TagBusiness) GetAllHotTags() ([]models.Tag, error) {
+	tags, err := tagBusiness.tagStore.GetAllHotTags()
+	if err != nil {
+		return nil, err
+	}
+
+	return tags, nil
 }
