@@ -3,6 +3,7 @@ package main
 import (
 	"crawl/business"
 	"crawl/database"
+	"crawl/pkg"
 	mysqlStorage "crawl/storage"
 	"crawl/util"
 	"fmt"
@@ -10,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"strconv"
 )
 
 func main() {
@@ -33,7 +35,10 @@ func main() {
 	cwd, _ := os.Getwd()
 	r.LoadHTMLGlob(path.Join(cwd, "templates/*"))
 	r.GET("/", func(c *gin.Context) {
-		articles, err := articleBU.GetAllArticles()
+		var pagination pkg.Pagination
+		page := c.Request.URL.Query().Get("page")
+		pagination.Page, _ = strconv.Atoi(page)
+		articles, err := articleBU.GetAllArticles(&pagination)
 		if err != nil {
 			fmt.Println("article list empty")
 		}
@@ -41,21 +46,24 @@ func main() {
 		tags, err := tagBu.GetAllTags()
 
 		c.HTML(http.StatusOK, "index.tmpl", gin.H{
-			"title":    "The Best Developer News - Tech Daily",
-			"articles": articles,
-			"tags":     tags,
+			"title":       "The Best Developer News",
+			"pagination":  articles,
+			"currentPage": articles.Page,
+			"listPage":    articles.ListPages,
+			"tags":        tags,
 		})
 	})
 
 	r.GET("/t/:tag", func(c *gin.Context) {
 		tagName := c.Param("tag")
+		page := c.Request.URL.Query().Get("page")
 
 		tags, err := tagBu.GetAllTags()
 		if err != nil {
 			fmt.Println("tags list empty")
 		}
 
-		tag, err := tagBu.FindTag(map[string]interface{}{"Title": tagName})
+		tag, err := tagBu.FindTag(map[string]interface{}{"slug": tagName})
 		if err != nil {
 			fmt.Println("tags list empty")
 		}
@@ -63,15 +71,23 @@ func main() {
 		// get all article_tag by tag_id
 		articleTagBU := business.NewArticleTagBusiness(storage)
 		articleTags := articleTagBU.FindArticleIdByTagId(tag.Id)
-		articles, err := articleBU.GetAllArticlesByIds(articleTags)
+
+		var pagination pkg.Pagination
+
+		pagination.Page, _ = strconv.Atoi(page)
+		articles, err := articleBU.GetAllArticlesByIds(articleTags, &pagination)
+		fmt.Println(articles)
 		if err != nil {
 			fmt.Println("not load article by tag")
 		}
 
 		c.HTML(http.StatusOK, "tags.tmpl", gin.H{
-			"articles": articles,
-			"tags":     tags,
-			"tag":      tag,
+			"title":       tag.Title,
+			"pagination":  articles,
+			"currentPage": articles.Page,
+			"listPage":    articles.ListPages,
+			"tags":        tags,
+			"tag":         tag,
 		})
 	})
 

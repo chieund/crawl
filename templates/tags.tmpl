@@ -4,7 +4,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-        <title>{{ .tag.Title }} - Tech Daily</title>
+        <title>{{.title}} - Tech Daily</title>
 
         <!-- Bootstrap -->
         <link rel="stylesheet" href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" crossorigin="anonymous">
@@ -38,12 +38,12 @@
         <div class="row row-offcanvas row-offcanvas-right">
             <div class="col-xs-2 col-sm-2 sidebar-offcanvas" id="sidebar">
                 {{range .tags}}
-                    <a href="/t/{{.Title}}" class="badge badge-primary">#{{.Title}}</a>
+                    <a href="/t/{{.Slug}}" class="badge badge-primary">#{{.Title}}</a>
                 {{end}}
             </div>
             <div class="col-xs-10 col-sm-10">
                 <div class="row box-list">
-                    {{range .articles}}
+                    {{range .pagination.Rows}}
                     <div class="col-xs-12 col-ms-6 col-lg-3">
                         <h2><a href="{{.Link}}" target="_blank">{{.Title}}</a></h2>
                         <a href="{{.Link}}" target="_blank">
@@ -51,6 +51,79 @@
                     </div><!--/.col-xs-6.col-lg-4-->
                     {{end}}
                 </div><!--/row-->
+                <div class="d-flex justify-content-center align-items-center" style="height:100px;">
+                    <nav aria-label="...">
+                        <ul class="pagination">
+                            {{ $currentPage := .pagination.Page }}
+                            {{ $lastPage := .pagination.TotalPages }}
+                            {{ $checkTest := .pagination.TotalPages }}
+                            {{ $checkShowPage := .pagination.ShowPage }}
+                            {{ $checkShowPage1 := .pagination.ShowPage1 }}
+                            {{ $checkShowPage2 := .pagination.ShowPage2  }}
+                            {{ range $page := .listPage }}
+                            {{if le $currentPage 3}}
+                            {{if le $page 4}}
+                            {{if eq $page $currentPage}}
+                            <li class="page-item active">
+                                <span class="page-link">{{$page}}</span>
+                            </li>
+                            {{else}}
+                            <li class="page-item">
+                                <a href="/t/{{.tag.Slug}}?page={{$page}}" class="page-link">{{ $page }}</a>
+                            </li>
+                            {{end}}
+                            {{else if eq $page $lastPage}}
+                            <li class="page-item"><span class="page-link">...</span></li>
+                            <li class="page-item">
+                                <a href="/t/{{.tag.Slug}}?page={{$page}}" class="page-link">{{ $page }}</a>
+                            </li>
+                            {{end}}
+                            {{else if $checkShowPage}}
+                            {{if eq $page 1}}
+                            <li class="page-item">
+                                <a href="/t/{{.tag.Slug}}?page={{$page}}" class="page-link">{{ $page }}</a>
+                            </li>
+                            <li class="page-item"><span class="page-link">...</span></li>
+                            {{else if $checkShowPage1}}
+                            {{if eq $page $currentPage}}
+                            <li class="page-item">
+                                <span class="page-link">...</span>
+                            </li>
+                            {{else}}
+                            <li class="page-item">
+                                <a href="/t/{{.tag.Slug}}?page={{$page}}" class="page-link">{{ $page }}</a>
+                            </li>
+                            {{end}}
+                            {{end}}
+                            {{else}}
+                            {{if eq $page 1}}
+                            <li class="page-item">
+                                <a href="/t/{{.tag.Slug}}?page={{$page}}" class="page-link">{{ $page }}</a>
+                            </li>
+                            <li class="page-item"><span class="page-link">...</span></li>
+                            {{else if eq $page $lastPage}}
+                            <li class="page-item"><span class="page-link">...</span></li>
+                            <li class="page-item">
+                                <a href="/t/{{.tag.Slug}}?page={{$page}}" class="page-link">{{ $page }}</a>
+                            </li>
+                            {{else}}
+                            {{if $checkShowPage2}}
+                            {{if eq $page $currentPage}}
+                            <li class="page-item active">
+                                <span class="page-link">{{$page}}</span>
+                            </li>
+                            {{else}}
+                            <li class="page-item">
+                                <a href="/t/{{.tag.Slug}}?page={{$page}}" class="page-link">{{ $page }}</a>
+                            </li>
+                            {{end}}
+                            {{end}}
+                            {{end}}
+                            {{end}}
+                            {{end}}
+                        </ul>
+                    </nav>
+                </div>
             </div><!--/.col-xs-12.col-sm-9-->
         </div>
     </div>

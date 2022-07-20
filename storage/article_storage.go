@@ -2,6 +2,8 @@ package storage
 
 import (
 	"crawl/models"
+	"crawl/pkg"
+	"math"
 )
 
 func (s *mysqlStorage) FindArticle(condition map[string]interface{}) (*models.Article, error) {
@@ -26,14 +28,28 @@ func (s *mysqlStorage) CreateArticle(article *models.Article) {
 	s.db.Create(&article)
 }
 
-func (s *mysqlStorage) GetAllArticles() ([]models.Article, error) {
+func (s *mysqlStorage) GetAllArticles(pagination *pkg.Pagination) (*pkg.Pagination, error) {
 	var articles []models.Article
-	s.db.Order("id DESC").Find(&articles)
-	return articles, nil
+	var totalRows int64
+	s.db.Model(&articles).Count(&totalRows)
+	pagination.TotalRows = totalRows
+	pagination.TotalPages = int(math.Ceil(float64(totalRows) / float64(pagination.GetLimit())))
+	pagination.SetListPages()
+
+	s.db.Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
+	pagination.Rows = articles
+	return pagination, nil
 }
 
-func (s *mysqlStorage) GetAllArticlesByIds(ids []int) ([]models.Article, error) {
+func (s *mysqlStorage) GetAllArticlesByIds(ids []int, pagination *pkg.Pagination) (*pkg.Pagination, error) {
 	var articles []models.Article
-	s.db.Order("id DESC").Find(&articles, ids)
-	return articles, nil
+	var totalRows int64
+	s.db.Model(&articles).Where("id=?", ids).Count(&totalRows)
+	pagination.TotalRows = totalRows
+	pagination.TotalPages = int(math.Ceil(float64(totalRows) / float64(pagination.GetLimit())))
+	pagination.SetListPages()
+
+	s.db.Where("id=?", ids).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
+	pagination.Rows = articles
+	return pagination, nil
 }
