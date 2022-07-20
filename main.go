@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"crawl/business"
 	"crawl/database"
 	"crawl/pkg"
@@ -8,6 +9,7 @@ import (
 	"crawl/util"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"html/template"
 	"net/http"
 	"os"
 	"path"
@@ -53,6 +55,28 @@ func main() {
 			"listPage":    articles.ListPages,
 			"tags":        tags,
 		})
+	})
+
+	// add sitemap
+	r.GET("/sitemap.xml", func(c *gin.Context) {
+		var pagination pkg.Pagination
+		page := c.Request.URL.Query().Get("page")
+		pagination.Page, _ = strconv.Atoi(page)
+		pagination.Link = "/"
+		articles, err := articleBU.GetAllArticles(&pagination)
+		if err != nil {
+			fmt.Println("article list empty")
+		}
+		fmt.Println(articles)
+
+		t := template.Must(template.New("sitemap.xml").ParseFiles("./templates/sitemap.xml"))
+		var b bytes.Buffer
+		t.Execute(&b, gin.H{
+			"title":    "List tags",
+			"articles": articles,
+		})
+
+		c.Data(http.StatusOK, "application/xml", b.Bytes())
 	})
 
 	r.GET("/tags", func(c *gin.Context) {
