@@ -7,6 +7,7 @@ type Pagination struct {
 	TotalRows  int64
 	TotalPages int
 	ListPages  []int
+	Link       string
 	Rows       interface{}
 }
 
@@ -68,4 +69,8 @@ func (p *Pagination) ShowPage2() bool {
 		}
 	}
 	return false
+}
+
+func (p *Pagination) ShowHref() string {
+	return p.Link
 }
