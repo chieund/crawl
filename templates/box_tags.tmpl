@@ -1,8 +1,8 @@
 {{ define "box_tags.tmpl" }}
 <div class="col-xs-2 col-sm-2 sidebar-offcanvas" id="sidebar">
-    <div>
+    <div class="box-tags">
         {{range .tags}}
-        <a href="/t/{{.Slug}}" class="badge badge-primary">#{{.Title}}</a>
+        <a href="/t/{{.Slug}}" class="badge badge-{{ .ShowColor }}">#{{.Title}}</a>
         {{end}}
     </div>
     <div>
