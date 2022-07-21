@@ -16,21 +16,23 @@ jobs:
       with:
         go-version: 1.18
         cache: false
+
     - name: Build
       run: |
         export GOCACHE="/root/.cache/go-build"
         export GOPATH="/root/go"
         export GOENV="/root/.config/go/env"
         go build -v ./...
+
     - name: Test
       run: |
         export GOCACHE="/root/.cache/go-test"
         export GOPATH="/root/go"
         export GOENV="/root/.config/go/env"
         go test -v ./...
-      if: "github.event.pull_request.merged == true"
+
     - name: Deploy Product
-      id: master
+      if: "github.event.pull_request.merged == true"
       run: |
         export GOCACHE="/root/.cache/go-build"
         export GOPATH="/root/go"
