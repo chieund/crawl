@@ -20,7 +20,7 @@ jobs:
 
     - name: Build
       run: |
-        go env|grep CACHE \
+        go env|grep CACHE
         go build -v ./...
 
     - name: Test
