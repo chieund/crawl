@@ -20,6 +20,7 @@ jobs:
 
     - name: Build
       run: |
+        ls
         go env|grep CACHE
         go env GOMODCACHE
         go env
