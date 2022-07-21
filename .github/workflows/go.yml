@@ -19,7 +19,9 @@ jobs:
         go-version: 1.18
 
     - name: Build
-      run: go build -v ./...
+      run:
+        go env|grep CACHE
+        go build -v ./...
 
     - name: Test
       run: go test -v ./...
