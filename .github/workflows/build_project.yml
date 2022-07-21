@@ -31,5 +31,8 @@ jobs:
     - name: Deploy Product
       id: master
       run: |
+        export GOCACHE="/root/.cache/go-build"
+        export GOPATH="/root/go"
+        export GOENV="/root/.config/go/env"
         ./build.sh
         sudo systemctl restart app_web
