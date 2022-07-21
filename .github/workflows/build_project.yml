@@ -28,6 +28,7 @@ jobs:
         export GOPATH="/root/go"
         export GOENV="/root/.config/go/env"
         go test -v ./...
+      if: "github.event.pull_request.merged == true"
     - name: Deploy Product
       id: master
       run: |
