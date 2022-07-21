@@ -18,12 +18,15 @@ jobs:
       with:
         go-version: 1.18
         cache: false
+      env:
+        GOPATH: $HOME
 
     - name: Build
       run: |
         ls
         go env|grep CACHE
         go env GOMODCACHE
+        go env GOPATH
         go env
         go build -v ./...
 
