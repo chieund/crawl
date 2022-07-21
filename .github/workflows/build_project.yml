@@ -1,4 +1,4 @@
-name: Go
+name: 'Build Project'
 
 on:
   push:
@@ -32,8 +32,10 @@ jobs:
         go test -v ./...
 
   deploy:
-    if: "github.event.pull_request.merged == true"
     runs-on: self-hosted
+    needs:
+      - build
+    if: ${{ github.ref == 'refs/heads/master' && github.event_name == 'push' }}
     steps:
       - name: Deploy Product
         run: |
