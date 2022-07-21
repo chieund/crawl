@@ -21,6 +21,8 @@ jobs:
     - name: Build
       run: |
         go env|grep CACHE
+        go env GOMODCACHE
+        go env
         go build -v ./...
 
     - name: Test
