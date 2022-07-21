@@ -9,6 +9,22 @@ import (
 
 const DOMAIN_CRAWL string = "https://dev.to"
 
+var listCrawlDevTags = []string{
+	"javascript",
+	"webdev",
+	"react",
+	"python",
+	"devops",
+	"css",
+	"typescript",
+	"java",
+	"php",
+	"blockchain",
+	"database",
+	"go",
+	"aws",
+}
+
 func CrawlWeb(url string) []DataArticle {
 	c := colly.NewCollector()
 
@@ -44,5 +60,8 @@ func CrawlWeb(url string) []DataArticle {
 	})
 
 	c.Visit(url)
+	for _, tag := range listCrawlDevTags {
+		c.Visit(DOMAIN_CRAWL + "/t/" + tag)
+	}
 	return dataArticles
 }

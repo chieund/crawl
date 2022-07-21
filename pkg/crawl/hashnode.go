@@ -11,6 +11,17 @@ const (
 	URL_HASHNODE = "https://hashnode.com"
 )
 
+var listCrawlTags = []string{
+	"javascript",
+	"web-development",
+	"css",
+	"reactjs",
+	"python",
+	"javascript",
+	"html5",
+	"devops",
+}
+
 func CrawlWebHashNode() []DataArticle {
 	c := colly.NewCollector()
 	var dataArticles []DataArticle
@@ -48,6 +59,9 @@ func CrawlWebHashNode() []DataArticle {
 	})
 
 	c.Visit(URL_HASHNODE + "/community")
+	for _, tag := range listCrawlTags {
+		c.Visit(URL_HASHNODE + "/n/" + tag)
+	}
 
 	return dataArticles
 }
