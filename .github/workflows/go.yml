@@ -35,4 +35,5 @@ jobs:
       run: |
         export GOCACHE="/root/.cache/go-build"
         export GOPATH="/root/go"
+        export GOENV="/root/.config/go/env"
         go test -v ./...
