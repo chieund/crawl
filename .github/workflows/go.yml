@@ -21,6 +21,8 @@ jobs:
     - name: Build
       run: |
         ls
+        go clean -modcache
+        go clean -cache
         go env|grep CACHE
         go env GOMODCACHE
         go env
