@@ -31,11 +31,14 @@ jobs:
         export GOENV="/root/.config/go/env"
         go test -v ./...
 
-    - name: Deploy Product
-      if: "github.event.pull_request.merged == true"
-      run: |
-        export GOCACHE="/root/.cache/go-build"
-        export GOPATH="/root/go"
-        export GOENV="/root/.config/go/env"
-        ./build.sh
-        sudo systemctl restart app_web
+  deploy:
+    if: ${{ github.event.pull_request.merged }}
+    runs-on: self-hosted
+    steps:
+      - name: Deploy Product
+        run: |
+          export GOCACHE="/root/.cache/go-build"
+          export GOPATH="/root/go"
+          export GOENV="/root/.config/go/env"
+          ./build.sh
+          sudo systemctl restart app_web
