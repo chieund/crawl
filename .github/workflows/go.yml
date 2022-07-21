@@ -24,11 +24,6 @@ jobs:
         export GOCACHE="/root/.cache/go-build"
         export GOPATH="/root/go"
         export GOENV="/root/.config/go/env"
-        ls
-        go env|grep CACHE
-        go env GOMODCACHE
-        go env GOPATH
-        go env
         go build -v ./...
 
     - name: Test
