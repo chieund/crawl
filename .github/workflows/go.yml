@@ -22,7 +22,6 @@ jobs:
     - name: Build
       run: |
         export GOPATH="/root/go"
-        export GOMODCACHE="/root/go/pkg/mod"
         export GOENV="/root/.config/go/env"
         ls
         go env|grep CACHE
