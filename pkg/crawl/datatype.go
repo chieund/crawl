@@ -6,9 +6,11 @@ type DataTag struct {
 }
 
 type DataArticle struct {
-	Title string
-	Slug  string
-	Link  string
-	Image string
-	Tags  []DataTag
+	Title       string
+	Slug        string
+	Link        string
+	Image       string
+	Description string
+	Content     string
+	Tags        []DataTag
 }

@@ -2,7 +2,7 @@ package models
 
 import "gorm.io/gorm"
 
-type Article struct {
+type Website struct {
 	Id          int `gorm:"primary_key"`
 	Title       string
 	Slug        string
@@ -10,12 +10,9 @@ type Article struct {
 	Description string
 	Content     string
 	Link        string
-	WebsiteId   int
-	WebsiteSlug string
 	gorm.Model
-	Tags []Tag `gorm:"many2many:article_tag"`
 }
 
-func (article *Article) TableName() string {
-	return "articles"
+func (website *Website) TableName() string {
+	return "websites"
 }

@@ -65,3 +65,19 @@ func CrawlWeb(url string) []DataArticle {
 	}
 	return dataArticles
 }
+
+func CrawlWebDevContent(url string) DataArticle {
+	c := colly.NewCollector()
+
+	var dataArticle DataArticle
+	c.OnHTML("#article-body", func(e *colly.HTMLElement) {
+		dataArticle.Content, _ = e.DOM.Html()
+	})
+
+	c.OnRequest(func(r *colly.Request) {
+		fmt.Print("Visiting\n", r.URL)
+	})
+
+	c.Visit(url)
+	return dataArticle
+}
