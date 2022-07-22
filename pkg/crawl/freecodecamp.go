@@ -8,7 +8,7 @@ import (
 
 const URL_FREECODECAMP = "https://www.freecodecamp.org"
 
-func CrawlWebFreeCodeCamp() []DataArticle {
+func CrawlWebFreeCodeCamp(ch chan []DataArticle) {
 	c := colly.NewCollector()
 
 	var dataArticles []DataArticle
@@ -28,5 +28,6 @@ func CrawlWebFreeCodeCamp() []DataArticle {
 	})
 
 	c.Visit(URL_FREECODECAMP + "/news")
-	return dataArticles
+	ch <- dataArticles
+	defer close(ch)
 }

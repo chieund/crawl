@@ -22,7 +22,7 @@ var listCrawlTags = []string{
 	"devops",
 }
 
-func CrawlWebHashNode() []DataArticle {
+func CrawlWebHashNode(ch chan []DataArticle) {
 	c := colly.NewCollector()
 	var dataArticles []DataArticle
 	c.OnHTML("div.css-4gdbui", func(e *colly.HTMLElement) {
@@ -63,5 +63,6 @@ func CrawlWebHashNode() []DataArticle {
 		c.Visit(URL_HASHNODE + "/n/" + tag)
 	}
 
-	return dataArticles
+	ch <- dataArticles
+	defer close(ch)
 }

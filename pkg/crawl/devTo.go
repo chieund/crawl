@@ -25,7 +25,7 @@ var listCrawlDevTags = []string{
 	"aws",
 }
 
-func CrawlWeb(url string) []DataArticle {
+func CrawlWeb(ch chan []DataArticle) {
 	c := colly.NewCollector()
 
 	var dataArticles []DataArticle
@@ -59,9 +59,10 @@ func CrawlWeb(url string) []DataArticle {
 		fmt.Print("Visiting\n", r.URL)
 	})
 
-	c.Visit(url)
+	c.Visit(DOMAIN_CRAWL)
 	for _, tag := range listCrawlDevTags {
 		c.Visit(DOMAIN_CRAWL + "/t/" + tag)
 	}
-	return dataArticles
+	ch <- dataArticles
+	defer close(ch)
 }
