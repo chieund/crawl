@@ -31,18 +31,22 @@ func main() {
 
 	articleTagBiz := business.NewArticleTagBusiness(storage)
 
-	dataResult := crawl.CrawlWeb(DOMAIN_CRAWL)
-	insertData(dataResult, biz, bizTag, articleTagBiz)
+	devToChan := make(chan []crawl.DataArticle)
+	go crawl.CrawlWeb(devToChan)
+	insertData(<-devToChan, biz, bizTag, articleTagBiz)
 
 	// crawl freecodecamp
-	dataResultFreeCodeCamp := crawl.CrawlWebFreeCodeCamp()
-	insertData(dataResultFreeCodeCamp, biz, bizTag, articleTagBiz)
+	webFreeCodeCamp := make(chan []crawl.DataArticle)
+	go crawl.CrawlWebFreeCodeCamp(webFreeCodeCamp)
+	insertData(<-webFreeCodeCamp, biz, bizTag, articleTagBiz)
 
-	medium := crawl.CrawlWebMedium()
-	insertData(medium, biz, bizTag, articleTagBiz)
+	medium := make(chan []crawl.DataArticle)
+	go crawl.CrawlWebMedium(medium)
+	insertData(<-medium, biz, bizTag, articleTagBiz)
 
-	hashNode := crawl.CrawlWebHashNode()
-	insertData(hashNode, biz, bizTag, articleTagBiz)
+	hashNode := make(chan []crawl.DataArticle)
+	go crawl.CrawlWebHashNode(hashNode)
+	insertData(<-hashNode, biz, bizTag, articleTagBiz)
 }
 
 func insertData(dataResult []crawl.DataArticle, biz *business.ArticleBusiness, bizTag *business.TagBusiness, articleTagBiz *business.ArticleTagBusiness) {
