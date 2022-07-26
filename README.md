@@ -18,6 +18,10 @@ docker-compose exec crawl go mod vendor
 ```
 docker-compose exec crawl go run cmd/main.go
 ```
+## Use air autoload 
+```
+docker-compose exec crawl air -c .air.conf
+```
 
 # Deploy
 ## Run file build.sh build project into folder bin

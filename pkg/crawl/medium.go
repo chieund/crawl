@@ -21,7 +21,7 @@ var listTags = []string{
 	"software-development",
 }
 
-func CrawlWebMedium() []DataArticle {
+func CrawlWebMedium(ch chan []DataArticle) {
 	c := colly.NewCollector()
 	var dataArticles []DataArticle
 	c.OnHTML("article", func(e *colly.HTMLElement) {
@@ -60,5 +60,6 @@ func CrawlWebMedium() []DataArticle {
 		c.Visit(URL_MEDIUM + "/tag/" + tag)
 	}
 
-	return dataArticles
+	ch <- dataArticles
+	defer close(ch)
 }
