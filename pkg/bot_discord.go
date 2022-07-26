@@ -26,6 +26,6 @@ func BotPushNewGoToDiscord(config util.Config, title string, href string, image 
 	}
 	err := discordwebhook.SendMessage(config.URL_WEBHOOK_DISCORD, message)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 }
