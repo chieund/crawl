@@ -8,8 +8,7 @@ import (
 
 const UserBotDiscord = "Bot News Go"
 
-func BotPushNewGoToDiscord(title string, href string, image string) {
-	var config util.Config
+func BotPushNewGoToDiscord(config util.Config, title string, href string, image string) {
 	var embeds []discordwebhook.Embed
 
 	var user = UserBotDiscord
@@ -17,9 +16,9 @@ func BotPushNewGoToDiscord(title string, href string, image string) {
 	embed.Title = &title
 	embed.Url = &href
 
-	var thumbnail discordwebhook.Thumbnail
+	var thumbnail discordwebhook.Image
 	thumbnail.Url = &image
-	embed.Thumbnail = &thumbnail
+	embed.Image = &thumbnail
 	embeds = append(embeds, embed)
 	message := discordwebhook.Message{
 		Username: &user,
