@@ -1,18 +1,14 @@
-set_env_project_build:
+step_project_build:
 	export GOCACHE="/root/.cache/go-build"
 	export GOPATH="/root/go"
 	export GOENV="/root/.config/go/env"
+	go build -v ./...
 
-set_env_project_test:
+step_project_test:
 	export GOCACHE="/root/.cache/go-test"
 	export GOPATH="/root/go"
 	export GOENV="/root/.config/go/env"
-
-build_project:
-	go build -v ./...
-
-test_project:
-	go build -v ./...
+	go test -v ./...
 
 copy_template:
 	cp app.yaml bin/
