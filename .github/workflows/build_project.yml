@@ -16,6 +16,8 @@ jobs:
         cache: false
 
     - name: Build
+      env:
+        URL_WEBHOOK_DISCORD: ${{ secrets.URL_WEBHOOK_DISCORD }}
       run: |
         export GOCACHE="/root/.cache/go-build"
         export GOPATH="/root/go"
