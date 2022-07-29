@@ -16,10 +16,16 @@ jobs:
         cache: false
 
     - name: Build
+      env:
+        ENV_URL_WEBHOOK_DISCORD: ${{ secrets.URL_WEBHOOK_DISCORD }}
       run: |
         export GOCACHE="/root/.cache/go-build"
         export GOPATH="/root/go"
         export GOENV="/root/.config/go/env"
+        export URL_WEBHOOK_DISCORD=${ENV_URL_WEBHOOK_DISCORD}
+        echo "${URL_WEBHOOK_DISCORD}"
+        echo "${ENV_URL_WEBHOOK_DISCORD}"
+        envsubst < app_deploy.yaml > app.yaml
         make project_build
 
     - name: Test
