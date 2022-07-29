@@ -5,6 +5,7 @@ project_test:
 	go test -v ./...
 
 copy_template:
+	ls
 	cp app.yaml bin/
 	cp -R templates/ bin/
 
