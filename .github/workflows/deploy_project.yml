@@ -17,5 +17,7 @@ jobs:
           cache: false
       - name: Deploy Product
         run: |
-          make set_env_project_build
+          export GOCACHE="/root/.cache/go-build"
+          export GOPATH="/root/go"
+          export GOENV="/root/.config/go/env"
           make deploy_project

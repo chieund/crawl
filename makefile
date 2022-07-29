@@ -1,13 +1,7 @@
-step_project_build:
-	export GOCACHE="/root/.cache/go-build"
-	export GOPATH="/root/go"
-	export GOENV="/root/.config/go/env"
+project_build:
 	go build -v ./...
 
-step_project_test:
-	export GOCACHE="/root/.cache/go-test"
-	export GOPATH="/root/go"
-	export GOENV="/root/.config/go/env"
+project_test:
 	go test -v ./...
 
 copy_template:
