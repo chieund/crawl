@@ -1,4 +1,9 @@
 # Build Run Local
+## Change file app_example.yaml to app.yaml
+```
+cp app_example.yaml app.yaml
+```
+
 ## Build Docker
 ```
 docker-compose up --build
@@ -24,10 +29,9 @@ docker-compose exec crawl air -c .air.conf
 ```
 
 # Deploy
-## Run file build.sh build project into folder bin
+## Run file makefile build project into folder bin
 ```
-chmod +x build.sh
-./build.sh
+make copy_template build_app_web build_app_crawl migrate
 ```
 
 # Create Services in run in background (https://www.atpeaz.com/running-go-app-as-a-service-on-ubuntu/amp/)
