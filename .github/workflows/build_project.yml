@@ -20,6 +20,7 @@ jobs:
         export GOCACHE="/root/.cache/go-build"
         export GOPATH="/root/go"
         export GOENV="/root/.config/go/env"
+        envsubst app_deploy.yaml app.yaml
         make project_build
 
     - name: Test
