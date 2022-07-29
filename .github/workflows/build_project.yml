@@ -17,10 +17,8 @@ jobs:
 
     - name: Build
       run: |
-        make set_env_project_build
-        make build_project
+        make step_project_build
 
     - name: Test
       run: |
-        make set_env_project_test
-        make test_project
+        make step_project_test
