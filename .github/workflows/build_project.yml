@@ -22,8 +22,9 @@ jobs:
         export GOCACHE="/root/.cache/go-build"
         export GOPATH="/root/go"
         export GOENV="/root/.config/go/env"
+        echo ${{ secrets.URL_WEBHOOK_DISCORD }}
+        echo "${URL_WEBHOOK_DISCORD}"
         export URL_WEBHOOK_DISCORD=${URL_WEBHOOK_DISCORD}
-        echo ${URL_WEBHOOK_DISCORD}
         envsubst < app_deploy.yaml > app.yaml
         make project_build
 
