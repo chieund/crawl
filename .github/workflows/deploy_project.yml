@@ -17,5 +17,5 @@ jobs:
           cache: false
       - name: Deploy Product
         run: |
-          make set_env_project
+          make set_env_project_build
           make deploy_project
