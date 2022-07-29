@@ -1,0 +1,24 @@
+name: 'Deploy Project'
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    if: ${{ github.ref == 'refs/heads/master' && github.event_name == 'push' }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+          cache: false
+      - name: Deploy Product
+        run: |
+          export GOCACHE="/root/.cache/go-build"
+          export GOPATH="/root/go"
+          export GOENV="/root/.config/go/env"
+          ./build.sh
+          sudo systemctl restart app_web
