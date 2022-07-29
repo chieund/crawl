@@ -1,5 +1,10 @@
-set_env_project:
+set_env_project_build:
 	export GOCACHE="/root/.cache/go-build"
+	export GOPATH="/root/go"
+	export GOENV="/root/.config/go/env"
+
+set_env_project_test:
+	export GOCACHE="/root/.cache/go-test"
 	export GOPATH="/root/go"
 	export GOENV="/root/.config/go/env"
 
