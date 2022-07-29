@@ -17,8 +17,5 @@ jobs:
           cache: false
       - name: Deploy Product
         run: |
-          export GOCACHE="/root/.cache/go-build"
-          export GOPATH="/root/go"
-          export GOENV="/root/.config/go/env"
-          ./build.sh
-          sudo systemctl restart app_web
+          make set_env_project
+          make deploy_project

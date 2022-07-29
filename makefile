@@ -1,3 +1,14 @@
+set_env_project:
+	export GOCACHE="/root/.cache/go-build"
+	export GOPATH="/root/go"
+	export GOENV="/root/.config/go/env"
+
+build_project:
+	go build -v ./...
+
+test_project:
+	go build -v ./...
+
 copy_template:
 	cp app.yaml bin/
 	cp -R templates/ bin/
@@ -17,4 +28,4 @@ restart_app_web:
 reload_cronjob:
 	sudo service cron reload
 
-all: copy_template build_app_web build_app_crawl migrate restart_app_web reload_cronjob
+deploy_project: copy_template build_app_web build_app_crawl migrate restart_app_web reload_cronjob

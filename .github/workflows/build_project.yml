@@ -17,14 +17,10 @@ jobs:
 
     - name: Build
       run: |
-        export GOCACHE="/root/.cache/go-build"
-        export GOPATH="/root/go"
-        export GOENV="/root/.config/go/env"
-        go build -v ./...
+        make set_env_project
+        make build_project
 
     - name: Test
       run: |
-        export GOCACHE="/root/.cache/go-test"
-        export GOPATH="/root/go"
-        export GOENV="/root/.config/go/env"
-        go test -v ./...
+        make set_env_project
+        make test_project
