@@ -31,6 +31,7 @@ func main() {
 	r.GET("/", controller.GetAllArticles(db))
 	r.GET("/tags", controller.GetAllTags(db))
 	r.GET("/t/:tag", controller.GetArticleByTag(db))
+	r.GET("/:slug", controller.GetArticleBySlug(db))
 
 	r.Run(":80") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }

@@ -37,3 +37,20 @@ func (controller *Controller) GetAllArticles(db *gorm.DB) gin.HandlerFunc {
 		})
 	}
 }
+
+func (controller *Controller) GetArticleBySlug(db *gorm.DB) gin.HandlerFunc {
+	storage := mysqlStorage.NewMySQLStorage(db)
+	articleBU := business.NewArticleBusiness(storage)
+
+	return func(c *gin.Context) {
+		slug := c.Param("slug")
+		article, err := articleBU.FindArticle(map[string]interface{}{"slug": slug})
+		if err != nil {
+			c.Redirect(http.StatusNotFound, "/")
+		}
+
+		article.Viewed = article.Viewed + 1
+		articleBU.UpdateArticle(map[string]interface{}{"slug": slug}, *article)
+		c.Redirect(http.StatusFound, article.Link)
+	}
+}

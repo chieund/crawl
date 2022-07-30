@@ -10,6 +10,7 @@ type Article struct {
 	Description string
 	Content     string
 	Link        string
+	Viewed      int `gorm:"default:0"`
 	gorm.Model
 	Tags []Tag `gorm:"many2many:article_tag"`
 }
