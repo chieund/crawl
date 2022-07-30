@@ -1,5 +1,0 @@
-DB_USERNAME: root
-DB_PASSWORD: password
-DB_HOST: db
-DB_NAME: db_crawl
-URL_WEBHOOK_DISCORD:
