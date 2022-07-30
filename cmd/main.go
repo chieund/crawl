@@ -4,10 +4,12 @@ import (
 	"crawl/business"
 	"crawl/database"
 	"crawl/models"
+	"crawl/pkg"
 	"crawl/pkg/crawl"
 	articleStorage "crawl/storage"
 	"crawl/util"
 	"fmt"
+	"strings"
 )
 
 //const PAGE_LASTER = "latest"
@@ -31,21 +33,23 @@ func main() {
 
 	articleTagBiz := business.NewArticleTagBusiness(storage)
 
-	dataResult := crawl.CrawlWeb(DOMAIN_CRAWL)
-	insertData(dataResult, biz, bizTag, articleTagBiz)
+	devToChan := make(chan []crawl.DataArticle)
+	hashNode := make(chan []crawl.DataArticle)
+	webFreeCodeCamp := make(chan []crawl.DataArticle)
+	medium := make(chan []crawl.DataArticle)
 
-	// crawl freecodecamp
-	dataResultFreeCodeCamp := crawl.CrawlWebFreeCodeCamp()
-	insertData(dataResultFreeCodeCamp, biz, bizTag, articleTagBiz)
+	go crawl.CrawlWeb(devToChan)
+	go crawl.CrawlWebFreeCodeCamp(webFreeCodeCamp)
+	go crawl.CrawlWebMedium(medium)
+	go crawl.CrawlWebHashNode(hashNode)
 
-	medium := crawl.CrawlWebMedium()
-	insertData(medium, biz, bizTag, articleTagBiz)
-
-	hashNode := crawl.CrawlWebHashNode()
-	insertData(hashNode, biz, bizTag, articleTagBiz)
+	insertData(config, <-webFreeCodeCamp, biz, bizTag, articleTagBiz)
+	insertData(config, <-devToChan, biz, bizTag, articleTagBiz)
+	insertData(config, <-medium, biz, bizTag, articleTagBiz)
+	insertData(config, <-hashNode, biz, bizTag, articleTagBiz)
 }
 
-func insertData(dataResult []crawl.DataArticle, biz *business.ArticleBusiness, bizTag *business.TagBusiness, articleTagBiz *business.ArticleTagBusiness) {
+func insertData(config util.Config, dataResult []crawl.DataArticle, biz *business.ArticleBusiness, bizTag *business.TagBusiness, articleTagBiz *business.ArticleTagBusiness) {
 	for _, data := range dataResult {
 		if len(data.Tags) > 0 {
 			for _, dataTag := range data.Tags {
@@ -60,6 +64,11 @@ func insertData(dataResult []crawl.DataArticle, biz *business.ArticleBusiness, b
 					bizTag.UpdateTag(map[string]interface{}{"slug": dataTag.Slug}, *tag)
 				}
 			}
+		}
+
+		check := strings.Contains(data.Slug, "go")
+		if check {
+			pkg.BotPushNewGoToDiscord(config, data.Title, data.Link, data.Image)
 		}
 
 		article, err := biz.FindArticle(map[string]interface{}{"slug": data.Slug})

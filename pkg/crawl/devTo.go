@@ -25,45 +25,49 @@ var listCrawlDevTags = []string{
 	"aws",
 }
 
-func CrawlWeb(url string) []DataArticle {
-	c := colly.NewCollector()
+func CrawlWeb(ch chan []DataArticle) {
+	result := func() []DataArticle {
+		c := colly.NewCollector()
 
-	var dataArticles []DataArticle
-	c.OnHTML(".crayons-story", func(e *colly.HTMLElement) {
-		dataArticle := DataArticle{}
-		dataArticle.Title = e.ChildText("h2.crayons-story__title a")
-		link := e.ChildAttr("h2.crayons-story__title a", "href")
-		dataArticle.Image = e.ChildAttr("h2.crayons-story__title a", "data-preload-image")
-		if dataArticle.Image == "" {
-			dataArticle.Image = "https://thepracticaldev.s3.amazonaws.com/i/6hqmcjaxbgbon8ydw93z.png"
-		}
+		var dataArticles []DataArticle
+		c.OnHTML(".crayons-story", func(e *colly.HTMLElement) {
+			dataArticle := DataArticle{}
+			dataArticle.Title = e.ChildText("h2.crayons-story__title a")
+			link := e.ChildAttr("h2.crayons-story__title a", "href")
+			dataArticle.Image = e.ChildAttr("h2.crayons-story__title a", "data-preload-image")
+			if dataArticle.Image == "" {
+				dataArticle.Image = "https://thepracticaldev.s3.amazonaws.com/i/6hqmcjaxbgbon8ydw93z.png"
+			}
 
-		var tags []DataTag
-		e.ForEach("a.crayons-tag", func(_ int, e *colly.HTMLElement) {
-			tagText := e.Text
-			title := strings.Replace(tagText, "#", "", 1)
-			tag := DataTag{}
-			tag.Title = title
-			tag.Slug = slug.Make(title)
-			tags = append(tags, tag)
+			var tags []DataTag
+			e.ForEach("a.crayons-tag", func(_ int, e *colly.HTMLElement) {
+				tagText := e.Text
+				title := strings.Replace(tagText, "#", "", 1)
+				tag := DataTag{}
+				tag.Title = title
+				tag.Slug = slug.Make(title)
+				tags = append(tags, tag)
+			})
+			dataArticle.Tags = tags
+
+			// get tags
+			dataArticle.Slug = slug.Make(dataArticle.Title)
+			dataArticle.Link = DOMAIN_CRAWL + link
+			dataArticles = append(dataArticles, dataArticle)
 		})
-		dataArticle.Tags = tags
 
-		// get tags
-		dataArticle.Slug = slug.Make(dataArticle.Title)
-		dataArticle.Link = DOMAIN_CRAWL + link
-		dataArticles = append(dataArticles, dataArticle)
-	})
+		c.OnRequest(func(r *colly.Request) {
+			fmt.Println("Visiting\n", r.URL)
+		})
 
-	c.OnRequest(func(r *colly.Request) {
-		fmt.Print("Visiting\n", r.URL)
-	})
-
-	c.Visit(url)
-	for _, tag := range listCrawlDevTags {
-		c.Visit(DOMAIN_CRAWL + "/t/" + tag)
-	}
-	return dataArticles
+		c.Visit(DOMAIN_CRAWL)
+		for _, tag := range listCrawlDevTags {
+			c.Visit(DOMAIN_CRAWL + "/t/" + tag)
+		}
+		return dataArticles
+	}()
+	ch <- result
+	defer close(ch)
 }
 
 func CrawlWebDevContent(url string) DataArticle {

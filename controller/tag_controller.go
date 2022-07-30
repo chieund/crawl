@@ -53,7 +53,7 @@ func (controller *Controller) GetArticleByTag(db *gorm.DB) gin.HandlerFunc {
 
 		var pagination pkg.Pagination
 		pagination.Page, _ = strconv.Atoi(page)
-		pagination.Link = "/tag/"
+		pagination.Link = fmt.Sprintf("/t/%s", tag.Slug)
 		articles, err := articleBU.GetAllArticlesByIds(articleTags, &pagination)
 		if err != nil {
 			fmt.Println("not load article by tag")

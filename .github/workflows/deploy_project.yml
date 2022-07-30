@@ -16,9 +16,15 @@ jobs:
           go-version: 1.18
           cache: false
       - name: Deploy Product
+        env:
+          ENV_DB_USERNAME: ${{ secrets.ENV_DB_USERNAME }}
+          ENV_DB_PASSWORD: ${{ secrets.ENV_DB_PASSWORD }}
+          ENV_DB_HOST: ${{ secrets.ENV_DB_HOST }}
+          ENV_DB_NAME: ${{ secrets.ENV_DB_NAME }}
+          ENV_URL_WEBHOOK_DISCORD: ${{ secrets.URL_WEBHOOK_DISCORD }}
         run: |
           export GOCACHE="/root/.cache/go-build"
           export GOPATH="/root/go"
           export GOENV="/root/.config/go/env"
-          ./build.sh
-          sudo systemctl restart app_web
+          envsubst < app_deploy.yaml > app.yaml
+          make deploy_project
