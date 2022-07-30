@@ -1,0 +1,42 @@
+name: 'Build Project'
+
+on:
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.18
+        cache: false
+
+    - name: Build
+      env:
+        ENV_DB_USERNAME: ${{ secrets.ENV_DB_USERNAME }}
+        ENV_DB_PASSWORD: ${{ secrets.ENV_DB_PASSWORD }}
+        ENV_DB_HOST: ${{ secrets.ENV_DB_HOST }}
+        ENV_DB_NAME: ${{ secrets.ENV_DB_NAME }}
+        ENV_URL_WEBHOOK_DISCORD: ${{ secrets.URL_WEBHOOK_DISCORD }}
+      run: |
+        export GOCACHE="/root/.cache/go-build"
+        export GOPATH="/root/go"
+        export GOENV="/root/.config/go/env"
+        echo "${ENV_DB_USERNAME}"
+        echo "${ENV_DB_PASSWORD}"
+        echo "${ENV_DB_HOST}"
+        echo "${ENV_DB_NAME}"
+        echo "${ENV_URL_WEBHOOK_DISCORD}"
+        envsubst < app_deploy.yaml > app.yaml
+        make project_build
+
+    - name: Test
+      run: |
+        export GOCACHE="/root/.cache/go-test"
+        export GOPATH="/root/go"
+        export GOENV="/root/.config/go/env"
+        make project_test
