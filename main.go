@@ -31,29 +31,9 @@ func main() {
 	r.GET("/", controller.GetAllArticles(db))
 	r.GET("/tags", controller.GetAllTags(db))
 	// add sitemap
-	r.GET("/sitemap.xml", func(c *gin.Context) {
-		var pagination pkg.Pagination
-		page := c.Request.URL.Query().Get("page")
-		pagination.Page, _ = strconv.Atoi(page)
-		pagination.Link = "/"
-		articles, err := articleBU.GetAllArticles(&pagination)
-		if err != nil {
-			fmt.Println("article list empty")
-		}
-		fmt.Println(articles)
-
-		t := template.Must(template.New("sitemap.xml").ParseFiles("./templates/sitemap.xml"))
-		var b bytes.Buffer
-		t.Execute(&b, gin.H{
-			"title":    "List tags",
-			"articles": articles,
-		})
-
-		c.Data(http.StatusOK, "application/xml", b.Bytes())
-	})
-
+	r.GET("/sitemap.xml", controller.Sitemap(db))
 	r.GET("/t/:tag", controller.GetArticleByTag(db))
 	r.GET("/:slug", controller.GetArticleBySlug(db))
 
-	r.Run(":80") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
