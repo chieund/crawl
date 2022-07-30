@@ -30,6 +30,8 @@ func main() {
 	controller := IndexAction.Controller{}
 	r.GET("/", controller.GetAllArticles(db))
 	r.GET("/tags", controller.GetAllTags(db))
+	// add sitemap
+	r.GET("/sitemap.xml", controller.Sitemap(db))
 	r.GET("/t/:tag", controller.GetArticleByTag(db))
 	r.GET("/:slug", controller.GetArticleBySlug(db))
 
