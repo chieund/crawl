@@ -23,10 +23,7 @@ func (controller *Controller) Sitemap(db *gorm.DB) gin.HandlerFunc {
 		if err != nil {
 			fmt.Println("article list empty")
 		}
-		fmt.Println(articles)
-
 		t := template.Must(template.New("sitemap.xml").ParseFiles("./templates/sitemap.xml"))
-
 		var b bytes.Buffer
 		t.Execute(&b, gin.H{
 			"articles": articles,
