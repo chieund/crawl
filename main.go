@@ -28,6 +28,7 @@ func main() {
 	cwd, _ := os.Getwd()
 	r.LoadHTMLGlob(path.Join(cwd, "templates/*.tmpl"))
 	controller := IndexAction.Controller{}
+	r.StaticFile("/favicon.ico", "./templates/favicon.ico")
 	r.GET("/", controller.GetAllArticles(db))
 	r.GET("/tags", controller.GetAllTags(db))
 	// add sitemap
