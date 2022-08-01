@@ -38,7 +38,7 @@ func (controller *Controller) Sitemap(db *gorm.DB) gin.HandlerFunc {
 		t := template.Must(template.New("sitemap.xml").ParseFiles("./templates/sitemap.xml"))
 		var b bytes.Buffer
 		t.Execute(&b, gin.H{
-			"articles": articles,
+			"articles": articleResponses,
 		})
 
 		c.Data(http.StatusOK, "application/xml", b.Bytes())
