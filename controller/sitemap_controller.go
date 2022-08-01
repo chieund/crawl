@@ -6,7 +6,6 @@ import (
 	"crawl/models"
 	"crawl/pkg"
 	mysqlStorage "crawl/storage"
-	"crawl/util"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
