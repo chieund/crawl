@@ -23,3 +23,9 @@ func (tag *Tag) ShowColor() string {
 	pick := in[randomIndex]
 	return pick
 }
+
+type TagResponse struct {
+	Title    string
+	Slug     string
+	UpdateAt string
+}

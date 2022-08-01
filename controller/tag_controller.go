@@ -22,8 +22,10 @@ func (controller *Controller) GetAllTags(db *gorm.DB) gin.HandlerFunc {
 		}
 
 		c.HTML(http.StatusOK, "tags.tmpl", gin.H{
-			"title": "List tags",
-			"tags":  tags,
+			"title":       fmt.Sprintf("%s - The Best Developer News", "List tags"),
+			"description": fmt.Sprintf("%s a website that aggregates all the latest articles on technology", "list tags"),
+			"keywords":    "Angular, Aws, blockchain, ci/cd, css, Data Science, Django, GoLang, Java, Javascript, Laravel, Mmagento, Node.js, Php, Python, React, Rust, Serverless, Vuejs, Web Development",
+			"tags":        tags,
 		})
 	}
 }
@@ -60,7 +62,9 @@ func (controller *Controller) GetArticleByTag(db *gorm.DB) gin.HandlerFunc {
 		}
 
 		c.HTML(http.StatusOK, "article_tags.tmpl", gin.H{
-			"title":       tag.Title,
+			"title":       fmt.Sprintf("%s - The Best Developer News", tag.Title),
+			"description": fmt.Sprintf("%s a website that aggregates all the latest articles on technology", tag.Title),
+			"keywords":    fmt.Sprintf("Software development, engineering, Web Development, %s", tag.Title),
 			"pagination":  articles,
 			"currentPage": articles.Page,
 			"listPage":    articles.ListPages,

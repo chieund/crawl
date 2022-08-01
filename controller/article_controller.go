@@ -30,6 +30,8 @@ func (controller *Controller) GetAllArticles(db *gorm.DB) gin.HandlerFunc {
 
 		c.HTML(http.StatusOK, "index.tmpl", gin.H{
 			"title":       "The Best Developer News",
+			"description": "The Best Developer News is a website that aggregates all the latest articles on technology",
+			"keywords":    "Angular, Aws, blockchain, ci/cd, css, Data Science, Django, GoLang, Java, Javascript, Laravel, Mmagento, Node.js, Php, Python, React, Rust, Serverless, Vuejs, Web Development",
 			"pagination":  articles,
 			"currentPage": articles.Page,
 			"listPage":    articles.ListPages,

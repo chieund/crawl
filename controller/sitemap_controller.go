@@ -35,10 +35,38 @@ func (controller *Controller) Sitemap(db *gorm.DB) gin.HandlerFunc {
 			articleResponses = append(articleResponses, articleResponse)
 		}
 
-		t := template.Must(template.New("sitemap.xml").ParseFiles("./templates/sitemap.xml"))
+		t := template.Must(template.New("sitemap.xml").ParseFiles("./templates/sitemap/sitemap.xml"))
 		var b bytes.Buffer
 		t.Execute(&b, gin.H{
 			"articles": articleResponses,
+		})
+
+		c.Data(http.StatusOK, "application/xml", b.Bytes())
+	}
+}
+
+func (controller *Controller) SitemapTags(db *gorm.DB) gin.HandlerFunc {
+	storage := mysqlStorage.NewMySQLStorage(db)
+	tagBu := business.NewTagBusiness(storage)
+
+	return func(c *gin.Context) {
+		tags, err := tagBu.GetAllTags()
+		if err != nil {
+			fmt.Println("article list empty")
+		}
+
+		var tagResponses []models.TagResponse
+		for _, article := range tags {
+			tagResponse := models.TagResponse{}
+			tagResponse.Slug = article.Slug
+			tagResponse.UpdateAt = article.UpdatedAt.Format(time.RFC3339)
+			tagResponses = append(tagResponses, tagResponse)
+		}
+
+		t := template.Must(template.New("tags.xml").ParseFiles("./templates/sitemap/tags.xml"))
+		var b bytes.Buffer
+		t.Execute(&b, gin.H{
+			"tags": tagResponses,
 		})
 
 		c.Data(http.StatusOK, "application/xml", b.Bytes())

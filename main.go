@@ -29,9 +29,12 @@ func main() {
 	r.LoadHTMLGlob(path.Join(cwd, "templates/*.tmpl"))
 	controller := IndexAction.Controller{}
 	r.StaticFile("/favicon.ico", "./templates/favicon.ico")
+	r.StaticFile("/robots.txt", "./templates/robots.txt")
+	r.StaticFile("/images/image.webp", "./templates/images/image.webp")
 	r.GET("/", controller.GetAllArticles(db))
 	r.GET("/tags", controller.GetAllTags(db))
 	r.GET("/sitemap.xml", controller.Sitemap(db))
+	r.GET("/tags.xml", controller.SitemapTags(db))
 	r.GET("/t/:tag", controller.GetArticleByTag(db))
 	r.GET("/:slug", controller.GetArticleBySlug(db))
 
