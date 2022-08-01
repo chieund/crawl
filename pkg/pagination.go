@@ -1,5 +1,7 @@
 package pkg
 
+import "crawl/models"
+
 type Pagination struct {
 	Limit      int
 	Page       int
@@ -8,7 +10,7 @@ type Pagination struct {
 	TotalPages int
 	ListPages  []int
 	Link       string
-	Rows       interface{}
+	Rows       []models.Article
 }
 
 func (p *Pagination) GetOffset() int {
