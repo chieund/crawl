@@ -1,6 +1,8 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Article struct {
 	Id          int `gorm:"primary_key"`
@@ -17,4 +19,11 @@ type Article struct {
 
 func (article *Article) TableName() string {
 	return "articles"
+}
+
+type ArticleResponse struct {
+	Title    string
+	Slug     string
+	Link     string
+	UpdateAt string
 }
