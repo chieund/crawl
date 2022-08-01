@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     {{range .tags}}
     <url>
-        <loc>http://techdaily.info/t/{{.Slug}}</loc>
+        <loc>http://www.techdaily.info/t/{{.Slug}}</loc>
         <lastmod>{{.UpdateAt}}</lastmod>
     </url>
     {{end}}
