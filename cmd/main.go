@@ -50,6 +50,7 @@ func main() {
 }
 
 func insertData(config util.Config, dataResult []crawl.DataArticle, biz *business.ArticleBusiness, bizTag *business.TagBusiness, articleTagBiz *business.ArticleTagBusiness) {
+	count := 0
 	for _, data := range dataResult {
 		if len(data.Tags) > 0 {
 			for _, dataTag := range data.Tags {
@@ -67,7 +68,7 @@ func insertData(config util.Config, dataResult []crawl.DataArticle, biz *busines
 		}
 
 		check := strings.Contains(data.Slug, "go")
-		if check {
+		if check && count < 5 {
 			pkg.BotPushNewGoToDiscord(config, data.Title, data.Link, data.Image)
 		}
 
@@ -99,5 +100,7 @@ func insertData(config util.Config, dataResult []crawl.DataArticle, biz *busines
 			//fmt.Println("update article: ", article.Title)
 			biz.UpdateArticle(map[string]interface{}{"slug": data.Slug}, *article)
 		}
+
+		count++
 	}
 }
