@@ -28,9 +28,16 @@ func main() {
 	cwd, _ := os.Getwd()
 	r.LoadHTMLGlob(path.Join(cwd, "templates/*.tmpl"))
 	controller := IndexAction.Controller{}
+	r.StaticFile("/favicon.ico", "./templates/favicon.ico")
+	r.StaticFile("/robots.txt", "./templates/robots.txt")
+	r.StaticFile("/images/image.webp", "./templates/images/image.webp")
+	r.StaticFile("/google18bb3160694ad28a.html", "./templates/google18bb3160694ad28a.html")
 	r.GET("/", controller.GetAllArticles(db))
 	r.GET("/tags", controller.GetAllTags(db))
+	r.GET("/sitemap.xml", controller.Sitemap(db))
+	r.GET("/tags.xml", controller.SitemapTags(db))
 	r.GET("/t/:tag", controller.GetArticleByTag(db))
+	r.GET("/:slug", controller.GetArticleBySlug(db))
 
 	r.Run(":80") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }

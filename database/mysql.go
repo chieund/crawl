@@ -9,7 +9,7 @@ import (
 
 func DBConn(config util.Config) (db *gorm.DB, err error) {
 	dns := fmt.Sprintf(
-		"%s:%s@(%s:3306)/%s?charset=utf8&parseTime=True&loc=Local",
+		"%s:%s@(%s:3306)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		config.DBUserName,
 		config.DBPassWord,
 		config.DBHost,

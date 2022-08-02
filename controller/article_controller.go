@@ -30,10 +30,29 @@ func (controller *Controller) GetAllArticles(db *gorm.DB) gin.HandlerFunc {
 
 		c.HTML(http.StatusOK, "index.tmpl", gin.H{
 			"title":       "The Best Developer News",
+			"description": "The Best Developer News is a website that aggregates all the latest articles on technology",
+			"keywords":    "Angular, Aws, blockchain, ci/cd, css, Data Science, Django, GoLang, Java, Javascript, Laravel, Mmagento, Node.js, Php, Python, React, Rust, Serverless, Vuejs, Web Development",
 			"pagination":  articles,
 			"currentPage": articles.Page,
 			"listPage":    articles.ListPages,
 			"tags":        tags,
 		})
+	}
+}
+
+func (controller *Controller) GetArticleBySlug(db *gorm.DB) gin.HandlerFunc {
+	storage := mysqlStorage.NewMySQLStorage(db)
+	articleBU := business.NewArticleBusiness(storage)
+
+	return func(c *gin.Context) {
+		slug := c.Param("slug")
+		article, err := articleBU.FindArticle(map[string]interface{}{"slug": slug})
+		if err != nil {
+			c.Redirect(http.StatusNotFound, "/")
+		}
+
+		article.Viewed = article.Viewed + 1
+		articleBU.UpdateArticle(map[string]interface{}{"slug": slug}, *article)
+		c.Redirect(http.StatusFound, article.Link)
 	}
 }

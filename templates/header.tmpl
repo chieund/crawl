@@ -6,6 +6,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         <title>{{ .title }}</title>
+        <meta name="description" content="{{ .description }}">
+        <meta name="keywords" content="{{ .keywords }}">
+
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="http://techdaily.info/" />
+        <meta property="og:title" content="{{ .title }}" />
+        <meta property="og:image" content="http://techdaily.info/images/image.webp">
+        <meta property="og:description" content="{{ .description }}" />
+        <meta property="og:site_name" content="The Best Developer News" />
+
+        <meta name="twitter:site" content="The Best Developer News">
+        <meta name="twitter:title" content="{{ .title }}">
+        <meta name="twitter:description" content="{{ .description }}">
+        <meta name="twitter:image:src" content="http://techdaily.info/images/image.webp">
+        <meta name="twitter:card" content="summary_large_image">
 
         <!-- Bootstrap -->
         <link rel="stylesheet" href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" crossorigin="anonymous">

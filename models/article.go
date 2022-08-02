@@ -10,6 +10,7 @@ type Article struct {
 	Description string
 	Content     string
 	Link        string
+	Viewed      int `gorm:"default:0"`
 	WebsiteId   int
 	WebsiteSlug string
 	gorm.Model
