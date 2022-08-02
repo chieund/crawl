@@ -9,9 +9,9 @@
             <div class="row box-list">
                 {{range .pagination.Rows}}
                 <div class="col-xs-12 col-ms-6 col-lg-3 list-item">
-                    <h2><a href="{{.Slug}}" target="_blank">{{.Title}}</a></h2>
-                    <a href="{{.Slug}}" target="_blank">
-                        <img class="img-rounded" style="width: 100%;" src="{{.Image}}" data-holder-rendered="true"></a>
+                    <h2><a href="{{.Slug}}" target="_blank" title="{{.Title}}">{{.Title}}</a></h2>
+                    <a href="{{.Slug}}" title="{{.Title}}" target="_blank">
+                        <img class="img-rounded" alt="{{.Title}}" style="width: 100%;" src="{{.Image}}" data-holder-rendered="true"></a>
                 </div><!--/.col-xs-6.col-lg-4-->
                 {{end}}
             </div><!--/row-->
