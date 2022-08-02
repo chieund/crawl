@@ -27,9 +27,17 @@ func main() {
 	var paging pkg.Pagination
 	paging.Page = 1
 	artiles, _ := biz.GetAllArticlesByIds([]int{1, 2, 3, 4, 5}, &paging)
-	fmt.Println(artiles.Rows)
 	for _, article := range artiles.Rows {
 		content := crawl.CrawlWebDevContent(article.Link)
-		fmt.Println(content)
+
+		// find article by id
+		articleFind, err := biz.FindArticle(map[string]interface{}{"id": article.Id})
+		if err != nil {
+			fmt.Println("article not found", article.Id, article.Slug, article.Title)
+		}
+		articleFind.Content = content.Content
+		articleFind.IsUpdateContent = 1
+
+		biz.UpdateArticle(map[string]interface{}{"id": article.Id}, *articleFind)
 	}
 }

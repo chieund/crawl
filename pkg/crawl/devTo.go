@@ -76,7 +76,6 @@ func CrawlWebDevContent(url string) DataArticle {
 	var dataArticle DataArticle
 	c.OnHTML("#article-body", func(e *colly.HTMLElement) {
 		dataArticle.Content, _ = e.DOM.Html()
-		fmt.Println(e.DOM.Html())
 	})
 
 	c.OnRequest(func(r *colly.Request) {
