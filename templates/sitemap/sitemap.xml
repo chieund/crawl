@@ -4,8 +4,6 @@
     <url>
         <loc>http://www.techdaily.info/{{.Slug}}</loc>
         <lastmod>2022-08-02</lastmod>
-        <changefreq>hourly</changefreq>
-        <priority>0.8</priority>
     </url>
     {{end}}
 </urlset>
