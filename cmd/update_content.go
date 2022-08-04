@@ -10,7 +10,7 @@ import (
 	"fmt"
 )
 
-func main() {
+func test() {
 	config, err := util.LoadConfig(".")
 	if err != nil {
 		fmt.Println("not load config", err)
