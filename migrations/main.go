@@ -19,5 +19,5 @@ func Migrate() {
 	}
 
 	db, err := database.DBConn(config)
-	db.AutoMigrate(models.Article{}, models.Tag{})
+	db.AutoMigrate(models.Article{}, models.Tag{}, models.Website{})
 }

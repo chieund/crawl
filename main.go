@@ -29,6 +29,7 @@ func main() {
 	r.LoadHTMLGlob(path.Join(cwd, "templates/*.tmpl"))
 	controller := IndexAction.Controller{}
 	r.StaticFile("/favicon.ico", "./templates/favicon.ico")
+	r.StaticFile("/css/styles.css", "./templates/css/styles.css")
 	r.StaticFile("/robots.txt", "./templates/robots.txt")
 	r.StaticFile("/images/image.webp", "./templates/images/image.webp")
 	r.StaticFile("/google18bb3160694ad28a.html", "./templates/google18bb3160694ad28a.html")
@@ -39,5 +40,5 @@ func main() {
 	r.GET("/t/:tag", controller.GetArticleByTag(db))
 	r.GET("/:slug", controller.GetArticleBySlug(db))
 
-	r.Run(":80") // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
