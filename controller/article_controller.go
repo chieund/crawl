@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-	"html/template"
 	"net/http"
 	"strconv"
 )
@@ -44,7 +43,6 @@ func (controller *Controller) GetAllArticles(db *gorm.DB) gin.HandlerFunc {
 func (controller *Controller) GetArticleBySlug(db *gorm.DB) gin.HandlerFunc {
 	storage := mysqlStorage.NewMySQLStorage(db)
 	articleBU := business.NewArticleBusiness(storage)
-	tagBu := business.NewTagBusiness(storage)
 
 	return func(c *gin.Context) {
 		slug := c.Param("slug")
@@ -55,19 +53,6 @@ func (controller *Controller) GetArticleBySlug(db *gorm.DB) gin.HandlerFunc {
 
 		article.Viewed = article.Viewed + 1
 		articleBU.UpdateArticle(map[string]interface{}{"slug": slug}, *article)
-
-		if article.IsUpdateContent != 1 {
-			c.Redirect(http.StatusFound, article.Link)
-		}
-		ContentArticle := template.HTML(article.Content)
-		tags, err := tagBu.GetAllHotTags()
-		c.HTML(http.StatusOK, "article_detail.tmpl", gin.H{
-			"title":          "The Best Developer News",
-			"description":    "The Best Developer News is a website that aggregates all the latest articles on technology",
-			"keywords":       "Angular, Aws, blockchain, ci/cd, css, Data Science, Django, GoLang, Java, Javascript, Laravel, Mmagento, Node.js, Php, Python, React, Rust, Serverless, Vuejs, Web Development",
-			"article":        article,
-			"ContentArticle": ContentArticle,
-			"tags":           tags,
-		})
+		c.Redirect(http.StatusFound, article.Link)
 	}
 }
