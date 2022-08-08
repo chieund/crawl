@@ -1,4 +1,4 @@
-package main
+package crawl
 
 import (
 	"crawl/business"
@@ -10,7 +10,7 @@ import (
 	"fmt"
 )
 
-func test() {
+func main() {
 	config, err := util.LoadConfig(".")
 	if err != nil {
 		fmt.Println("not load config", err)
