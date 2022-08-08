@@ -41,7 +41,7 @@ func (controller *Controller) Sitemap(db *gorm.DB) gin.HandlerFunc {
 			"articles": articleResponses,
 		})
 
-		c.Data(http.StatusOK, "text/xml", b.Bytes())
+		c.Data(http.StatusOK, "text/xml; charset=utf-8", b.Bytes())
 	}
 }
 
@@ -69,6 +69,6 @@ func (controller *Controller) SitemapTags(db *gorm.DB) gin.HandlerFunc {
 			"tags": tagResponses,
 		})
 
-		c.Data(http.StatusOK, "text/xml", b.Bytes())
+		c.Data(http.StatusOK, "text/xml; charset=utf-8", b.Bytes())
 	}
 }
