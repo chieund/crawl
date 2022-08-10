@@ -36,7 +36,12 @@ func (s *mysqlStorage) GetAllArticles(pagination *pkg.Pagination) (*pkg.Paginati
 	pagination.TotalPages = int(math.Ceil(float64(totalRows) / float64(pagination.GetLimit())))
 	pagination.SetListPages()
 
-	s.db.Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
+	if len(pagination.Condition) == 0 {
+		s.db.Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
+	} else {
+		s.db.Where(pagination.Condition).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
+	}
+
 	pagination.Rows = articles
 	return pagination, nil
 }

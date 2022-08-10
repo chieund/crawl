@@ -4,12 +4,12 @@ import (
 	"crawl/business"
 	"crawl/database"
 	"crawl/models"
-	"crawl/pkg"
+	//"crawl/pkg"
 	"crawl/pkg/crawl"
 	articleStorage "crawl/storage"
 	"crawl/util"
 	"fmt"
-	"strings"
+	//"strings"
 )
 
 //const PAGE_LASTER = "latest"
@@ -33,19 +33,19 @@ func main() {
 
 	articleTagBiz := business.NewArticleTagBusiness(storage)
 
-	devToChan := make(chan []crawl.DataArticle)
-	hashNode := make(chan []crawl.DataArticle)
-	webFreeCodeCamp := make(chan []crawl.DataArticle)
-	medium := make(chan []crawl.DataArticle)
+	//devToChan := make(chan []crawl.DataArticle)
+	//hashNode := make(chan []crawl.DataArticle)
+	//webFreeCodeCamp := make(chan []crawl.DataArticle)
+	//medium := make(chan []crawl.DataArticle)
 
-	go crawl.CrawlWeb(devToChan)
-	go crawl.CrawlWebFreeCodeCamp(webFreeCodeCamp)
-	go crawl.CrawlWebMedium(medium)
-	go crawl.CrawlWebHashNode(hashNode)
+	//go crawl.CrawlWeb(devToChan)
+	//go crawl.CrawlWebFreeCodeCamp(webFreeCodeCamp)
+	//go crawl.CrawlWebMedium(medium)
+	//go crawl.CrawlWebHashNode(hashNode)
 
-	insertData(config, <-webFreeCodeCamp, biz, bizTag, articleTagBiz)
-	insertData(config, <-devToChan, biz, bizTag, articleTagBiz)
-	insertData(config, <-medium, biz, bizTag, articleTagBiz)
+	//insertData(config, <-webFreeCodeCamp, biz, bizTag, articleTagBiz)
+	//insertData(config, <-devToChan, biz, bizTag, articleTagBiz)
+	//insertData(config, <-medium, biz, bizTag, articleTagBiz)
 	insertData(config, <-hashNode, biz, bizTag, articleTagBiz)
 }
 
@@ -67,10 +67,10 @@ func insertData(config util.Config, dataResult []crawl.DataArticle, biz *busines
 			}
 		}
 
-		check := strings.Contains(data.Slug, "go")
-		if check && count < 5 {
-			pkg.BotPushNewGoToDiscord(config, data.Title, data.Link, data.Image)
-		}
+		//check := strings.Contains(data.Slug, "go")
+		//if check && count < 5 {
+		//	pkg.BotPushNewGoToDiscord(config, data.Title, data.Link, data.Image)
+		//}
 
 		article, err := biz.FindArticle(map[string]interface{}{"slug": data.Slug})
 		if err != nil {

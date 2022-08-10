@@ -11,6 +11,7 @@ type Pagination struct {
 	ListPages  []int
 	Link       string
 	Rows       []models.Article
+	Condition  map[string]interface{}
 }
 
 func (p *Pagination) GetOffset() int {
