@@ -20,6 +20,8 @@ var listCrawlTags = []string{
 	"javascript",
 	"html5",
 	"devops",
+	"go",
+	"html5",
 }
 
 func CrawlWebHashNode(ch chan []DataArticle) {
@@ -29,8 +31,8 @@ func CrawlWebHashNode(ch chan []DataArticle) {
 		c.OnHTML("div.css-4gdbui", func(e *colly.HTMLElement) {
 			dataArticle := DataArticle{}
 
-			dataArticle.Title = e.ChildText("h1.css-1ja44m4 a.css-4zleql")
-			link := e.ChildAttr("h1.css-1ja44m4 a.css-4zleql", "href")
+			dataArticle.Title = e.ChildText("h1.css-1j1qyv3 a.css-4zleql")
+			link := e.ChildAttr("h1.css-1j1qyv3 a.css-4zleql", "href")
 			image := e.ChildAttr("div.css-qnvenm img", "style")
 			if image != "" {
 				imageNew := strings.Split(image, "background-image:url(")
@@ -59,7 +61,7 @@ func CrawlWebHashNode(ch chan []DataArticle) {
 			fmt.Println("Visiting\n", r.URL)
 		})
 
-		c.Visit(URL_HASHNODE + "/community")
+		//c.Visit(URL_HASHNODE + "/community")
 		for _, tag := range listCrawlTags {
 			c.Visit(URL_HASHNODE + "/n/" + tag)
 		}
