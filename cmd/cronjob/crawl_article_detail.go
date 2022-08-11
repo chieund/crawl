@@ -36,7 +36,7 @@ func CrawlArticleDetail() {
 
 	var paging pkg.Pagination
 	paging.Page = 1
-	paging.Sort = "created_at asc"
+	paging.Sort = "created_at desc"
 	paging.Condition = map[string]interface{}{
 		"website_slug": []string{
 			"dev-to",
