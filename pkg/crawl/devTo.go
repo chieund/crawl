@@ -54,6 +54,8 @@ func CrawlWeb(ch chan []DataArticle) {
 			// get tags
 			dataArticle.Slug = slug.Make(dataArticle.Title)
 			dataArticle.Link = DOMAIN_CRAWL + link
+			dataArticle.WebsiteId = 1
+			dataArticle.WebsiteSlug = "dev-to"
 			dataArticles = append(dataArticles, dataArticle)
 		})
 

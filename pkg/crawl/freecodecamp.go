@@ -21,6 +21,8 @@ func CrawlWebFreeCodeCamp(ch chan []DataArticle) {
 			link := e.ChildAttr("h2.post-card-title a", "href")
 			dataArticle.Link = URL_FREECODECAMP + link
 			dataArticle.Slug = slug.Make(dataArticle.Title)
+			dataArticle.WebsiteId = 2
+			dataArticle.WebsiteSlug = "freecodecamp-org"
 			dataArticles = append(dataArticles, dataArticle)
 		})
 

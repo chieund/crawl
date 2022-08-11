@@ -43,6 +43,8 @@ func CrawlWebHashNode(ch chan []DataArticle) {
 			}
 			dataArticle.Link = link
 			dataArticle.Slug = slug.Make(dataArticle.Title)
+			dataArticle.WebsiteId = 3
+			dataArticle.WebsiteSlug = "hashnode-com"
 
 			// get tags
 			var tags []DataTag
