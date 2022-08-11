@@ -14,7 +14,7 @@ services:
     volumes:
       - ./:/app/
     ports:
-      - "8080"
+      - "9000"
     working_dir: "/app"
     privileged: true
     tty: true
