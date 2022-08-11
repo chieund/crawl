@@ -1,12 +1,20 @@
 version: '3.7'
 services:
+  nginx:
+    build:
+      context: ./docker/nginx/
+    ports:
+      - "80:80"
+    depends_on:
+      - "crawl"
+
   crawl:
     build:
       context: ./docker/golang/
     volumes:
       - ./:/app/
     ports:
-      - "8082:8080"
+      - "9000"
     working_dir: "/app"
     privileged: true
     tty: true
