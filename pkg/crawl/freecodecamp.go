@@ -34,3 +34,20 @@ func CrawlWebFreeCodeCamp(ch chan []DataArticle) {
 	ch <- result
 	defer close(ch)
 }
+
+func CrawlWebFreeCodeCampContent(url string) DataArticle {
+	c := colly.NewCollector()
+
+	var dataArticle DataArticle
+	c.OnHTML(".post-content", func(e *colly.HTMLElement) {
+		content, _ := e.DOM.Html()
+		dataArticle.Content = content
+	})
+
+	c.OnRequest(func(r *colly.Request) {
+		fmt.Println("Visiting\n", r.URL)
+	})
+
+	c.Visit(url)
+	return dataArticle
+}
