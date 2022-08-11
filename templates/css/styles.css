@@ -13,3 +13,10 @@ body {
     line-height: 1.7777778;
     overflow-wrap: break-word;
 }
+
+.box-detail h2 {
+    font-size: 1.8em;
+    margin-top: 1.5555556em;
+    margin-bottom: 0.8888889em;
+    line-height: 1.1111111;
+}
