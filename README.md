@@ -31,7 +31,7 @@ docker-compose exec crawl air -c .air.conf
 # Deploy
 ## Run file makefile build project into folder bin
 ```
-make copy_template build_app_web build_app_crawl migrate
+make copy_template build_app_web build_app_crawl
 ```
 
 # Create Services in run in background (https://www.atpeaz.com/running-go-app-as-a-service-on-ubuntu/amp/)
@@ -71,7 +71,8 @@ crontab -e
 ```
 ### add cron time
 ```
-*/60 * * * * /root/actions-runner/crawl/crawl/crawl/bin/app_crawl
+*/60 * * * * /root/actions-runner/crawl/crawl/crawl/bin/app_crawl crawl-article
+*/20 * * * * /root/actions-runner/crawl/crawl/crawl/bin/app_crawl crawl-article-detail
 ```
 ### Reload cron run
 ```
