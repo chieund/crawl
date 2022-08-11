@@ -92,6 +92,6 @@ func CrawlWebDevContent(url string) DataArticle {
 
 func clearContent(content string) string {
 	re, _ := regexp.Compile("<div class=\"highlight__panel js-actions-panel\">[\\S\\s]*?<\\/div>")
-	contentClear := re.ReplaceAllString(content, "")
-	return contentClear
+	_ = re.ReplaceAllString(content, "")
+	return content
 }
