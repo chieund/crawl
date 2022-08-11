@@ -20,3 +20,18 @@ body {
     margin-bottom: 0.8888889em;
     line-height: 1.1111111;
 }
+
+.article-content img {
+    margin-bottom: 10px;
+}
+
+@media screen and (max-width: 480px) {
+    .article-content {
+        padding: 10px;
+    }
+    .article-content img {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+}
