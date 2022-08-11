@@ -77,7 +77,6 @@ func CrawlWebHashNodeContent(url string) DataArticle {
 	var dataArticle DataArticle
 	c.OnHTML("#post-content-wrapper", func(e *colly.HTMLElement) {
 		content, _ := e.DOM.Html()
-		fmt.Println(content)
 		dataArticle.Content = content
 	})
 
