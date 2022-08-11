@@ -38,7 +38,11 @@ func CrawlArticleDetail() {
 	paging.Page = 1
 	paging.Sort = "created_at asc"
 	paging.Condition = map[string]interface{}{
-		"website_slug":      []string{"dev-to", "freecodecamp-org"},
+		"website_slug": []string{
+			"dev-to",
+			"freecodecamp-org",
+			"hashnode-com",
+		},
 		"is_update_content": 0,
 	}
 	artiles, _ := biz.GetAllArticles(&paging)
@@ -49,6 +53,8 @@ func CrawlArticleDetail() {
 			content = crawl.CrawlWebDevContent(article.Link)
 		case "freecodecamp-org":
 			content = crawl.CrawlWebFreeCodeCampContent(article.Link)
+		case "hashnode-com":
+			content = crawl.CrawlWebHashNodeContent(article.Link)
 		}
 
 		//// find article by id

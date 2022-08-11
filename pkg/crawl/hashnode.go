@@ -70,3 +70,21 @@ func CrawlWebHashNode(ch chan []DataArticle) {
 	ch <- result
 	defer close(ch)
 }
+
+func CrawlWebHashNodeContent(url string) DataArticle {
+	c := colly.NewCollector()
+
+	var dataArticle DataArticle
+	c.OnHTML("#post-content-wrapper", func(e *colly.HTMLElement) {
+		content, _ := e.DOM.Html()
+		fmt.Println(content)
+		dataArticle.Content = content
+	})
+
+	c.OnRequest(func(r *colly.Request) {
+		fmt.Println("Visiting\n", r.URL)
+	})
+
+	c.Visit(url)
+	return dataArticle
+}
