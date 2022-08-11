@@ -22,6 +22,7 @@ func (controller *Controller) GetAllArticles(db *gorm.DB) gin.HandlerFunc {
 		page := c.Request.URL.Query().Get("page")
 		pagination.Page, _ = strconv.Atoi(page)
 		pagination.Link = "/"
+		pagination.Limit = 40
 		articles, err := articleBU.GetAllArticles(&pagination)
 		if err != nil {
 			fmt.Println("article list empty")
