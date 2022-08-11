@@ -12,5 +12,7 @@ type DataArticle struct {
 	Image       string
 	Description string
 	Content     string
+	WebsiteId   int
+	WebsiteSlug string
 	Tags        []DataTag
 }

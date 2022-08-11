@@ -85,10 +85,12 @@ func insertData(config util.Config, dataResult []crawl.DataArticle, biz *busines
 		if err != nil {
 			//fmt.Println("insert article: ", data.Title)
 			article := models.Article{
-				Title: data.Title,
-				Slug:  data.Slug,
-				Image: data.Image,
-				Link:  data.Link,
+				Title:       data.Title,
+				Slug:        data.Slug,
+				Image:       data.Image,
+				Link:        data.Link,
+				WebsiteId:   data.WebsiteId,
+				WebsiteSlug: data.WebsiteSlug,
 			}
 			biz.CreateArticle(&article)
 			// insert article_tag
