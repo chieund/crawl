@@ -1,30 +1,25 @@
-package list
+package cronjob
 
 import (
 	"crawl/business"
 	"crawl/database"
 	"crawl/models"
-	"github.com/spf13/cobra"
-
-	//"crawl/pkg"
+	"crawl/pkg"
 	"crawl/pkg/crawl"
 	articleStorage "crawl/storage"
 	"crawl/util"
 	"fmt"
-	//"strings"
+	"github.com/spf13/cobra"
+	"strings"
 )
 
-var crawlArticleCmd = &cobra.Command{
+var CrawlArticleCmd = &cobra.Command{
 	Use:   "crawl-article",
 	Short: "Crawl web",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(args)
 		CrawlArticle()
 	},
-}
-
-func init() {
-	RootCmd.AddCommand(crawlArticleCmd)
 }
 
 const DOMAIN_CRAWL string = "https://dev.to"
@@ -47,19 +42,19 @@ func CrawlArticle() {
 
 	articleTagBiz := business.NewArticleTagBusiness(storage)
 
-	//devToChan := make(chan []crawl.DataArticle)
+	devToChan := make(chan []crawl.DataArticle)
 	hashNode := make(chan []crawl.DataArticle)
-	//webFreeCodeCamp := make(chan []crawl.DataArticle)
-	//medium := make(chan []crawl.DataArticle)
+	webFreeCodeCamp := make(chan []crawl.DataArticle)
+	medium := make(chan []crawl.DataArticle)
 
-	//go crawl.CrawlWeb(devToChan)
-	//go crawl.CrawlWebFreeCodeCamp(webFreeCodeCamp)
-	//go crawl.CrawlWebMedium(medium)
+	go crawl.CrawlWeb(devToChan)
+	go crawl.CrawlWebFreeCodeCamp(webFreeCodeCamp)
+	go crawl.CrawlWebMedium(medium)
 	go crawl.CrawlWebHashNode(hashNode)
 
-	//insertData(config, <-webFreeCodeCamp, biz, bizTag, articleTagBiz)
-	//insertData(config, <-devToChan, biz, bizTag, articleTagBiz)
-	//insertData(config, <-medium, biz, bizTag, articleTagBiz)
+	insertData(config, <-webFreeCodeCamp, biz, bizTag, articleTagBiz)
+	insertData(config, <-devToChan, biz, bizTag, articleTagBiz)
+	insertData(config, <-medium, biz, bizTag, articleTagBiz)
 	insertData(config, <-hashNode, biz, bizTag, articleTagBiz)
 }
 
@@ -81,10 +76,10 @@ func insertData(config util.Config, dataResult []crawl.DataArticle, biz *busines
 			}
 		}
 
-		//check := strings.Contains(data.Slug, "go")
-		//if check && count < 5 {
-		//	pkg.BotPushNewGoToDiscord(config, data.Title, data.Link, data.Image)
-		//}
+		check := strings.Contains(data.Slug, "go")
+		if check && count < 5 {
+			pkg.BotPushNewGoToDiscord(config, data.Title, data.Link, data.Image)
+		}
 
 		article, err := biz.FindArticle(map[string]interface{}{"slug": data.Slug})
 		if err != nil {

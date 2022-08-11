@@ -1,29 +1,22 @@
-package list
+package cronjob
 
 import (
 	"crawl/business"
 	"crawl/database"
 	"crawl/pkg"
-	"github.com/spf13/cobra"
-
-	//"crawl/pkg"
 	"crawl/pkg/crawl"
 	articleStorage "crawl/storage"
 	"crawl/util"
 	"fmt"
-	//"strings"
+	"github.com/spf13/cobra"
 )
 
-var crawlArticleDetailCmd = &cobra.Command{
-	Use:   "crawl-detail",
-	Short: "Crawl web detail",
+var CrawlArticleDetailCmd = &cobra.Command{
+	Use:   "crawl-article-detail",
+	Short: "Crawl Article Detail",
 	Run: func(cmd *cobra.Command, args []string) {
 		CrawlArticleDetail()
 	},
-}
-
-func init() {
-	RootCmd.AddCommand(crawlArticleDetailCmd)
 }
 
 //const PAGE_LASTER = "latest"
@@ -44,7 +37,10 @@ func CrawlArticleDetail() {
 	var paging pkg.Pagination
 	paging.Page = 1
 	paging.Sort = "created_at asc"
-	paging.Condition = map[string]interface{}{"website_slug": "dev-to"}
+	paging.Condition = map[string]interface{}{
+		"website_slug":      "dev-to",
+		"is_update_content": 0,
+	}
 	artiles, _ := biz.GetAllArticles(&paging)
 	for _, article := range artiles.Rows {
 		var content crawl.DataArticle
@@ -52,7 +48,6 @@ func CrawlArticleDetail() {
 		case "dev-to":
 			content = crawl.CrawlWebDevContent(article.Link)
 		}
-		fmt.Println(content)
 
 		//// find article by id
 		if len(content.Content) > 0 {

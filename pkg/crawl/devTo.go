@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gocolly/colly/v2"
 	"github.com/gosimple/slug"
+	"regexp"
 	"strings"
 )
 
@@ -75,7 +76,8 @@ func CrawlWebDevContent(url string) DataArticle {
 
 	var dataArticle DataArticle
 	c.OnHTML("#article-body", func(e *colly.HTMLElement) {
-		dataArticle.Content, _ = e.DOM.Html()
+		content, _ := e.DOM.Html()
+		dataArticle.Content = clearContent(content)
 	})
 
 	c.OnRequest(func(r *colly.Request) {
@@ -84,4 +86,10 @@ func CrawlWebDevContent(url string) DataArticle {
 
 	c.Visit(url)
 	return dataArticle
+}
+
+func clearContent(content string) string {
+	re, _ := regexp.Compile("<div class=\"highlight__panel js-actions-panel\">[\\S\\s]*?<\\/div>")
+	contentClear := re.ReplaceAllString(content, "")
+	return contentClear
 }

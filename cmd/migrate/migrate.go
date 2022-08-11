@@ -1,4 +1,4 @@
-package list
+package migrate
 
 import (
 	"crawl/database"
@@ -8,16 +8,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var migrateCmd = &cobra.Command{
+var MigrateCmd = &cobra.Command{
 	Use:   "migrate",
 	Short: "Migrate",
 	Run: func(cmd *cobra.Command, args []string) {
 		Migrate()
 	},
-}
-
-func init() {
-	RootCmd.AddCommand(migrateCmd)
 }
 
 func Migrate() {
