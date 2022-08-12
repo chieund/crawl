@@ -6,10 +6,12 @@ import (
 	mysqlStorage "crawl/storage"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/grokify/html-strip-tags-go"
 	"gorm.io/gorm"
 	"html/template"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 func (controller *Controller) GetAllArticles(db *gorm.DB) gin.HandlerFunc {
@@ -63,12 +65,23 @@ func (controller *Controller) GetArticleBySlug(db *gorm.DB) gin.HandlerFunc {
 		ContentArticle := template.HTML(article.Content)
 		tags, err := tagBu.GetAllHotTags()
 		c.HTML(http.StatusOK, "article_detail.tmpl", gin.H{
-			"title":          "The Best Developer News",
-			"description":    "The Best Developer News is a website that aggregates all the latest articles on technology",
+			"title":          article.Title + "- The Best Developer News",
+			"description":    clearContentDescription(article.Content, 170),
 			"keywords":       "Angular, Aws, blockchain, ci/cd, css, Data Science, Django, GoLang, Java, Javascript, Laravel, Mmagento, Node.js, Php, Python, React, Rust, Serverless, Vuejs, Web Development",
 			"article":        article,
 			"ContentArticle": ContentArticle,
 			"tags":           tags,
 		})
 	}
+}
+
+func clearContentDescription(content string, length int) string {
+	content = strip.StripTags(content)
+	if len(content) > length {
+		content = content[0:length]
+	}
+	content = strings.TrimSuffix(content, "\r\n")
+	content = strings.Replace(content, "\n", "", -1)
+	content = strings.TrimSpace(content) + "..."
+	return content
 }
