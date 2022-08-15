@@ -25,6 +25,15 @@ body {
     margin-bottom: 10px;
 }
 
+.article-content img {
+    max-width: 100%;
+}
+
+.box-list-other {
+    margin-top: 20px;
+    margin-bottom: 60px;
+}
+
 @media screen and (max-width: 480px) {
     .article-content {
         padding: 10px;
