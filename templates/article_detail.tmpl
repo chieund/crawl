@@ -5,17 +5,33 @@
         </div>
         <div class="row">
             {{ template "box_tags.tmpl" .}}
-            <div class="col-xs-12 col-sm-6">
+            <div class="col-xs-12 col-sm-10">
                 <div class="row box-detail">
-                    <img src="{{.article.Image}}"  alt="{{.article.Title}}" class="article-img img-fluid"/>
-                    <div class="article-content">
-                        <h1>{{.article.Title}}</h1>
-                        <div class="content crayons-article__body text-styles spec__body">
-                            {{.ContentArticle}}
+                    <div class="col-xs-12 col-sm-12">
+                        <img src="{{.article.Image}}"  alt="{{.article.Title}}" class="article-img img-fluid"/>
+                        <div class="article-content">
+                            <h1>{{.article.Title}}</h1>
+                            <div class="content crayons-article__body text-styles spec__body">
+                                {{.ContentArticle}}
+                            </div>
                         </div>
                     </div>
                 </div><!--/row-->
             </div><!--/.col-xs-12.col-sm-9-->
+        </div>
+        <div class="row box-list box-list-other">
+            {{range .articleOthers.Rows}}
+            <div class="col-xs-12 col-ms-6 col-lg-2">
+                <div class="box-list-other">
+                    <h2><a href="{{.Slug}}" title="{{.Title}}"{{if not .IsUpdateContent}} target="_blank" {{end}}>{{.Title}}</a></h2>
+                    {{if .Image}}
+                    <a href="{{.Slug}}" title="{{.Title}}"{{if not .IsUpdateContent}} target="_blank" {{end}}>
+                        <img class="img-rounded" alt="{{.Title}}" style="width: 100%;" src="{{.Image}}" data-holder-rendered="true">
+                    </a>
+                    {{end}}
+                </div>
+            </div>
+            {{end}}
         </div>
     </div>
 <link rel="stylesheet"

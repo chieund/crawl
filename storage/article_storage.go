@@ -58,3 +58,16 @@ func (s *mysqlStorage) GetAllArticlesByIds(ids []int, pagination *pkg.Pagination
 	pagination.Rows = articles
 	return pagination, nil
 }
+
+func (s *mysqlStorage) FindArticleOther(pagination *pkg.Pagination) (*pkg.Pagination, error) {
+	var articles []models.Article
+	var totalRows int64
+	s.db.Not(pagination.Condition).Find(&articles).Count(&totalRows)
+	pagination.TotalRows = totalRows
+	pagination.TotalPages = int(math.Ceil(float64(totalRows) / float64(pagination.GetLimit())))
+	pagination.SetListPages()
+
+	s.db.Not(pagination.Condition).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
+	pagination.Rows = articles
+	return pagination, nil
+}
