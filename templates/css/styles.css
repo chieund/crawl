@@ -34,6 +34,23 @@ body {
     margin-bottom: 60px;
 }
 
+.box-list h2 {
+    font-size: 16px;
+}
+.box-tags a.badge {
+    padding: 10px;
+    margin: 2px;
+}
+.article-tag .btn {
+    border: none;
+    font-size: 15px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+.list-item {
+    margin-bottom: 20px;
+}
+
 @media screen and (max-width: 480px) {
     .article-content {
         padding: 10px;

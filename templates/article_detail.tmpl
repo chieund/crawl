@@ -11,6 +11,11 @@
                         <img src="{{.article.Image}}"  alt="{{.article.Title}}" class="article-img img-fluid"/>
                         <div class="article-content">
                             <h1>{{.article.Title}}</h1>
+                            <div class="article-tag">
+                                {{range .article.Tags}}
+                                <a href="/t/{{.Slug}}" title="" class="btn-sm btn btn-outline-{{ .ShowColor }}">#{{.Title}}</a>
+                                {{end}}
+                            </div>
                             <div class="content crayons-article__body text-styles spec__body">
                                 {{.ContentArticle}}
                             </div>
