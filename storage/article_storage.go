@@ -9,7 +9,7 @@ import (
 func (s *mysqlStorage) FindArticle(condition map[string]interface{}) (*models.Article, error) {
 	var article models.Article
 
-	err := s.db.Where(condition).First(&article).Error
+	err := s.db.Preload("Tags").Where(condition).First(&article).Error
 	if err != nil {
 		return nil, err
 	}
