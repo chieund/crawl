@@ -65,10 +65,16 @@ func (controller *Controller) GetArticleBySlug(db *gorm.DB) gin.HandlerFunc {
 		ContentArticle := template.HTML(article.Content)
 		tags, err := tagBu.GetAllHotTags()
 
+		// get list tags of article
+		var tagId []int
+		for _, tag := range article.Tags {
+			tagId = append(tagId, tag.Id)
+		}
+
 		var pagination pkg.Pagination
 		pagination.Limit = 40
 		pagination.Condition = map[string]interface{}{"slug": slug}
-		articleOthers, err := articleBU.FindArticleOther(&pagination)
+		articleOthers, err := articleBU.FindArticleOther(tagId, &pagination)
 		c.HTML(http.StatusOK, "article_detail.tmpl", gin.H{
 			"title":          article.Title + "- The Best Developer News",
 			"description":    clearContentDescription(article.Content, 170),
