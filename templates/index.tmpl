@@ -1,8 +1,10 @@
 {{ template "header.tmpl" .}}
-<div class="container-fluid">
-    <div class="header clearfix">
-        <h3 class="text-muted"><a href="/">Tech Daily</a></h3>
+<nav class="navbar navbar-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Tech Daily</a>
     </div>
+</nav>
+<div class="container-fluid bg-light">
     <div class="row row-offcanvas row-offcanvas-right">
         {{ template "box_tags.tmpl" .}}
         <div class="col-xs-10 col-sm-10">
@@ -10,9 +12,9 @@
                 {{range .pagination.Rows}}
                 <div class="col-xs-12 col-ms-6 col-lg-3 list-item">
                     <h2><a href="{{.Slug}}" title="{{.Title}}"{{if not .IsUpdateContent}} target="_blank" {{end}}>{{.Title}}</a></h2>
-                    <div>
+                    <div class="article-tag">
                         {{range .Tags}}
-                        <a href="/t/{{.Slug}}" title="" class="btn-outline-{{ .ShowColor }}">#{{.Title}}</a>
+                        <a href="/t/{{.Slug}}" title="{{.Title}}" class="btn-sm btn btn-outline-{{ .ShowColor }}">#{{.Title}}</a>
                         {{end}}
                     </div>
                     <a href="{{.Slug}}" title="{{.Title}}"{{if not .IsUpdateContent}} target="_blank" {{end}}>
