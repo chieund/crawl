@@ -11,7 +11,7 @@ type ArticleStorageInterface interface {
 	CreateArticle(*models.Article)
 	GetAllArticles(*pkg.Pagination) (*pkg.Pagination, error)
 	GetAllArticlesByIds([]int, *pkg.Pagination) (*pkg.Pagination, error)
-	FindArticleOther(*pkg.Pagination) (*pkg.Pagination, error)
+	FindArticleOther([]int, *pkg.Pagination) (*pkg.Pagination, error)
 }
 
 type ArticleBusiness struct {
@@ -55,6 +55,6 @@ func (articleBusiness *ArticleBusiness) GetAllArticlesByIds(ids []int, paginatio
 	return articleBusiness.articleStore.GetAllArticlesByIds(ids, pagination)
 }
 
-func (articleBusiness *ArticleBusiness) FindArticleOther(pagination *pkg.Pagination) (*pkg.Pagination, error) {
-	return articleBusiness.articleStore.FindArticleOther(pagination)
+func (articleBusiness *ArticleBusiness) FindArticleOther(tagId []int, pagination *pkg.Pagination) (*pkg.Pagination, error) {
+	return articleBusiness.articleStore.FindArticleOther(tagId, pagination)
 }

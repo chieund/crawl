@@ -59,15 +59,25 @@ func (s *mysqlStorage) GetAllArticlesByIds(ids []int, pagination *pkg.Pagination
 	return pagination, nil
 }
 
-func (s *mysqlStorage) FindArticleOther(pagination *pkg.Pagination) (*pkg.Pagination, error) {
+func (s *mysqlStorage) FindArticleOther(tagId []int, pagination *pkg.Pagination) (*pkg.Pagination, error) {
 	var articles []models.Article
 	var totalRows int64
-	s.db.Not(pagination.Condition).Find(&articles).Count(&totalRows)
+	if len(tagId) > 0 {
+		s.db.Not(pagination.Condition).Joins("JOIN article_tag on article_tag.article_id=articles.id").Where("tag_id IN ?", tagId).Find(&articles).Count(&totalRows)
+	} else {
+		s.db.Not(pagination.Condition).Find(&articles).Count(&totalRows)
+	}
+
 	pagination.TotalRows = totalRows
 	pagination.TotalPages = int(math.Ceil(float64(totalRows) / float64(pagination.GetLimit())))
 	pagination.SetListPages()
 
-	s.db.Not(pagination.Condition).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
+	if len(tagId) > 0 {
+		s.db.Not(pagination.Condition).Joins("JOIN article_tag on article_tag.article_id=articles.id").Where("tag_id IN ?", tagId).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
+	} else {
+		s.db.Not(pagination.Condition).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
+	}
+
 	pagination.Rows = articles
 	return pagination, nil
 }
