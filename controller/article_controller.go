@@ -72,7 +72,7 @@ func (controller *Controller) GetArticleBySlug(db *gorm.DB) gin.HandlerFunc {
 		}
 
 		var pagination pkg.Pagination
-		pagination.Limit = 40
+		pagination.Limit = 42
 		pagination.Condition = map[string]interface{}{"slug": slug}
 		articleOthers, err := articleBU.FindArticleOther(tagId, &pagination)
 		c.HTML(http.StatusOK, "article_detail.tmpl", gin.H{
