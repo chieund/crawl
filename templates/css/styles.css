@@ -28,14 +28,25 @@ body {
 .article-content img {
     max-width: 100%;
 }
+.box-list {
+    margin-top: 20px;
+}
 
 .box-list-other {
     margin-top: 20px;
     margin-bottom: 60px;
 }
-
+.btn-outline-light {
+    color: #000;
+}
 .box-list h2 {
     font-size: 16px;
+}
+.box-list h2 a {
+    color: #000;
+    text-decoration: none;
+}
+.list-item {
 }
 .box-tags a.badge {
     padding: 10px;

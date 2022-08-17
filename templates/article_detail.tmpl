@@ -13,7 +13,7 @@
                             <h1>{{.article.Title}}</h1>
                             <div class="article-tag">
                                 {{range .article.Tags}}
-                                <a href="/t/{{.Slug}}" title="" class="btn-sm btn btn-outline-{{ .ShowColor }}">#{{.Title}}</a>
+                                <a href="/t/{{.Slug}}" title="{{.Title}}" class="btn-sm btn btn-outline-{{ .ShowColor }}">#{{.Title}}</a>
                                 {{end}}
                             </div>
                             <div class="content crayons-article__body text-styles spec__body">
