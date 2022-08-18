@@ -46,16 +46,18 @@ body {
     color: #000;
     text-decoration: none;
 }
-.list-item {
-}
-.box-tags a.badge {
-    padding: 10px;
-    margin: 2px;
+
+.box-tags .btn {
+    padding: 5px;
+    margin: 5px;
 }
 .article-tag .btn {
     border: none;
     font-size: 15px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+    /*margin-right: 10px;*/
+}
+.article-tag-detail  .btn {
     margin-right: 10px;
 }
 .list-item {
