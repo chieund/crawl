@@ -42,6 +42,7 @@ func CrawlArticleDetail() {
 			"dev-to",
 			"freecodecamp-org",
 			"hashnode-com",
+			"logrocket-com",
 		},
 		"is_update_content": 0,
 	}
@@ -49,12 +50,14 @@ func CrawlArticleDetail() {
 	for _, article := range artiles.Rows {
 		var content crawl.DataArticle
 		switch article.WebsiteSlug {
-		case "dev-to":
-			content = crawl.CrawlWebDevContent(article.Link)
-		case "freecodecamp-org":
-			content = crawl.CrawlWebFreeCodeCampContent(article.Link)
-		case "hashnode-com":
-			content = crawl.CrawlWebHashNodeContent(article.Link)
+		//case "dev-to":
+		//	content = crawl.CrawlWebDevContent(article.Link)
+		//case "freecodecamp-org":
+		//	content = crawl.CrawlWebFreeCodeCampContent(article.Link)
+		//case "hashnode-com":
+		//	content = crawl.CrawlWebHashNodeContent(article.Link)
+		case "logrocket-com":
+			content = crawl.CrawlWebLogrocketContent(article.Link)
 		}
 
 		//// find article by id
