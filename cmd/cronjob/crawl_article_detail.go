@@ -42,6 +42,7 @@ func CrawlArticleDetail() {
 			"dev-to",
 			"freecodecamp-org",
 			"hashnode-com",
+			"logrocket-com",
 		},
 		"is_update_content": 0,
 	}
@@ -55,6 +56,8 @@ func CrawlArticleDetail() {
 			content = crawl.CrawlWebFreeCodeCampContent(article.Link)
 		case "hashnode-com":
 			content = crawl.CrawlWebHashNodeContent(article.Link)
+		case "logrocket-com":
+			content = crawl.CrawlWebLogrocketContent(article.Link)
 		}
 
 		//// find article by id

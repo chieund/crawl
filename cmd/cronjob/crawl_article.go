@@ -46,16 +46,19 @@ func CrawlArticle() {
 	hashNode := make(chan []crawl.DataArticle)
 	webFreeCodeCamp := make(chan []crawl.DataArticle)
 	medium := make(chan []crawl.DataArticle)
+	logrocket := make(chan []crawl.DataArticle)
 
 	go crawl.CrawlWeb(devToChan)
 	go crawl.CrawlWebFreeCodeCamp(webFreeCodeCamp)
 	go crawl.CrawlWebMedium(medium)
 	go crawl.CrawlWebHashNode(hashNode)
+	go crawl.CrawlLogrocketWeb(logrocket)
 
 	insertData(config, <-webFreeCodeCamp, biz, bizTag, articleTagBiz)
 	insertData(config, <-devToChan, biz, bizTag, articleTagBiz)
 	insertData(config, <-medium, biz, bizTag, articleTagBiz)
 	insertData(config, <-hashNode, biz, bizTag, articleTagBiz)
+	insertData(config, <-logrocket, biz, bizTag, articleTagBiz)
 }
 
 func insertData(config util.Config, dataResult []crawl.DataArticle, biz *business.ArticleBusiness, bizTag *business.TagBusiness, articleTagBiz *business.ArticleTagBusiness) {
