@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gocolly/colly/v2"
 	"github.com/gosimple/slug"
+	"regexp"
 	"strings"
 )
 
@@ -46,7 +47,7 @@ func CrawlWebLogrocketContent(url string) DataArticle {
 	var dataArticle DataArticle
 	c.OnHTML(".article-post", func(e *colly.HTMLElement) {
 		content, _ := e.DOM.Html()
-		dataArticle.Content = clearContent(content)
+		dataArticle.Content = clearImageLogrocketContent(content)
 	})
 
 	c.OnRequest(func(r *colly.Request) {
@@ -60,5 +61,11 @@ func CrawlWebLogrocketContent(url string) DataArticle {
 func clearImageLogrocket(image string) string {
 	image = strings.Replace(image, "background-image:url(", "", 1)
 	image = strings.Replace(image, ");", "", 1)
+	return image
+}
+
+func clearImageLogrocketContent(image string) string {
+	re1, _ := regexp.Compile(" srcset=\"data:image\\/gif;(.)*\"")
+	image = re1.ReplaceAllString(image, "")
 	return image
 }

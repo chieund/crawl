@@ -42,23 +42,22 @@ func CrawlArticle() {
 
 	articleTagBiz := business.NewArticleTagBusiness(storage)
 
-	//devToChan := make(chan []crawl.DataArticle)
-	//hashNode := make(chan []crawl.DataArticle)
-	//webFreeCodeCamp := make(chan []crawl.DataArticle)
-	//medium := make(chan []crawl.DataArticle)
+	devToChan := make(chan []crawl.DataArticle)
+	hashNode := make(chan []crawl.DataArticle)
+	webFreeCodeCamp := make(chan []crawl.DataArticle)
+	medium := make(chan []crawl.DataArticle)
 	logrocket := make(chan []crawl.DataArticle)
 
+	go crawl.CrawlWeb(devToChan)
+	go crawl.CrawlWebFreeCodeCamp(webFreeCodeCamp)
+	go crawl.CrawlWebMedium(medium)
+	go crawl.CrawlWebHashNode(hashNode)
 	go crawl.CrawlLogrocketWeb(logrocket)
 
-	//go crawl.CrawlWeb(devToChan)
-	//go crawl.CrawlWebFreeCodeCamp(webFreeCodeCamp)
-	//go crawl.CrawlWebMedium(medium)
-	//go crawl.CrawlWebHashNode(hashNode)
-
-	//insertData(config, <-webFreeCodeCamp, biz, bizTag, articleTagBiz)
-	//insertData(config, <-devToChan, biz, bizTag, articleTagBiz)
-	//insertData(config, <-medium, biz, bizTag, articleTagBiz)
-	//insertData(config, <-hashNode, biz, bizTag, articleTagBiz)
+	insertData(config, <-webFreeCodeCamp, biz, bizTag, articleTagBiz)
+	insertData(config, <-devToChan, biz, bizTag, articleTagBiz)
+	insertData(config, <-medium, biz, bizTag, articleTagBiz)
+	insertData(config, <-hashNode, biz, bizTag, articleTagBiz)
 	insertData(config, <-logrocket, biz, bizTag, articleTagBiz)
 }
 
