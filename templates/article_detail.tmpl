@@ -1,51 +1,51 @@
 {{ template "header.tmpl" .}}
-    <div class="container-fluid">
-        <div class="header clearfix">
-            <h3 class="text-muted"><a href="/">Tech Daily</a></h3>
-        </div>
-        <div class="row">
-            {{ template "box_tags.tmpl" .}}
-            <div class="col-xs-12 col-sm-10">
-                <div class="row box-detail">
-                    <div class="col-xs-12 col-sm-12">
-                        <img src="{{.article.Image}}"  alt="{{.article.Title}}" class="article-img img-fluid"/>
-                        <div class="article-content">
-                            <h1>{{.article.Title}}</h1>
-                            <div class="article-tag article-tag-detail">
-                                {{range .article.Tags}}
-                                <a href="/t/{{.Slug}}" title="{{.Title}}" class="btn-sm btn btn-outline-{{ .ShowColor }}">#{{.Title}}</a>
-                                {{end}}
-                            </div>
-                            <div class="content crayons-article__body text-styles spec__body">
-                                {{.ContentArticle}}
-                            </div>
+<div class="container-fluid">
+    <div class="header clearfix">
+        <h3 class="text-muted"><a href="/">Tech Daily</a></h3>
+    </div>
+    <div class="row">
+        {{ template "box_tags.tmpl" .}}
+        <div class="col-xs-12 col-sm-10">
+            <div class="row box-detail">
+                <div class="col-xs-12 col-sm-12">
+                    <img src="{{.article.Image}}"  alt="{{.article.Title}}" class="article-img img-fluid"/>
+                    <div class="article-content">
+                        <h1>{{.article.Title}}</h1>
+                        <div class="article-tag article-tag-detail">
+                            {{range .article.Tags}}
+                            <a href="/t/{{.Slug}}" title="{{.Title}}" class="btn-sm btn btn-outline-{{ .ShowColor }}">#{{.Title}}</a>
+                            {{end}}
+                        </div>
+                        <div class="content crayons-article__body text-styles spec__body">
+                            {{.ContentArticle}}
                         </div>
                     </div>
-                </div><!--/row-->
-            </div><!--/.col-xs-12.col-sm-9-->
-        </div>
+                </div>
+            </div><!--/row-->
+        </div><!--/.col-xs-12.col-sm-9-->
+    </div>
 
-        <h2 style="margin-top: 20px">MORE ARTICLES</h2>
-        <div class="row box-list box-list-other">
-            {{range .articleOthers.Rows}}
-            <div class="col-xs-12 col-ms-6 col-lg-2">
-                <div class="box-list-other">
-                    <h2><a href="{{.Slug}}" title="{{.Title}}"{{if not .IsUpdateContent}} target="_blank" {{end}}>{{.Title}}</a></h2>
-                    <div class="article-tag">
-                        {{range .Tags}}
-                        <a href="/t/{{.Slug}}" title="{{.Title}}" class="btn-sm btn btn-outline-{{ .ShowColor }}">#{{.Title}}</a>
-                        {{end}}
-                    </div>
-                    {{if .Image}}
-                    <a href="{{.Slug}}" title="{{.Title}}"{{if not .IsUpdateContent}} target="_blank" {{end}}>
-                        <img class="img-rounded" alt="{{.Title}}" style="width: 100%;" src="{{.Image}}" data-holder-rendered="true">
-                    </a>
+    <h2 style="margin-top: 20px">MORE ARTICLES</h2>
+    <div class="row box-list box-list-other">
+        {{range .articleOthers.Rows}}
+        <div class="col-xs-12 col-ms-6 col-lg-2">
+            <div class="box-list-other">
+                <h2><a href="{{.Slug}}" title="{{.Title}}"{{if not .IsUpdateContent}} target="_blank" {{end}}>{{.Title}}</a></h2>
+                <div class="article-tag">
+                    {{range .Tags}}
+                    <a href="/t/{{.Slug}}" title="{{.Title}}" class="btn-sm btn btn-outline-{{ .ShowColor }}">#{{.Title}}</a>
                     {{end}}
                 </div>
+                {{if .Image}}
+                <a href="{{.Slug}}" title="{{.Title}}"{{if not .IsUpdateContent}} target="_blank" {{end}}>
+                    <img class="img-rounded" alt="{{.Title}}" style="width: 100%;" src="{{.Image}}" data-holder-rendered="true">
+                </a>
+                {{end}}
             </div>
-            {{end}}
         </div>
+        {{end}}
     </div>
+</div>
 <link rel="stylesheet"
       href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
