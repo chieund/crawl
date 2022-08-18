@@ -1,22 +1,29 @@
 {{ template "header.tmpl" .}}
+<nav class="navbar navbar-light">
     <div class="container-fluid">
-        <div class="header clearfix">
-            <h3 class="text-muted"><a href="/">Tech Daily</a></h3>
-        </div>
-        <div class="row row-offcanvas row-offcanvas-right">
-            {{ template "box_tags.tmpl" .}}
-            <div class="col-xs-10 col-sm-10">
-                <div class="row box-list">
-                    {{range .pagination.Rows}}
-                    <div class="col-xs-12 col-ms-6 col-lg-3 list-item">
-                        <h2><a href="/{{.Slug}}" title="{{.Title}}"{{if not .IsUpdateContent}} target="_blank" {{end}}>{{.Title}}</a></h2>
-                        <a href="/{{.Slug}}" title="{{.Title}}"{{if not .IsUpdateContent}} target="_blank" {{end}}>
-                            <img class="img-rounded" alt="{{.Title}}" style="width: 100%;" src="{{.Image}}" data-holder-rendered="true"></a>
-                    </div><!--/.col-xs-6.col-lg-4-->
-                    {{end}}
-                </div><!--/row-->
-                {{ template "pagination.tmpl" .}}
-            </div><!--/.col-xs-12.col-sm-9-->
-        </div>
+        <a class="navbar-brand" href="/">Tech Daily</a>
     </div>
+</nav>
+<div class="container-fluid">
+    <div class="row row-offcanvas row-offcanvas-right">
+        {{ template "box_tags.tmpl" .}}
+        <div class="col-xs-10 col-sm-10">
+            <div class="row box-list">
+                {{range .pagination.Rows}}
+                <div class="col-xs-12 col-ms-6 col-lg-3 list-item">
+                    <h2><a href="/{{.Slug}}" title="{{.Title}}"{{if not .IsUpdateContent}} target="_blank" {{end}}>{{.Title}}</a></h2>
+                    <div class="article-tag">
+                        {{range .Tags}}
+                        <a href="/t/{{.Slug}}" title="{{.Title}}" class="btn-sm btn btn-outline-{{ .ShowColor }}">#{{.Title}}</a>
+                        {{end}}
+                    </div>
+                    <a href="/{{.Slug}}" title="{{.Title}}"{{if not .IsUpdateContent}} target="_blank" {{end}}>
+                        <img class="img-rounded" alt="{{.Title}}" style="width: 100%;" src="{{.Image}}" data-holder-rendered="true"></a>
+                </div><!--/.col-xs-6.col-lg-4-->
+                {{end}}
+            </div><!--/row-->
+            {{ template "pagination.tmpl" .}}
+        </div><!--/.col-xs-12.col-sm-9-->
+    </div>
+</div>
 {{ template "footer.tmpl" .}}
