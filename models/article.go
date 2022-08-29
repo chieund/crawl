@@ -13,7 +13,8 @@ type Article struct {
 	Viewed          int `gorm:"default:0"`
 	WebsiteId       int
 	WebsiteSlug     string
-	IsUpdateContent int `gorm:"default:0"`
+	Website         Website `gorm:"foreignkey:website_id"`
+	IsUpdateContent int     `gorm:"default:0"`
 	gorm.Model
 	Tags []Tag `gorm:"many2many:article_tag"`
 }
@@ -23,8 +24,12 @@ func (article *Article) TableName() string {
 }
 
 type ArticleResponse struct {
-	Title    string
-	Slug     string
-	Link     string
-	UpdateAt string
+	Title           string
+	Slug            string
+	Image           string
+	Link            string
+	UpdateAt        string
+	IsUpdateContent int
+	Tags            []Tag
+	Website         Website
 }

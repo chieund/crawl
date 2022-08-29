@@ -37,9 +37,9 @@ func (s *mysqlStorage) GetAllArticles(pagination *pkg.Pagination) (*pkg.Paginati
 	pagination.SetListPages()
 
 	if len(pagination.Condition) == 0 {
-		s.db.Preload("Tags").Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
+		s.db.Preload("Tags").Preload("Website").Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
 	} else {
-		s.db.Preload("Tags").Where(pagination.Condition).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
+		s.db.Preload("Tags").Preload("Website").Where(pagination.Condition).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
 	}
 
 	pagination.Rows = articles

@@ -32,6 +32,7 @@ func main() {
 	r.StaticFile("/css/styles.css", "./templates/css/styles.css")
 	r.StaticFile("/robots.txt", "./templates/robots.txt")
 	r.StaticFile("/images/image.webp", "./templates/images/image.webp")
+	r.StaticFile("/images/icon/dev-to.png", "./templates/images/icon/dev-to.png")
 	r.StaticFile("/google18bb3160694ad28a.html", "./templates/google18bb3160694ad28a.html")
 	r.GET("/", controller.GetAllArticles(db))
 	r.GET("/tags", controller.GetAllTags(db))

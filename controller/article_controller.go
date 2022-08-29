@@ -2,6 +2,7 @@ package controller
 
 import (
 	"crawl/business"
+	"crawl/models"
 	"crawl/pkg"
 	mysqlStorage "crawl/storage"
 	"fmt"
@@ -30,12 +31,26 @@ func (controller *Controller) GetAllArticles(db *gorm.DB) gin.HandlerFunc {
 			fmt.Println("article list empty")
 		}
 
+		var articleResponses []models.ArticleResponse
+		for _, article := range articles.Rows {
+			articleResponse := models.ArticleResponse{}
+			articleResponse.Link = article.Link
+			articleResponse.Slug = article.Slug
+			articleResponse.UpdateAt = article.UpdatedAt.Format("Jan 02")
+			articleResponse.Tags = article.Tags
+			articleResponse.Image = article.Image
+			articleResponse.IsUpdateContent = article.IsUpdateContent
+			articleResponse.Website = article.Website
+			articleResponses = append(articleResponses, articleResponse)
+		}
+
 		tags, err := tagBu.GetAllHotTags()
 
 		c.HTML(http.StatusOK, "index.tmpl", gin.H{
 			"title":       "The Best Developer News",
 			"description": "The Best Developer News is a website that aggregates all the latest articles on technology",
 			"keywords":    "Angular, Aws, blockchain, ci/cd, css, Data Science, Django, GoLang, Java, Javascript, Laravel, Mmagento, Node.js, Php, Python, React, Rust, Serverless, Vuejs, Web Development",
+			"articles":    articleResponses,
 			"pagination":  articles,
 			"currentPage": articles.Page,
 			"listPage":    articles.ListPages,
