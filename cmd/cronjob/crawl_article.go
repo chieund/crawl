@@ -48,6 +48,8 @@ func CrawlArticle() {
 	medium := make(chan []crawl.DataArticle)
 	logrocket := make(chan []crawl.DataArticle)
 
+	infoq := make(chan []crawl.DataArticle)
+	go crawl.CrawlInfoQWeb(infoq)
 	go crawl.CrawlWeb(devToChan)
 	go crawl.CrawlWebFreeCodeCamp(webFreeCodeCamp)
 	go crawl.CrawlWebMedium(medium)
@@ -59,6 +61,7 @@ func CrawlArticle() {
 	insertData(config, <-medium, biz, bizTag, articleTagBiz)
 	insertData(config, <-hashNode, biz, bizTag, articleTagBiz)
 	insertData(config, <-logrocket, biz, bizTag, articleTagBiz)
+	insertData(config, <-infoq, biz, bizTag, articleTagBiz)
 }
 
 func insertData(config util.Config, dataResult []crawl.DataArticle, biz *business.ArticleBusiness, bizTag *business.TagBusiness, articleTagBiz *business.ArticleTagBusiness) {
