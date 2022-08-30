@@ -34,6 +34,7 @@ func (controller *Controller) GetAllArticles(db *gorm.DB) gin.HandlerFunc {
 		var articleResponses []models.ArticleResponse
 		for _, article := range articles.Rows {
 			articleResponse := models.ArticleResponse{}
+			articleResponse.Title = article.Title
 			articleResponse.Link = article.Link
 			articleResponse.Slug = article.Slug
 			articleResponse.UpdateAt = article.UpdatedAt.Format("Jan 02")

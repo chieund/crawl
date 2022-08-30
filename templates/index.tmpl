@@ -7,7 +7,12 @@
                 {{range .articles}}
                 <div class="col-xs-12 col-ms-6 col-lg-3 list-item">
                     <h2><a href="{{.Slug}}" title="{{.Title}}"{{if not .IsUpdateContent}} target="_blank" {{end}}>{{.Title}}</a></h2>
-                    <h3 class="box-website"><img src="{{.Website.Image}}" alt="{{.Website.Title}}" width="20"> - <span> {{.UpdateAt}}</span></h3>
+                    <h3 class="box-website">
+                        {{if .Website.Image}}
+                        <img src="{{.Website.Image}}" alt="{{.Website.Title}}" width="32"> -
+                        {{end}}
+                        <span> {{.UpdateAt}}</span>
+                    </h3>
                     <div class="article-tag">
                         {{range .Tags}}
                         <a href="/t/{{.Slug}}" title="{{.Title}}" class="btn-sm btn btn-outline-{{ .ShowColor }}">#{{.Title}}</a>
