@@ -36,6 +36,7 @@ func main() {
 	r.StaticFile("/images/icon/hashnode.jpeg", "./templates/images/icon/hashnode.jpeg")
 	r.StaticFile("/images/icon/freecodecam.jpeg", "./templates/images/icon/freecodecam.jpeg")
 	r.StaticFile("/images/icon/logrocket.png", "./templates/images/icon/logrocket.png")
+	r.StaticFile("/images/icon/infoq.png", "./templates/images/icon/infoq.png")
 	r.StaticFile("/google18bb3160694ad28a.html", "./templates/google18bb3160694ad28a.html")
 	r.GET("/", controller.GetAllArticles(db))
 	r.GET("/tags", controller.GetAllTags(db))

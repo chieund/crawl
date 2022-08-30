@@ -43,6 +43,7 @@ func CrawlArticleDetail() {
 			"freecodecamp-org",
 			"hashnode-com",
 			"logrocket-com",
+			"infoq-com",
 		},
 		"is_update_content": 0,
 	}
@@ -58,6 +59,8 @@ func CrawlArticleDetail() {
 			content = crawl.CrawlWebHashNodeContent(article.Link)
 		case "logrocket-com":
 			content = crawl.CrawlWebLogrocketContent(article.Link)
+		case "infoq-com":
+			content = crawl.CrawlWebInfoQContent(article.Link)
 		}
 
 		//// find article by id
@@ -68,6 +71,10 @@ func CrawlArticleDetail() {
 			}
 
 			articleFind.Content = content.Content
+			if article.WebsiteSlug == "infoq-com" {
+				articleFind.Image = content.Image
+			}
+
 			articleFind.IsUpdateContent = 1
 			biz.UpdateArticle(map[string]interface{}{"id": article.Id}, *articleFind)
 		} else {
