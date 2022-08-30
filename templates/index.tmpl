@@ -4,13 +4,22 @@
         {{ template "box_tags.tmpl" .}}
         <div class="col-xs-10 col-sm-10">
             <div class="row box-list">
-                {{range .pagination.Rows}}
+                {{range .articles}}
                 <div class="col-xs-12 col-ms-6 col-lg-3 list-item">
                     <h2><a href="{{.Slug}}" title="{{.Title}}"{{if not .IsUpdateContent}} target="_blank" {{end}}>{{.Title}}</a></h2>
+                    <h3 class="box-website">
+                        {{if .Website.Image}}
+                        <img src="{{.Website.Image}}" alt="{{.Website.Title}}" width="32"> -
+                        {{end}}
+                        <span> {{.UpdateAt}}</span>
+                    </h3>
                     <div class="article-tag">
                         {{range .Tags}}
                         <a href="/t/{{.Slug}}" title="{{.Title}}" class="btn-sm btn btn-outline-{{ .ShowColor }}">#{{.Title}}</a>
                         {{end}}
+                    </div>
+                    <div>
+
                     </div>
                     <a href="{{.Slug}}" title="{{.Title}}"{{if not .IsUpdateContent}} target="_blank" {{end}}>
                         <img class="img-rounded" alt="{{.Title}}" style="width: 100%;" src="{{.Image}}" data-holder-rendered="true">
