@@ -9,7 +9,7 @@ import (
 func (s *mysqlStorage) FindArticle(condition map[string]interface{}) (*models.Article, error) {
 	var article models.Article
 
-	err := s.db.Preload("Tags").Where(condition).First(&article).Error
+	err := s.db.Preload("Tags").Preload("Website").Where(condition).First(&article).Error
 	if err != nil {
 		return nil, err
 	}
@@ -63,9 +63,9 @@ func (s *mysqlStorage) FindArticleOther(tagId []int, pagination *pkg.Pagination)
 	var articles []models.Article
 	var totalRows int64
 	if len(tagId) > 0 {
-		s.db.Preload("Tags").Not(pagination.Condition).Joins("JOIN article_tag on article_tag.article_id=articles.id").Where("tag_id IN ?", tagId).Find(&articles).Count(&totalRows)
+		s.db.Preload("Tags").Preload("Website").Not(pagination.Condition).Joins("JOIN article_tag on article_tag.article_id=articles.id").Where("tag_id IN ?", tagId).Find(&articles).Count(&totalRows)
 	} else {
-		s.db.Preload("Tags").Not(pagination.Condition).Find(&articles).Count(&totalRows)
+		s.db.Preload("Tags").Preload("Website").Not(pagination.Condition).Find(&articles).Count(&totalRows)
 	}
 
 	pagination.TotalRows = totalRows
@@ -73,9 +73,9 @@ func (s *mysqlStorage) FindArticleOther(tagId []int, pagination *pkg.Pagination)
 	pagination.SetListPages()
 
 	if len(tagId) > 0 {
-		s.db.Preload("Tags").Not(pagination.Condition).Joins("JOIN article_tag on article_tag.article_id=articles.id").Where("tag_id IN ?", tagId).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
+		s.db.Preload("Tags").Preload("Website").Not(pagination.Condition).Joins("JOIN article_tag on article_tag.article_id=articles.id").Where("tag_id IN ?", tagId).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
 	} else {
-		s.db.Preload("Tags").Not(pagination.Condition).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
+		s.db.Preload("Tags").Preload("Website").Not(pagination.Condition).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
 	}
 
 	pagination.Rows = articles

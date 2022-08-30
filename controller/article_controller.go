@@ -78,6 +78,7 @@ func (controller *Controller) GetArticleBySlug(db *gorm.DB) gin.HandlerFunc {
 		if article.IsUpdateContent != 1 {
 			c.Redirect(http.StatusFound, article.Link)
 		}
+
 		ContentArticle := template.HTML(article.Content)
 		tags, err := tagBu.GetAllHotTags()
 
@@ -92,17 +93,29 @@ func (controller *Controller) GetArticleBySlug(db *gorm.DB) gin.HandlerFunc {
 		pagination.Condition = map[string]interface{}{"slug": slug}
 		articleOthers, err := articleBU.FindArticleOther(tagId, &pagination)
 
+		// articleDetail
+		articleDetail := models.ArticleResponse{
+			Title:           article.Title,
+			Link:            article.Link,
+			Slug:            article.Slug,
+			CreatedAt:       article.CreatedAt.Format("Jan 02"),
+			Tags:            article.Tags,
+			Image:           article.Image,
+			IsUpdateContent: article.IsUpdateContent,
+			Website:         article.Website,
+		}
+
 		var articleResponses []models.ArticleResponse
-		for _, article := range articleOthers.Rows {
+		for _, articleOther := range articleOthers.Rows {
 			articleResponse := models.ArticleResponse{}
-			articleResponse.Title = article.Title
-			articleResponse.Link = article.Link
-			articleResponse.Slug = article.Slug
-			articleResponse.CreatedAt = article.CreatedAt.Format("Jan 02")
-			articleResponse.Tags = article.Tags
-			articleResponse.Image = article.Image
-			articleResponse.IsUpdateContent = article.IsUpdateContent
-			articleResponse.Website = article.Website
+			articleResponse.Title = articleOther.Title
+			articleResponse.Link = articleOther.Link
+			articleResponse.Slug = articleOther.Slug
+			articleResponse.CreatedAt = articleOther.CreatedAt.Format("Jan 02")
+			articleResponse.Tags = articleOther.Tags
+			articleResponse.Image = articleOther.Image
+			articleResponse.IsUpdateContent = articleOther.IsUpdateContent
+			articleResponse.Website = articleOther.Website
 			articleResponses = append(articleResponses, articleResponse)
 		}
 
@@ -110,7 +123,7 @@ func (controller *Controller) GetArticleBySlug(db *gorm.DB) gin.HandlerFunc {
 			"title":          article.Title + "- The Best Developer News",
 			"description":    clearContentDescription(article.Content, 170),
 			"keywords":       "Angular, Aws, blockchain, ci/cd, css, Data Science, Django, GoLang, Java, Javascript, Laravel, Mmagento, Node.js, Php, Python, React, Rust, Serverless, Vuejs, Web Development",
-			"article":        article,
+			"article":        articleDetail,
 			"articleOthers":  articleResponses,
 			"ContentArticle": ContentArticle,
 			"tags":           tags,

@@ -8,6 +8,12 @@
                     <img src="{{.article.Image}}"  alt="{{.article.Title}}" class="article-img img-fluid"/>
                     <div class="article-content">
                         <h1>{{.article.Title}}</h1>
+                        <div class="box-website">
+                            {{if .article.Website.Image}}
+                            <img src="{{.article.Website.Image}}" alt="{{.article.Website.Title}}" width="32"> -
+                            {{end}}
+                            <span> {{.article.CreatedAt}}</span>
+                        </div>
                         <div class="article-tag article-tag-detail">
                             {{range .article.Tags}}
                             <a href="/t/{{.Slug}}" title="{{.Title}}" class="btn-sm btn btn-outline-{{ .ShowColor }}">#{{.Title}}</a>
@@ -23,7 +29,7 @@
     </div>
     <h2 style="margin-top: 20px">MORE ARTICLES</h2>
     <div class="row box-list box-list-other">
-        {{range .articles}}
+        {{range .articleOthers}}
         <div class="col-xs-12 col-ms-6 col-lg-2">
             <div class="box-list-other">
                 <h2><a href="{{.Slug}}" title="{{.Title}}"{{if not .IsUpdateContent}} target="_blank" {{end}}>{{.Title}}</a></h2>
