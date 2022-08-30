@@ -37,7 +37,7 @@ func (controller *Controller) GetAllArticles(db *gorm.DB) gin.HandlerFunc {
 			articleResponse.Title = article.Title
 			articleResponse.Link = article.Link
 			articleResponse.Slug = article.Slug
-			articleResponse.UpdateAt = article.UpdatedAt.Format("Jan 02")
+			articleResponse.CreatedAt = article.CreatedAt.Format("Jan 02")
 			articleResponse.Tags = article.Tags
 			articleResponse.Image = article.Image
 			articleResponse.IsUpdateContent = article.IsUpdateContent
@@ -91,12 +91,27 @@ func (controller *Controller) GetArticleBySlug(db *gorm.DB) gin.HandlerFunc {
 		pagination.Limit = 42
 		pagination.Condition = map[string]interface{}{"slug": slug}
 		articleOthers, err := articleBU.FindArticleOther(tagId, &pagination)
+
+		var articleResponses []models.ArticleResponse
+		for _, article := range articleOthers.Rows {
+			articleResponse := models.ArticleResponse{}
+			articleResponse.Title = article.Title
+			articleResponse.Link = article.Link
+			articleResponse.Slug = article.Slug
+			articleResponse.CreatedAt = article.CreatedAt.Format("Jan 02")
+			articleResponse.Tags = article.Tags
+			articleResponse.Image = article.Image
+			articleResponse.IsUpdateContent = article.IsUpdateContent
+			articleResponse.Website = article.Website
+			articleResponses = append(articleResponses, articleResponse)
+		}
+
 		c.HTML(http.StatusOK, "article_detail.tmpl", gin.H{
 			"title":          article.Title + "- The Best Developer News",
 			"description":    clearContentDescription(article.Content, 170),
 			"keywords":       "Angular, Aws, blockchain, ci/cd, css, Data Science, Django, GoLang, Java, Javascript, Laravel, Mmagento, Node.js, Php, Python, React, Rust, Serverless, Vuejs, Web Development",
 			"article":        article,
-			"articleOthers":  articleOthers,
+			"articleOthers":  articleResponses,
 			"ContentArticle": ContentArticle,
 			"tags":           tags,
 		})
