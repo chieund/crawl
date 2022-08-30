@@ -29,6 +29,7 @@ type ArticleResponse struct {
 	Image           string
 	Link            string
 	UpdateAt        string
+	CreatedAt       string
 	IsUpdateContent int
 	Tags            []Tag
 	Website         Website
