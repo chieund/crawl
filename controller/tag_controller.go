@@ -2,8 +2,8 @@ package controller
 
 import (
 	"crawl/business"
-	"crawl/models"
 	"crawl/pkg"
+	"crawl/service"
 	mysqlStorage "crawl/storage"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -62,19 +62,8 @@ func (controller *Controller) GetArticleByTag(db *gorm.DB) gin.HandlerFunc {
 			fmt.Println("not load article by tag")
 		}
 
-		var articleResponses []models.ArticleResponse
-		for _, article := range articles.Rows {
-			articleResponse := models.ArticleResponse{}
-			articleResponse.Title = article.Title
-			articleResponse.Link = article.Link
-			articleResponse.Slug = article.Slug
-			articleResponse.CreatedAt = article.CreatedAt.Format("Jan 02")
-			articleResponse.Tags = article.Tags
-			articleResponse.Image = article.Image
-			articleResponse.IsUpdateContent = article.IsUpdateContent
-			articleResponse.Website = article.Website
-			articleResponses = append(articleResponses, articleResponse)
-		}
+		articleService := service.NewArticleService(articles)
+		articleResponses := articleService.FormatData()
 
 		c.HTML(http.StatusOK, "article_tags.tmpl", gin.H{
 			"title":       fmt.Sprintf("%s - The Best Developer News", tag.Title),
