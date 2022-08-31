@@ -39,6 +39,7 @@ func main() {
 	r.StaticFile("/images/icon/infoq.png", "./templates/images/icon/infoq.png")
 	r.StaticFile("/google18bb3160694ad28a.html", "./templates/google18bb3160694ad28a.html")
 	r.GET("/", controller.GetAllArticles(db))
+	r.GET("/top", controller.GetAllArticlesByTop(db))
 	r.GET("/tags", controller.GetAllTags(db))
 	r.GET("/sitemap.xml", controller.Sitemap(db))
 	r.GET("/tags.xml", controller.SitemapTags(db))
