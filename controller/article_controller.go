@@ -4,6 +4,7 @@ import (
 	"crawl/business"
 	"crawl/models"
 	"crawl/pkg"
+	"crawl/service"
 	mysqlStorage "crawl/storage"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -31,19 +32,8 @@ func (controller *Controller) GetAllArticles(db *gorm.DB) gin.HandlerFunc {
 			fmt.Println("article list empty")
 		}
 
-		var articleResponses []models.ArticleResponse
-		for _, article := range articles.Rows {
-			articleResponse := models.ArticleResponse{}
-			articleResponse.Title = article.Title
-			articleResponse.Link = article.Link
-			articleResponse.Slug = article.Slug
-			articleResponse.CreatedAt = article.CreatedAt.Format("Jan 02")
-			articleResponse.Tags = article.Tags
-			articleResponse.Image = article.Image
-			articleResponse.IsUpdateContent = article.IsUpdateContent
-			articleResponse.Website = article.Website
-			articleResponses = append(articleResponses, articleResponse)
-		}
+		articleService := service.NewArticleService(articles)
+		articleResponses := articleService.FormatData()
 
 		tags, err := tagBu.GetAllHotTags()
 
@@ -105,19 +95,8 @@ func (controller *Controller) GetArticleBySlug(db *gorm.DB) gin.HandlerFunc {
 			Website:         article.Website,
 		}
 
-		var articleResponses []models.ArticleResponse
-		for _, articleOther := range articleOthers.Rows {
-			articleResponse := models.ArticleResponse{}
-			articleResponse.Title = articleOther.Title
-			articleResponse.Link = articleOther.Link
-			articleResponse.Slug = articleOther.Slug
-			articleResponse.CreatedAt = articleOther.CreatedAt.Format("Jan 02")
-			articleResponse.Tags = articleOther.Tags
-			articleResponse.Image = articleOther.Image
-			articleResponse.IsUpdateContent = articleOther.IsUpdateContent
-			articleResponse.Website = articleOther.Website
-			articleResponses = append(articleResponses, articleResponse)
-		}
+		articleService := service.NewArticleService(articleOthers)
+		articleResponses := articleService.FormatData()
 
 		c.HTML(http.StatusOK, "article_detail.tmpl", gin.H{
 			"title":          article.Title + "- The Best Developer News",
@@ -127,6 +106,41 @@ func (controller *Controller) GetArticleBySlug(db *gorm.DB) gin.HandlerFunc {
 			"articleOthers":  articleResponses,
 			"ContentArticle": ContentArticle,
 			"tags":           tags,
+		})
+	}
+}
+
+func (controller *Controller) GetArticleBySource(db *gorm.DB) gin.HandlerFunc {
+	storage := mysqlStorage.NewMySQLStorage(db)
+	articleBU := business.NewArticleBusiness(storage)
+	tagBu := business.NewTagBusiness(storage)
+
+	return func(c *gin.Context) {
+		websiteSlug := c.Param("website_slug")
+		var pagination pkg.Pagination
+		page := c.Request.URL.Query().Get("page")
+		pagination.Page, _ = strconv.Atoi(page)
+		pagination.Link = fmt.Sprintf("/sources/%s", websiteSlug)
+		pagination.Limit = 40
+		pagination.Condition = map[string]interface{}{"website_slug": websiteSlug}
+		articles, err := articleBU.GetAllArticles(&pagination)
+		if err != nil {
+			fmt.Println("article list empty")
+		}
+
+		articleService := service.NewArticleService(articles)
+		articleResponses := articleService.FormatData()
+
+		tags, err := tagBu.GetAllHotTags()
+		c.HTML(http.StatusOK, "article_source.tmpl", gin.H{
+			"title":       "The Best Developer News",
+			"description": "The Best Developer News is a website that aggregates all the latest articles on technology",
+			"keywords":    "Angular, Aws, blockchain, ci/cd, css, Data Science, Django, GoLang, Java, Javascript, Laravel, Mmagento, Node.js, Php, Python, React, Rust, Serverless, Vuejs, Web Development",
+			"articles":    articleResponses,
+			"pagination":  articles,
+			"currentPage": articles.Page,
+			"listPage":    articles.ListPages,
+			"tags":        tags,
 		})
 	}
 }

@@ -31,7 +31,11 @@ func (s *mysqlStorage) CreateArticle(article *models.Article) {
 func (s *mysqlStorage) GetAllArticles(pagination *pkg.Pagination) (*pkg.Pagination, error) {
 	var articles []models.Article
 	var totalRows int64
-	s.db.Model(&articles).Count(&totalRows)
+	if len(pagination.Condition) == 0 {
+		s.db.Model(&articles).Count(&totalRows)
+	} else {
+		s.db.Model(&articles).Where(pagination.Condition).Count(&totalRows)
+	}
 	pagination.TotalRows = totalRows
 	pagination.TotalPages = int(math.Ceil(float64(totalRows) / float64(pagination.GetLimit())))
 	pagination.SetListPages()

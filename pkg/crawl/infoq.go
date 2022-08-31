@@ -41,9 +41,7 @@ func CrawlInfoQWeb(ch chan []DataArticle) {
 			dataArticle.Link = DOMAIN_INFOQ_CRAWL + link
 			dataArticle.WebsiteId = 6
 			dataArticle.WebsiteSlug = "infoq-com"
-			fmt.Println(dataArticle)
 			dataArticles = append(dataArticles, dataArticle)
-
 			//c.Visit(DOMAIN_INFOQ_CRAWL + link)
 		})
 
@@ -66,7 +64,6 @@ func CrawlInfoQWeb(ch chan []DataArticle) {
 		return dataArticles
 	}()
 
-	fmt.Println(result)
 	ch <- result
 	defer close(ch)
 }
@@ -86,14 +83,11 @@ func CrawlWebInfoQContent(url string) DataArticle {
 
 		imgURL, _ := e.DOM.Find(`meta[property="og:image"]`).Attr("content")
 		dataArticle.Image = imgURL
-		fmt.Println(dataArticle)
 	})
 
 	c.OnRequest(func(r *colly.Request) {
 		fmt.Print("Visiting\n", r.URL)
 	})
-
-	fmt.Println(dataArticle)
 
 	c.Visit(url)
 	return dataArticle
