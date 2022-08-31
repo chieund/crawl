@@ -46,6 +46,43 @@ func (controller *Controller) GetAllArticles(db *gorm.DB) gin.HandlerFunc {
 			"currentPage": articles.Page,
 			"listPage":    articles.ListPages,
 			"tags":        tags,
+			"tabActive":   1,
+		})
+	}
+}
+
+func (controller *Controller) GetAllArticlesByTop(db *gorm.DB) gin.HandlerFunc {
+	storage := mysqlStorage.NewMySQLStorage(db)
+	articleBU := business.NewArticleBusiness(storage)
+	tagBu := business.NewTagBusiness(storage)
+
+	return func(c *gin.Context) {
+		var pagination pkg.Pagination
+		page := c.Request.URL.Query().Get("page")
+		pagination.Page, _ = strconv.Atoi(page)
+		pagination.Link = "/top"
+		pagination.Limit = 40
+		pagination.Sort = "viewed desc"
+		articles, err := articleBU.GetAllArticles(&pagination)
+		if err != nil {
+			fmt.Println("article list empty")
+		}
+
+		articleService := service.NewArticleService(articles)
+		articleResponses := articleService.FormatData()
+
+		tags, err := tagBu.GetAllHotTags()
+
+		c.HTML(http.StatusOK, "index.tmpl", gin.H{
+			"title":       "The Best Developer News",
+			"description": "The Best Developer News is a website that aggregates all the latest articles on technology",
+			"keywords":    "Angular, Aws, blockchain, ci/cd, css, Data Science, Django, GoLang, Java, Javascript, Laravel, Mmagento, Node.js, Php, Python, React, Rust, Serverless, Vuejs, Web Development",
+			"articles":    articleResponses,
+			"pagination":  articles,
+			"currentPage": articles.Page,
+			"listPage":    articles.ListPages,
+			"tags":        tags,
+			"tabActive":   2,
 		})
 	}
 }
