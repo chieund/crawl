@@ -24,13 +24,13 @@ func (article *Article) TableName() string {
 }
 
 type ArticleResponse struct {
-	Title           string
-	Slug            string
-	Image           string
-	Link            string
-	UpdateAt        string
-	CreatedAt       string
-	IsUpdateContent int
-	Tags            []Tag
-	Website         Website
+	Title           string  `json:"title"`
+	Slug            string  `json:"slug"`
+	Image           string  `json:"image"`
+	Link            string  `json:"link"`
+	UpdateAt        string  `json:"update_at"`
+	CreatedAt       string  `json:"created_at"`
+	IsUpdateContent int     `json:"is_update_content"`
+	Tags            []Tag   `json:"tags"`
+	Website         Website `json:"website"`
 }
