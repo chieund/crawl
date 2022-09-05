@@ -3,6 +3,7 @@ package service
 import (
 	"crawl/models"
 	"crawl/pkg"
+	"crawl/pkg/typesense"
 )
 
 type ArticleService struct {
@@ -27,6 +28,36 @@ func (article *ArticleService) FormatData() []models.ArticleResponse {
 		articleResponse.Image = article.Image
 		articleResponse.IsUpdateContent = article.IsUpdateContent
 		articleResponse.Website = article.Website
+		articleResponses = append(articleResponses, articleResponse)
+	}
+
+	return articleResponses
+}
+
+func (article *ArticleService) FormatDataJson() []typesense.ArticleJson {
+	var articleResponses []typesense.ArticleJson
+	for _, article := range article.pagination.Rows {
+		articleResponse := typesense.ArticleJson{}
+		articleResponse.ID = article.Id
+		articleResponse.Title = article.Title
+		articleResponse.Link = article.Link
+		articleResponse.Slug = article.Slug
+		articleResponse.Image = article.Image
+
+		var tagJsons []typesense.TagJson
+		for _, tag := range article.Tags {
+			var tagJson = typesense.TagJson{
+				Title: tag.Title,
+				Slug:  tag.Slug,
+			}
+			tagJsons = append(tagJsons, tagJson)
+		}
+		//articleResponse.Tags = tagJsons
+		//articleResponse.Website = typesense.WebsiteJson{
+		//	Title: article.Website.Title,
+		//	Slug: article.Website.Slug,
+		//}
+
 		articleResponses = append(articleResponses, articleResponse)
 	}
 

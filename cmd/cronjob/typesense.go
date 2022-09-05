@@ -19,7 +19,8 @@ var TypeSenseCmd = &cobra.Command{
 
 		fmt.Println(args)
 		CreateSchema(config)
-		CreateDocument(config)
+		//CreateDocument(config)
+		//ImportFileJson(config)
 	},
 }
 
@@ -39,4 +40,9 @@ func CreateDocument(config util.Config) {
 		Link:  "Link",
 	}
 	typesenseService.CreateDocument(typeDocument)
+}
+
+func ImportFileJson(config util.Config) {
+	typesenseService := typesense.NewTypesenseService(config)
+	typesenseService.ImportJson(filePathJson)
 }

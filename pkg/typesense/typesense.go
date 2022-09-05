@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/typesense/typesense-go/typesense"
 	"github.com/typesense/typesense-go/typesense/api"
+	"os"
 )
 
 var (
@@ -82,4 +83,16 @@ func (typesenseService *TypesenseService) Search(params string) (*api.SearchResu
 	}
 	result, _ := typesenseService.client.Collection(schemaArticle).Documents().Search(searchParameters)
 	return result, nil
+}
+
+func (typesenseService *TypesenseService) ImportJson(fileName string) {
+	action := "create"
+	batchSize := 40
+	params := &api.ImportDocumentsParams{
+		Action:    &action,
+		BatchSize: &batchSize,
+	}
+	importBody, err := os.Open(fileName)
+	fmt.Println(importBody, err)
+	fmt.Println(typesenseService.client.Collection(schemaArticle).Documents().ImportJsonl(importBody, params))
 }
