@@ -46,12 +46,14 @@ func CreateSchema(config util.Config) {
 
 func CreateDocument(config util.Config) {
 	typesenseService := typesense.NewTypesenseService(config)
-	typeDocument := typesense.DocumentTypesense{
-		Id:    "2",
-		Title: "test",
-		Slug:  "slug",
-		Image: "img",
-		Link:  "Link",
+	typeDocument := typesense.ArticleJson{
+		ID:      "2",
+		Title:   "test",
+		Slug:    "slug",
+		Image:   "img",
+		Link:    "Link",
+		Tags:    []string{"java", "c#", "golang"},
+		Website: "dev-to",
 	}
 	typesenseService.CreateDocument(typeDocument)
 }

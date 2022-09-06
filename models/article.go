@@ -25,6 +25,7 @@ func (article *Article) TableName() string {
 
 type ArticleResponse struct {
 	Title           string  `json:"title"`
+	Snippet         string  `json:"snippet"`
 	Slug            string  `json:"slug"`
 	Image           string  `json:"image"`
 	Link            string  `json:"link"`

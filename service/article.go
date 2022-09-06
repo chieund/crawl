@@ -44,21 +44,14 @@ func (article *ArticleService) FormatDataJson() []typesense.ArticleJson {
 		articleResponse.Link = article.Link
 		articleResponse.Slug = article.Slug
 		articleResponse.Image = article.Image
+		articleResponse.IsUpdateContent = int32(article.IsUpdateContent)
 
-		var tagJsons []typesense.TagJson
+		var tagJsons = []string{}
 		for _, tag := range article.Tags {
-			var tagJson = typesense.TagJson{
-				Title: tag.Title,
-				Slug:  tag.Slug,
-			}
-			tagJsons = append(tagJsons, tagJson)
+			tagJsons = append(tagJsons, tag.Title)
 		}
-		//articleResponse.Tags = tagJsons
-		//articleResponse.Website = typesense.WebsiteJson{
-		//	Title: article.Website.Title,
-		//	Slug: article.Website.Slug,
-		//}
-
+		articleResponse.Tags = tagJsons
+		articleResponse.Website = article.Website.Slug
 		articleResponses = append(articleResponses, articleResponse)
 	}
 

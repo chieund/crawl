@@ -50,6 +50,18 @@ func (typesenseService *TypesenseService) CreateSchema() {
 				Name: "link",
 				Type: "string",
 			},
+			{
+				Name: "is_update_content",
+				Type: "int32",
+			},
+			{
+				Name: "tags",
+				Type: "string[]",
+			},
+			{
+				Name: "website",
+				Type: "string",
+			},
 		},
 	}
 
@@ -57,15 +69,7 @@ func (typesenseService *TypesenseService) CreateSchema() {
 	fmt.Println(data, err)
 }
 
-type DocumentTypesense struct {
-	Id    string `json:"id"`
-	Title string `json:"title"`
-	Slug  string `json:"slug"`
-	Image string `json:"image"`
-	Link  string `json:"link"`
-}
-
-func (typesenseService *TypesenseService) CreateDocument(dType DocumentTypesense) (map[string]interface{}, error) {
+func (typesenseService *TypesenseService) CreateDocument(dType ArticleJson) (map[string]interface{}, error) {
 	result, err := typesenseService.client.Collection(schemaArticle).Documents().Create(dType)
 	if err != nil {
 		fmt.Println(err)
