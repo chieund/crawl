@@ -3,13 +3,16 @@ package controller
 import (
 	"crawl/business"
 	"crawl/models"
+	"crawl/pkg"
 	"crawl/pkg/typesense"
 	mysqlStorage "crawl/storage"
 	"crawl/util"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"math"
 	"net/http"
+	"strconv"
 )
 
 func (controller *Controller) Search(config util.Config, db *gorm.DB) gin.HandlerFunc {
@@ -18,9 +21,20 @@ func (controller *Controller) Search(config util.Config, db *gorm.DB) gin.Handle
 
 	return func(c *gin.Context) {
 		keyword := c.Request.URL.Query().Get("q")
+		page := c.Request.URL.Query().Get("page")
+		fmt.Println(page)
 
 		typesenseService := typesense.NewTypesenseService(config)
 		articles, _ := typesenseService.Search(keyword, "title")
+
+		var pagination = pkg.Pagination{}
+		pagination.Page, _ = strconv.Atoi(page)
+		pagination.Link = fmt.Sprintf("/search?q=%s", keyword)
+		pagination.Limit = 10
+		pagination.TotalRows = int64(*articles.Found)
+		pagination.TotalPages = int(math.Ceil(float64(pagination.TotalRows) / float64(pagination.GetLimit())))
+		pagination.SetListPages()
+		pagination.GetPage()
 
 		var articleResponses []models.ArticleResponse
 		for _, value := range *articles.Hits {
@@ -51,8 +65,9 @@ func (controller *Controller) Search(config util.Config, db *gorm.DB) gin.Handle
 			"description": "The Best Developer News is a website that aggregates all the latest articles on technology",
 			"keywords":    "Angular, Aws, blockchain, ci/cd, css, Data Science, Django, GoLang, Java, Javascript, Laravel, Mmagento, Node.js, Php, Python, React, Rust, Serverless, Vuejs, Web Development",
 			"articles":    articleResponses,
-			"pagination":  articles,
-			"currentPage": articles.Page,
+			"pagination":  pagination,
+			"currentPage": pagination.Page,
+			"listPage":    pagination.ListPages,
 			"tags":        tags,
 			"keyword":     keyword,
 		})

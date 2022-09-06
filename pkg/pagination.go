@@ -1,6 +1,8 @@
 package pkg
 
-import "crawl/models"
+import (
+	"crawl/models"
+)
 
 type Pagination struct {
 	Limit      int
