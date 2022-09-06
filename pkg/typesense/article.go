@@ -1,7 +1,7 @@
 package typesense
 
 type ArticleJson struct {
-	ID    int    `json:"id"`
+	ID    string `json:"id"`
 	Title string `json:"title"`
 	Slug  string `json:"slug"`
 	Image string `json:"image"`

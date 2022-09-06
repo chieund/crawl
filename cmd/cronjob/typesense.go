@@ -5,6 +5,7 @@ import (
 	"crawl/util"
 	"fmt"
 	"github.com/spf13/cobra"
+	"github.com/typesense/typesense-go/typesense/api"
 )
 
 var TypeSenseCmd = &cobra.Command{
@@ -17,10 +18,24 @@ var TypeSenseCmd = &cobra.Command{
 			panic(err)
 		}
 
-		fmt.Println(args)
-		CreateSchema(config)
-		//CreateDocument(config)
-		//ImportFileJson(config)
+		fmt.Println("args input:", args)
+		if len(args) > 0 {
+			task := args[0]
+			switch task {
+			case "create-schema":
+				CreateSchema(config)
+			case "create-doc":
+				CreateDocument(config)
+			case "import-json":
+				ImportFileJson(config)
+			case "search":
+				fmt.Println(Search(config, "java", "title"))
+			default:
+				fmt.Println("Params not contain [create-schema, create-doc, import-json, search]")
+			}
+		} else {
+			fmt.Println("Require args contain [create-schema, create-doc, import-json, search]")
+		}
 	},
 }
 
@@ -31,9 +46,8 @@ func CreateSchema(config util.Config) {
 
 func CreateDocument(config util.Config) {
 	typesenseService := typesense.NewTypesenseService(config)
-
 	typeDocument := typesense.DocumentTypesense{
-		Id:    1,
+		Id:    "2",
 		Title: "test",
 		Slug:  "slug",
 		Image: "img",
@@ -45,4 +59,9 @@ func CreateDocument(config util.Config) {
 func ImportFileJson(config util.Config) {
 	typesenseService := typesense.NewTypesenseService(config)
 	typesenseService.ImportJson(filePathJson)
+}
+
+func Search(config util.Config, keyword string, queryFiledBy string) (*api.SearchResult, error) {
+	typesenseService := typesense.NewTypesenseService(config)
+	return typesenseService.Search(keyword, queryFiledBy)
 }

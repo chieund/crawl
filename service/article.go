@@ -4,6 +4,7 @@ import (
 	"crawl/models"
 	"crawl/pkg"
 	"crawl/pkg/typesense"
+	"strconv"
 )
 
 type ArticleService struct {
@@ -38,7 +39,7 @@ func (article *ArticleService) FormatDataJson() []typesense.ArticleJson {
 	var articleResponses []typesense.ArticleJson
 	for _, article := range article.pagination.Rows {
 		articleResponse := typesense.ArticleJson{}
-		articleResponse.ID = article.Id
+		articleResponse.ID = strconv.Itoa(article.Id)
 		articleResponse.Title = article.Title
 		articleResponse.Link = article.Link
 		articleResponse.Slug = article.Slug

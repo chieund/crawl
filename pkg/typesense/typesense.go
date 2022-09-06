@@ -27,7 +27,6 @@ func NewTypesenseService(config util.Config) *TypesenseService {
 }
 
 func (typesenseService *TypesenseService) CreateSchema() {
-	//test := "id"
 	schema := &api.CollectionSchema{
 		Name: schemaArticle,
 		Fields: []api.Field{
@@ -52,16 +51,14 @@ func (typesenseService *TypesenseService) CreateSchema() {
 				Type: "string",
 			},
 		},
-		//DefaultSortingField: &test,
 	}
-	fmt.Println(schema)
 
 	data, err := typesenseService.client.Collections().Create(schema)
 	fmt.Println(data, err)
 }
 
 type DocumentTypesense struct {
-	Id    int    `json:"id"`
+	Id    string `json:"id"`
 	Title string `json:"title"`
 	Slug  string `json:"slug"`
 	Image string `json:"image"`
@@ -76,15 +73,6 @@ func (typesenseService *TypesenseService) CreateDocument(dType DocumentTypesense
 	return result, nil
 }
 
-func (typesenseService *TypesenseService) Search(params string) (*api.SearchResult, error) {
-	searchParameters := &api.SearchCollectionParams{
-		Q:       params,
-		QueryBy: "title",
-	}
-	result, _ := typesenseService.client.Collection(schemaArticle).Documents().Search(searchParameters)
-	return result, nil
-}
-
 func (typesenseService *TypesenseService) ImportJson(fileName string) {
 	action := "create"
 	batchSize := 40
@@ -95,4 +83,13 @@ func (typesenseService *TypesenseService) ImportJson(fileName string) {
 	importBody, err := os.Open(fileName)
 	fmt.Println(importBody, err)
 	fmt.Println(typesenseService.client.Collection(schemaArticle).Documents().ImportJsonl(importBody, params))
+}
+
+func (typesenseService *TypesenseService) Search(keyword string, queryByField string) (*api.SearchResult, error) {
+	searchParameters := &api.SearchCollectionParams{
+		Q:       keyword,
+		QueryBy: queryByField,
+	}
+	result, _ := typesenseService.client.Collection(schemaArticle).Documents().Search(searchParameters)
+	return result, nil
 }
