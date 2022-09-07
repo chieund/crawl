@@ -22,17 +22,18 @@ func (controller *Controller) Search(config util.Config, db *gorm.DB) gin.Handle
 	return func(c *gin.Context) {
 		keyword := c.Request.URL.Query().Get("q")
 		page := c.Request.URL.Query().Get("page")
-		fmt.Println(page)
+
+		pagination := pkg.NewPagination()
+		pagination.Page, _ = strconv.Atoi(page)
 
 		typesenseService := typesense.NewTypesenseService(config)
-		articles, _ := typesenseService.Search(keyword, "title")
+		articles, _ := typesenseService.Search(keyword, "title", pagination.GetPage())
 
-		var pagination = pkg.Pagination{}
-		pagination.Page, _ = strconv.Atoi(page)
 		pagination.Link = fmt.Sprintf("/search?q=%s", keyword)
 		pagination.Limit = 10
 		pagination.TotalRows = int64(*articles.Found)
 		pagination.TotalPages = int(math.Ceil(float64(pagination.TotalRows) / float64(pagination.GetLimit())))
+		pagination.HasParam = true
 		pagination.SetListPages()
 		pagination.GetPage()
 
@@ -44,7 +45,7 @@ func (controller *Controller) Search(config util.Config, db *gorm.DB) gin.Handle
 			articleResponse := models.ArticleResponse{}
 			str, _ := (*document)["title"].(string)
 			image, _ := (*document)["image"].(string)
-			is_update_content, _ := (*document)["is_update_content"].(int)
+			isUpdateContent, _ := (*document)["is_update_content"].(int)
 			link, _ := (*document)["link"].(string)
 			slug, _ := (*document)["slug"].(string)
 
@@ -53,7 +54,7 @@ func (controller *Controller) Search(config util.Config, db *gorm.DB) gin.Handle
 			articleResponse.Title = str
 			articleResponse.Snippet = snippet
 			articleResponse.Image = image
-			articleResponse.IsUpdateContent = is_update_content
+			articleResponse.IsUpdateContent = isUpdateContent
 			articleResponse.Link = link
 			articleResponse.Slug = slug
 			articleResponses = append(articleResponses, articleResponse)

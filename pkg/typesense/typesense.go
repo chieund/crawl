@@ -32,7 +32,7 @@ func (typesenseService *TypesenseService) CreateSchema() {
 		Fields: []api.Field{
 			{
 				Name: "id",
-				Type: "int32",
+				Type: "string",
 			},
 			{
 				Name: "title",
@@ -77,6 +77,22 @@ func (typesenseService *TypesenseService) CreateDocument(dType ArticleJson) (map
 	return result, nil
 }
 
+func (typesenseService *TypesenseService) GetDocumentById(Id string) (map[string]interface{}, error) {
+	result, err := typesenseService.client.Collection(schemaArticle).Document(Id).Retrieve()
+	if err != nil {
+		fmt.Println(err)
+	}
+	return result, nil
+}
+
+func (typesenseService *TypesenseService) UpdateDocument(Id string, dType ArticleUpdateJson) (map[string]interface{}, error) {
+	result, err := typesenseService.client.Collection(schemaArticle).Document(Id).Update(dType)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return result, nil
+}
+
 func (typesenseService *TypesenseService) ImportJson(fileName string) {
 	action := "create"
 	batchSize := 40
@@ -89,10 +105,12 @@ func (typesenseService *TypesenseService) ImportJson(fileName string) {
 	fmt.Println(typesenseService.client.Collection(schemaArticle).Documents().ImportJsonl(importBody, params))
 }
 
-func (typesenseService *TypesenseService) Search(keyword string, queryByField string) (*api.SearchResult, error) {
+func (typesenseService *TypesenseService) Search(keyword string, queryByField string, page int) (*api.SearchResult, error) {
+	currentPage := page
 	searchParameters := &api.SearchCollectionParams{
 		Q:       keyword,
 		QueryBy: queryByField,
+		Page:    &currentPage,
 	}
 	result, _ := typesenseService.client.Collection(schemaArticle).Documents().Search(searchParameters)
 	return result, nil

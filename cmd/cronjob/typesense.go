@@ -26,10 +26,12 @@ var TypeSenseCmd = &cobra.Command{
 				CreateSchema(config)
 			case "create-doc":
 				CreateDocument(config)
+			case "find-doc":
+				FindDocument(config)
 			case "import-json":
 				ImportFileJson(config)
 			case "search":
-				fmt.Println(Search(config, "java", "title"))
+				fmt.Println(Search(config, "java", "title", 1))
 			default:
 				fmt.Println("Params not contain [create-schema, create-doc, import-json, search]")
 			}
@@ -58,12 +60,22 @@ func CreateDocument(config util.Config) {
 	typesenseService.CreateDocument(typeDocument)
 }
 
+func FindDocument(config util.Config) {
+	typesenseService := typesense.NewTypesenseService(config)
+	documentFind, _ := typesenseService.GetDocumentById("805")
+	if len(documentFind) > 0 {
+		fmt.Println("find found", documentFind)
+	} else {
+		fmt.Println("not found")
+	}
+}
+
 func ImportFileJson(config util.Config) {
 	typesenseService := typesense.NewTypesenseService(config)
 	typesenseService.ImportJson(filePathJson)
 }
 
-func Search(config util.Config, keyword string, queryFiledBy string) (*api.SearchResult, error) {
+func Search(config util.Config, keyword string, queryFiledBy string, page int) (*api.SearchResult, error) {
 	typesenseService := typesense.NewTypesenseService(config)
-	return typesenseService.Search(keyword, queryFiledBy)
+	return typesenseService.Search(keyword, queryFiledBy, page)
 }

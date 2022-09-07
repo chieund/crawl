@@ -5,10 +5,12 @@ import (
 	"crawl/database"
 	"crawl/pkg"
 	"crawl/pkg/crawl"
+	"crawl/pkg/typesense"
 	articleStorage "crawl/storage"
 	"crawl/util"
 	"fmt"
 	"github.com/spf13/cobra"
+	"strconv"
 )
 
 var CrawlArticleDetailCmd = &cobra.Command{
@@ -47,6 +49,9 @@ func CrawlArticleDetail() {
 		},
 		"is_update_content": 0,
 	}
+
+	typesenseService := typesense.NewTypesenseService(config)
+
 	artiles, _ := biz.GetAllArticles(&paging)
 	for _, article := range artiles.Rows {
 		var content crawl.DataArticle
@@ -77,6 +82,19 @@ func CrawlArticleDetail() {
 
 			articleFind.IsUpdateContent = 1
 			biz.UpdateArticle(map[string]interface{}{"id": article.Id}, *articleFind)
+
+			// find
+			articleId := strconv.Itoa(article.Id)
+			documentFind, _ := typesenseService.GetDocumentById(articleId)
+			if len(documentFind) > 0 {
+				document := typesense.ArticleUpdateJson{
+					IsUpdateContent: int32(articleFind.IsUpdateContent),
+					UpdatedAt:       articleFind.CreatedAt.Format("2006-01-02 15:04:05"),
+				}
+				typesenseService.UpdateDocument(articleId, document)
+			} else {
+				fmt.Println("not found update typesense article id: ", articleId)
+			}
 		} else {
 			fmt.Println("Content url", article.Link, " empty")
 		}
