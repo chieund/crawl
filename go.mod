@@ -6,9 +6,11 @@ require (
 	github.com/gin-gonic/gin v1.8.1
 	github.com/gocolly/colly/v2 v2.1.0
 	github.com/gosimple/slug v1.12.0
+	github.com/grokify/html-strip-tags-go v0.0.1
 	github.com/gtuk/discordwebhook v1.0.1
 	github.com/spf13/cobra v1.5.0
 	github.com/spf13/viper v1.12.0
+	github.com/typesense/typesense-go v0.6.0
 	gorm.io/driver/mysql v1.3.4
 	gorm.io/gorm v1.23.6
 )
@@ -19,6 +21,7 @@ require (
 	github.com/antchfx/htmlquery v1.2.3 // indirect
 	github.com/antchfx/xmlquery v1.2.4 // indirect
 	github.com/antchfx/xpath v1.1.8 // indirect
+	github.com/deepmap/oapi-codegen v1.9.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
@@ -30,7 +33,6 @@ require (
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/gosimple/unidecode v1.0.1 // indirect
-	github.com/grokify/html-strip-tags-go v0.0.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.0.1 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
@@ -46,6 +48,7 @@ require (
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.2 // indirect
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
+	github.com/sony/gobreaker v0.5.0 // indirect
 	github.com/spf13/afero v1.8.2 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect

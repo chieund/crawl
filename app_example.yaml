@@ -3,3 +3,5 @@ DB_PASSWORD: password
 DB_HOST: db
 DB_NAME: db_crawl
 URL_WEBHOOK_DISCORD:
+TYPESENSE_URL: http://typesense:8108
+TYPESENSE_API_KEY: key_demo

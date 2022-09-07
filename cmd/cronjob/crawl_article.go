@@ -6,10 +6,12 @@ import (
 	"crawl/models"
 	"crawl/pkg"
 	"crawl/pkg/crawl"
+	"crawl/pkg/typesense"
 	articleStorage "crawl/storage"
 	"crawl/util"
 	"fmt"
 	"github.com/spf13/cobra"
+	"strconv"
 	"strings"
 )
 
@@ -66,6 +68,9 @@ func CrawlArticle() {
 
 func insertData(config util.Config, dataResult []crawl.DataArticle, biz *business.ArticleBusiness, bizTag *business.TagBusiness, articleTagBiz *business.ArticleTagBusiness) {
 	count := 0
+
+	typesenseService := typesense.NewTypesenseService(config)
+
 	for _, data := range dataResult {
 		if len(data.Tags) > 0 {
 			for _, dataTag := range data.Tags {
@@ -100,6 +105,7 @@ func insertData(config util.Config, dataResult []crawl.DataArticle, biz *busines
 			}
 			biz.CreateArticle(&article)
 			// insert article_tag
+			var tagJsons = []string{}
 			if len(data.Tags) > 0 {
 				for _, dataTag := range data.Tags {
 					tag, err := bizTag.FindTag(map[string]interface{}{"slug": dataTag.Slug})
@@ -111,7 +117,25 @@ func insertData(config util.Config, dataResult []crawl.DataArticle, biz *busines
 						}
 						articleTagBiz.CreateArticleTag(&articleTag)
 					}
+
+					tagJsons = append(tagJsons, tag.Title)
 				}
+			}
+
+			typeDocument := typesense.ArticleJson{
+				ID:        strconv.Itoa(article.Id),
+				Title:     article.Title,
+				Slug:      article.Slug,
+				Image:     article.Image,
+				Link:      article.Link,
+				Tags:      tagJsons,
+				Website:   article.Website.Slug,
+				CreatedAt: article.CreatedAt.Format("2006-01-02 15:04:05"),
+				UpdatedAt: article.CreatedAt.Format("2006-01-02 15:04:05"),
+			}
+			_, err := typesenseService.CreateDocument(typeDocument)
+			if err != nil {
+				fmt.Println("not create typesense", article.Slug)
 			}
 		} else {
 			//fmt.Println("update article: ", article.Title)

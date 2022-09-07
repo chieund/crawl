@@ -1,10 +1,26 @@
 version: '3.7'
 services:
+  typesense:
+    build:
+      context: ./docker/typesense/
+    environment:
+      TYPESENSE_DATA_DIR: /data
+      TYPESENSE_API_KEY: key_demo
+    volumes:
+      - /tmp/typesense-server-data:/data
+    networks:
+      - crawl-net
+    ports:
+      - 8108:8108
+    restart: "no"
+
   nginx:
     build:
       context: ./docker/nginx/
     ports:
       - "80:80"
+    networks:
+      - crawl-net
     depends_on:
       - "crawl"
 
@@ -15,6 +31,8 @@ services:
       - ./:/app/
     ports:
       - "9000"
+    networks:
+      - crawl-net
     working_dir: "/app"
     privileged: true
     tty: true
@@ -23,6 +41,12 @@ services:
     build: ./docker/db
     ports:
       - "63311:3306"
+    networks:
+      - crawl-net
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: db_crawl
+
+networks:
+  crawl-net:
+    driver: bridge

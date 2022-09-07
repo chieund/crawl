@@ -27,6 +27,8 @@ func init() {
 	rootCmd.AddCommand(cronjob.CrawlArticleCmd)
 	rootCmd.AddCommand(cronjob.CrawlArticleDetailCmd)
 	rootCmd.AddCommand(migrate.MigrateCmd)
+	rootCmd.AddCommand(cronjob.TypeSenseCmd)
+	rootCmd.AddCommand(cronjob.ExportJsonCmd)
 }
 
 func main() {

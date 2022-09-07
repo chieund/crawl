@@ -1,6 +1,8 @@
 package pkg
 
-import "crawl/models"
+import (
+	"crawl/models"
+)
 
 type Pagination struct {
 	Limit      int
@@ -12,6 +14,11 @@ type Pagination struct {
 	Link       string
 	Rows       []models.Article
 	Condition  map[string]interface{}
+	HasParam   bool
+}
+
+func NewPagination() *Pagination {
+	return &Pagination{}
 }
 
 func (p *Pagination) GetOffset() int {
@@ -75,5 +82,9 @@ func (p *Pagination) ShowPage2() bool {
 }
 
 func (p *Pagination) ShowHref() string {
-	return p.Link
+	if p.HasParam {
+		return p.Link + "&"
+	} else {
+		return p.Link + "?"
+	}
 }
