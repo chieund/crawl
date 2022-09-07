@@ -22,6 +22,8 @@ jobs:
           ENV_DB_HOST: ${{ secrets.ENV_DB_HOST }}
           ENV_DB_NAME: ${{ secrets.ENV_DB_NAME }}
           ENV_URL_WEBHOOK_DISCORD: ${{ secrets.URL_WEBHOOK_DISCORD }}
+          ENV_TYPESENSE_URL: ${{ secrets.ENV_TYPESENSE_URL }}
+          ENV_TYPESENSE_API_KEY: ${{ secrets.ENV_TYPESENSE_API_KEY }}
         run: |
           export GOCACHE="/root/.cache/go-build"
           export GOPATH="/root/go"
