@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://www.techdaily.info/sitemap.xml
+Sitemap: https://www.techdaily.info/articles.xml
 Sitemap: https://www.techdaily.info/tags.xml
