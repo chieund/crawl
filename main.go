@@ -42,7 +42,7 @@ func main() {
 	r.GET("/search", controller.Search(config, db))
 	r.GET("/top", controller.GetAllArticlesByTop(db))
 	r.GET("/tags", controller.GetAllTags(db))
-	r.GET("/sitemap.xml", controller.Sitemap(db))
+	r.GET("/articles.xml", controller.Sitemap(db))
 	r.GET("/tags.xml", controller.SitemapTags(db))
 	r.GET("/sources/:website_slug", controller.GetArticleBySource(db))
 	r.GET("/t/:tag", controller.GetArticleByTag(db))
