@@ -20,7 +20,7 @@ func (controller *Controller) Sitemap(db *gorm.DB) gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 		var pagination pkg.Pagination
-		pagination.Limit = 10000
+		pagination.Limit = 500
 		articles, err := articleBU.GetAllArticles(&pagination)
 		if err != nil {
 			fmt.Println("article list empty")
