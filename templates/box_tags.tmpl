@@ -8,5 +8,12 @@
     <div>
         <a href="/tags">>> View All Tags</a>
     </div>
+
+    <br />
+    {{if .checkPageTag}}
+        <a href="https://freecourseweb.info/search?q={{.tag.Title}}">Download Free Course {{.tag.Title}} Udemy</a>
+    {{else}}
+        <a href="https://freecourseweb.info">Download Free Course Udemy</a>
+    {{end}}
 </div>
 {{ end }}
