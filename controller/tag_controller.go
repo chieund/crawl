@@ -66,15 +66,16 @@ func (controller *Controller) GetArticleByTag(db *gorm.DB) gin.HandlerFunc {
 		articleResponses := articleService.FormatData()
 
 		c.HTML(http.StatusOK, "article_tags.tmpl", gin.H{
-			"title":       fmt.Sprintf("%s - The Best Developer News", tag.Title),
-			"description": fmt.Sprintf("%s a website that aggregates all the latest articles on technology", tag.Title),
-			"keywords":    fmt.Sprintf("Software development, engineering, Web Development, %s", tag.Title),
-			"articles":    articleResponses,
-			"pagination":  articles,
-			"currentPage": articles.Page,
-			"listPage":    articles.ListPages,
-			"tags":        tags,
-			"tag":         tag,
+			"title":        fmt.Sprintf("%s - The Best Developer News", tag.Title),
+			"description":  fmt.Sprintf("%s a website that aggregates all the latest articles on technology", tag.Title),
+			"keywords":     fmt.Sprintf("Software development, engineering, Web Development, %s", tag.Title),
+			"articles":     articleResponses,
+			"pagination":   articles,
+			"currentPage":  articles.Page,
+			"listPage":     articles.ListPages,
+			"tags":         tags,
+			"tag":          tag,
+			"checkPageTag": true,
 		})
 	}
 }
