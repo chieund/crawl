@@ -24,6 +24,11 @@ func (s *mysqlStorage) UpdateArticle(condition map[string]interface{}, article m
 	return true
 }
 
+func (s *mysqlStorage) UpdateViewed(condition map[string]interface{}, viewed int) {
+	var articles models.Article
+	s.db.Model(&articles).Where(condition).Update("viewed", viewed)
+}
+
 func (s *mysqlStorage) CreateArticle(article *models.Article) {
 	s.db.Create(&article)
 }

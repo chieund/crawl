@@ -8,6 +8,7 @@ import (
 type ArticleStorageInterface interface {
 	FindArticle(map[string]interface{}) (*models.Article, error)
 	UpdateArticle(map[string]interface{}, models.Article) bool
+	UpdateViewed(map[string]interface{}, int)
 	CreateArticle(*models.Article)
 	GetAllArticles(*pkg.Pagination) (*pkg.Pagination, error)
 	GetAllArticlesByIds([]int, *pkg.Pagination) (*pkg.Pagination, error)
@@ -32,6 +33,10 @@ func (articleBusiness *ArticleBusiness) FindArticle(condition map[string]interfa
 	}
 
 	return article, nil
+}
+
+func (articleBusiness *ArticleBusiness) UpdateViewed(condition map[string]interface{}, viewed int) {
+	articleBusiness.articleStore.UpdateViewed(condition, viewed)
 }
 
 func (articleBusiness *ArticleBusiness) UpdateArticle(condition map[string]interface{}, article models.Article) bool {

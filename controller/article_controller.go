@@ -99,8 +99,7 @@ func (controller *Controller) GetArticleBySlug(db *gorm.DB) gin.HandlerFunc {
 			c.Redirect(http.StatusNotFound, "/")
 		}
 
-		article.Viewed = article.Viewed + 1
-		articleBU.UpdateArticle(map[string]interface{}{"slug": slug}, *article)
+		articleBU.UpdateViewed(map[string]interface{}{"slug": slug}, article.Viewed+1)
 
 		if article.IsUpdateContent != 1 {
 			c.Redirect(http.StatusFound, article.Link)
