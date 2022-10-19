@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 func DBConn(config util.Config) (db *gorm.DB, err error) {
@@ -14,7 +15,9 @@ func DBConn(config util.Config) (db *gorm.DB, err error) {
 		config.DBPassWord,
 		config.DBHost,
 		config.DBName)
-	db, err = gorm.Open(mysql.Open(dns), &gorm.Config{})
+	db, err = gorm.Open(mysql.Open(dns), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	})
 	if err != nil {
 		return db, err
 	}

@@ -3,13 +3,20 @@ package storage
 import (
 	"crawl/models"
 	"crawl/pkg"
+	"gorm.io/gorm"
 	"math"
 )
 
 func (s *mysqlStorage) FindArticle(condition map[string]interface{}) (*models.Article, error) {
 	var article models.Article
 
-	err := s.db.Preload("Tags").Preload("Website").Where(condition).First(&article).Error
+	err := s.db.Select(
+		"id", "title", "slug", "Link", "created_at", "image", "is_update_content", "website_id",
+	).Preload("Tags", func(db *gorm.DB) *gorm.DB {
+		return db.Select("id", "slug", "hot")
+	}).Preload("Website", func(db *gorm.DB) *gorm.DB {
+		return db.Select("id", "slug", "image")
+	}).Where(condition).First(&article).Error
 	if err != nil {
 		return nil, err
 	}
@@ -46,9 +53,21 @@ func (s *mysqlStorage) GetAllArticles(pagination *pkg.Pagination) (*pkg.Paginati
 	pagination.SetListPages()
 
 	if len(pagination.Condition) == 0 {
-		s.db.Preload("Tags").Preload("Website").Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
+		s.db.Select(
+			"id", "title", "slug", "Link", "created_at", "image", "is_update_content", "website_id",
+		).Preload("Tags", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "slug", "hot")
+		}).Preload("Website", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "slug", "image")
+		}).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
 	} else {
-		s.db.Preload("Tags").Preload("Website").Where(pagination.Condition).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
+		s.db.Select(
+			"id", "title", "slug", "Link", "created_at", "image", "is_update_content", "website_id",
+		).Preload("Tags", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "slug", "hot")
+		}).Preload("Website", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "slug", "image")
+		}).Where(pagination.Condition).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
 	}
 
 	pagination.Rows = articles
@@ -72,9 +91,21 @@ func (s *mysqlStorage) FindArticleOther(tagId []int, pagination *pkg.Pagination)
 	var articles []models.Article
 	var totalRows int64
 	if len(tagId) > 0 {
-		s.db.Preload("Tags").Preload("Website").Not(pagination.Condition).Joins("JOIN article_tag on article_tag.article_id=articles.id").Where("tag_id IN ?", tagId).Find(&articles).Count(&totalRows)
+		s.db.Select(
+			"id", "title", "slug", "Link", "created_at", "image", "is_update_content", "website_id",
+		).Preload("Tags", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "slug", "hot")
+		}).Preload("Website", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "slug", "image")
+		}).Not(pagination.Condition).Joins("JOIN article_tag on article_tag.article_id=articles.id").Where("tag_id IN ?", tagId).Find(&articles).Count(&totalRows)
 	} else {
-		s.db.Preload("Tags").Preload("Website").Not(pagination.Condition).Find(&articles).Count(&totalRows)
+		s.db.Select(
+			"id", "title", "slug", "Link", "created_at", "image", "is_update_content", "website_id",
+		).Preload("Tags", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "slug", "hot")
+		}).Preload("Website", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "slug", "image")
+		}).Not(pagination.Condition).Find(&articles).Count(&totalRows)
 	}
 
 	pagination.TotalRows = totalRows
@@ -82,9 +113,21 @@ func (s *mysqlStorage) FindArticleOther(tagId []int, pagination *pkg.Pagination)
 	pagination.SetListPages()
 
 	if len(tagId) > 0 {
-		s.db.Preload("Tags").Preload("Website").Not(pagination.Condition).Joins("JOIN article_tag on article_tag.article_id=articles.id").Where("tag_id IN ?", tagId).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
+		s.db.Select(
+			"id", "title", "slug", "Link", "created_at", "image", "is_update_content", "website_id",
+		).Preload("Tags", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "slug", "hot")
+		}).Preload("Website", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "slug", "image")
+		}).Not(pagination.Condition).Joins("JOIN article_tag on article_tag.article_id=articles.id").Where("tag_id IN ?", tagId).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
 	} else {
-		s.db.Preload("Tags").Preload("Website").Not(pagination.Condition).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
+		s.db.Select(
+			"id", "title", "slug", "Link", "created_at", "image", "is_update_content", "website_id",
+		).Preload("Tags", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "slug", "hot")
+		}).Preload("Website", func(db *gorm.DB) *gorm.DB {
+			return db.Select("id", "slug", "image")
+		}).Not(pagination.Condition).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
 	}
 
 	pagination.Rows = articles
