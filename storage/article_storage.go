@@ -11,9 +11,9 @@ func (s *mysqlStorage) FindArticle(condition map[string]interface{}) (*models.Ar
 	var article models.Article
 
 	err := s.db.Select(
-		"id", "title", "slug", "Link", "created_at", "image", "is_update_content", "website_id",
+		"id", "title", "slug", "link", "content", "created_at", "image", "is_update_content", "website_id",
 	).Preload("Tags", func(db *gorm.DB) *gorm.DB {
-		return db.Select("id", "slug", "hot")
+		return db.Select("id", "slug")
 	}).Preload("Website", func(db *gorm.DB) *gorm.DB {
 		return db.Select("id", "slug", "image")
 	}).Where(condition).First(&article).Error
@@ -56,7 +56,7 @@ func (s *mysqlStorage) GetAllArticles(pagination *pkg.Pagination) (*pkg.Paginati
 		s.db.Select(
 			"id", "title", "slug", "Link", "created_at", "image", "is_update_content", "website_id",
 		).Preload("Tags", func(db *gorm.DB) *gorm.DB {
-			return db.Select("id", "slug", "hot")
+			return db.Select("id", "slug")
 		}).Preload("Website", func(db *gorm.DB) *gorm.DB {
 			return db.Select("id", "slug", "image")
 		}).Offset(pagination.GetOffset()).Limit(pagination.GetLimit()).Order(pagination.GetSort()).Find(&articles)
