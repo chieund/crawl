@@ -14,7 +14,9 @@ func DBConn(config util.Config) (db *gorm.DB, err error) {
 		config.DBPassWord,
 		config.DBHost,
 		config.DBName)
-	db, err = gorm.Open(mysql.Open(dns), &gorm.Config{})
+	db, err = gorm.Open(mysql.Open(dns), &gorm.Config{
+		//Logger: logger.Default.LogMode(logger.Info),
+	})
 	if err != nil {
 		return db, err
 	}
