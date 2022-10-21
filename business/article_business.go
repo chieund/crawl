@@ -7,10 +7,12 @@ import (
 
 type ArticleStorageInterface interface {
 	FindArticle(map[string]interface{}) (*models.Article, error)
+	FindArticleCron(map[string]interface{}) (*models.Article, error)
 	UpdateArticle(map[string]interface{}, models.Article) bool
 	UpdateViewed(map[string]interface{}, int)
 	CreateArticle(*models.Article)
 	GetAllArticles(*pkg.Pagination) (*pkg.Pagination, error)
+	GetAllArticlesCron(*pkg.Pagination) (*pkg.Pagination, error)
 	GetAllArticlesByIds([]int, *pkg.Pagination) (*pkg.Pagination, error)
 	FindArticleOther([]int, *pkg.Pagination) (*pkg.Pagination, error)
 }
@@ -35,6 +37,16 @@ func (articleBusiness *ArticleBusiness) FindArticle(condition map[string]interfa
 	return article, nil
 }
 
+func (articleBusiness *ArticleBusiness) FindArticleCron(condition map[string]interface{}) (*models.Article, error) {
+	article, err := articleBusiness.articleStore.FindArticleCron(condition)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return article, nil
+}
+
 func (articleBusiness *ArticleBusiness) UpdateViewed(condition map[string]interface{}, viewed int) {
 	articleBusiness.articleStore.UpdateViewed(condition, viewed)
 }
@@ -49,6 +61,15 @@ func (articleBusiness *ArticleBusiness) CreateArticle(article *models.Article) {
 
 func (articleBusiness *ArticleBusiness) GetAllArticles(pagination *pkg.Pagination) (*pkg.Pagination, error) {
 	articles, err := articleBusiness.articleStore.GetAllArticles(pagination)
+	if err != nil {
+		return nil, err
+	}
+
+	return articles, nil
+}
+
+func (articleBusiness *ArticleBusiness) GetAllArticlesCron(pagination *pkg.Pagination) (*pkg.Pagination, error) {
+	articles, err := articleBusiness.articleStore.GetAllArticlesCron(pagination)
 	if err != nil {
 		return nil, err
 	}

@@ -6,12 +6,14 @@ import (
 	"crawl/models"
 	"crawl/pkg"
 	"crawl/pkg/crawl"
-	"crawl/pkg/typesense"
+	//"crawl/pkg/typesense"
+
+	//"crawl/pkg/typesense"
 	articleStorage "crawl/storage"
 	"crawl/util"
 	"fmt"
 	"github.com/spf13/cobra"
-	"strconv"
+	//"strconv"
 	"strings"
 )
 
@@ -69,7 +71,7 @@ func CrawlArticle() {
 func insertData(config util.Config, dataResult []crawl.DataArticle, biz *business.ArticleBusiness, bizTag *business.TagBusiness, articleTagBiz *business.ArticleTagBusiness) {
 	count := 0
 
-	typesenseService := typesense.NewTypesenseService(config)
+	//typesenseService := typesense.NewTypesenseService(config)
 
 	for _, data := range dataResult {
 		if len(data.Tags) > 0 {
@@ -92,7 +94,7 @@ func insertData(config util.Config, dataResult []crawl.DataArticle, biz *busines
 			pkg.BotPushNewGoToDiscord(config, data.Title, data.Link, data.Image)
 		}
 
-		article, err := biz.FindArticle(map[string]interface{}{"slug": data.Slug})
+		article, err := biz.FindArticleCron(map[string]interface{}{"slug": data.Slug})
 		if err != nil {
 			//fmt.Println("insert article: ", data.Title)
 			article := models.Article{
@@ -122,21 +124,21 @@ func insertData(config util.Config, dataResult []crawl.DataArticle, biz *busines
 				}
 			}
 
-			typeDocument := typesense.ArticleJson{
-				ID:        strconv.Itoa(article.Id),
-				Title:     article.Title,
-				Slug:      article.Slug,
-				Image:     article.Image,
-				Link:      article.Link,
-				Tags:      tagJsons,
-				Website:   article.Website.Slug,
-				CreatedAt: article.CreatedAt.Format("2006-01-02 15:04:05"),
-				UpdatedAt: article.CreatedAt.Format("2006-01-02 15:04:05"),
-			}
-			_, err := typesenseService.CreateDocument(typeDocument)
-			if err != nil {
-				fmt.Println("not create typesense", article.Slug)
-			}
+			//typeDocument := typesense.ArticleJson{
+			//	ID:        strconv.Itoa(article.Id),
+			//	Title:     article.Title,
+			//	Slug:      article.Slug,
+			//	Image:     article.Image,
+			//	Link:      article.Link,
+			//	Tags:      tagJsons,
+			//	Website:   article.Website.Slug,
+			//	CreatedAt: article.CreatedAt.Format("2006-01-02 15:04:05"),
+			//	UpdatedAt: article.CreatedAt.Format("2006-01-02 15:04:05"),
+			//}
+			//_, err := typesenseService.CreateDocument(typeDocument)
+			//if err != nil {
+			//	fmt.Println("not create typesense", article.Slug)
+			//}
 		} else {
 			//fmt.Println("update article: ", article.Title)
 			biz.UpdateArticle(map[string]interface{}{"slug": data.Slug}, *article)

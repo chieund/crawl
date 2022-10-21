@@ -5,12 +5,12 @@ import (
 	"crawl/database"
 	"crawl/pkg"
 	"crawl/pkg/crawl"
-	"crawl/pkg/typesense"
+	//"crawl/pkg/typesense"
 	articleStorage "crawl/storage"
 	"crawl/util"
 	"fmt"
 	"github.com/spf13/cobra"
-	"strconv"
+	//"strconv"
 )
 
 var CrawlArticleDetailCmd = &cobra.Command{
@@ -38,6 +38,7 @@ func CrawlArticleDetail() {
 
 	var paging pkg.Pagination
 	paging.Page = 1
+	//paging.Limit = 1
 	paging.Sort = "created_at desc"
 	paging.Condition = map[string]interface{}{
 		"website_slug": []string{
@@ -50,9 +51,9 @@ func CrawlArticleDetail() {
 		"is_update_content": 0,
 	}
 
-	typesenseService := typesense.NewTypesenseService(config)
+	//typesenseService := typesense.NewTypesenseService(config)
 
-	artiles, _ := biz.GetAllArticles(&paging)
+	artiles, _ := biz.GetAllArticlesCron(&paging)
 	for _, article := range artiles.Rows {
 		var content crawl.DataArticle
 		switch article.WebsiteSlug {
@@ -70,7 +71,7 @@ func CrawlArticleDetail() {
 
 		//// find article by id
 		if len(content.Content) > 0 {
-			articleFind, err := biz.FindArticle(map[string]interface{}{"id": article.Id})
+			articleFind, err := biz.FindArticleCron(map[string]interface{}{"id": article.Id})
 			if err != nil {
 				fmt.Println("article not found", article.Id, article.Slug, article.Title)
 			}
@@ -82,19 +83,20 @@ func CrawlArticleDetail() {
 
 			articleFind.IsUpdateContent = 1
 			biz.UpdateArticle(map[string]interface{}{"id": article.Id}, *articleFind)
+			fmt.Println("update content article id:", articleFind.Slug)
 
 			// find
-			articleId := strconv.Itoa(article.Id)
-			documentFind, _ := typesenseService.GetDocumentById(articleId)
-			if len(documentFind) > 0 {
-				document := typesense.ArticleUpdateJson{
-					IsUpdateContent: int32(articleFind.IsUpdateContent),
-					UpdatedAt:       articleFind.CreatedAt.Format("2006-01-02 15:04:05"),
-				}
-				typesenseService.UpdateDocument(articleId, document)
-			} else {
-				fmt.Println("not found update typesense article id: ", articleId)
-			}
+			//articleId := strconv.Itoa(article.Id)
+			//documentFind, _ := typesenseService.GetDocumentById(articleId)
+			//if len(documentFind) > 0 {
+			//	document := typesense.ArticleUpdateJson{
+			//		IsUpdateContent: int32(articleFind.IsUpdateContent),
+			//		UpdatedAt:       articleFind.CreatedAt.Format("2006-01-02 15:04:05"),
+			//	}
+			//	typesenseService.UpdateDocument(articleId, document)
+			//} else {
+			//	fmt.Println("not found update typesense article id: ", articleId)
+			//}
 		} else {
 			fmt.Println("Content url", article.Link, " empty")
 		}
