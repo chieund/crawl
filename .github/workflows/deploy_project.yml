@@ -9,6 +9,8 @@ on:
     branches:
       - main
       - 'release/*'
+    types: [closed]
+    
 jobs:
   deploy:
     runs-on: self-hosted
