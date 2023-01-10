@@ -1,13 +1,20 @@
 name: 'Deploy Project'
 
 on:
+  #push:
+    #branches: [ "master" ]
   push:
-    branches: [ "master" ]
+    branches:
+      - 'aal_*'
+  pull_request:
+    branches:
+      - main
+      - '*_release'
 
 jobs:
   deploy:
     runs-on: self-hosted
-    if: ${{ github.ref == 'refs/heads/master' && github.event_name == 'push' }}
+    if: endsWith(github.ref, 'release') || endsWith(github.ref, 'staging') || github.base_ref == 'main'
     steps:
       - uses: actions/checkout@v3
       - name: Set up Go
