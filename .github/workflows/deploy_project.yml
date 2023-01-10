@@ -8,13 +8,13 @@ on:
   pull_request:
     branches:
       - main
-      - 'release/*'
+      - '*release'
     types: [closed]
 
 jobs:
   deploy:
     runs-on: self-hosted
-    if: startsWith(github.ref, 'release') || endsWith(github.ref, 'staging') || github.base_ref == 'main'
+    if: endsWith(github.ref, 'release') || endsWith(github.ref, 'staging') || github.base_ref == 'main'
     steps:
       - uses: actions/checkout@v3
       - name: Set up Go
